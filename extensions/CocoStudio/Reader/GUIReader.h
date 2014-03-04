@@ -69,7 +69,7 @@ class WidgetPropertiesReader : public CCObject
 {
 public:
     virtual cocos2d::gui::Widget* createWidget(const rapidjson::Value& dic, const char* fullPath, const char* fileName)=0;
-    virtual cocos2d::gui::Widget* widgetFromJsonDictionary(const rapidjson::Value& data, float scale) = 0;
+    virtual cocos2d::gui::Widget* widgetFromJsonDictionary(const rapidjson::Value& data) = 0;
 protected:
     std::string m_strFilePath;
 };
@@ -89,7 +89,7 @@ public:
     virtual ~WidgetPropertiesReader0250(){};
     
     virtual cocos2d::gui::Widget* createWidget(const rapidjson::Value& dic, const char* fullPath, const char* fileName);
-    virtual cocos2d::gui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic, float scale = 1.f);
+    virtual cocos2d::gui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic);
     virtual void setPropsForWidgetFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
     
     virtual void setColorPropsForWidgetFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
@@ -120,24 +120,24 @@ public:
     virtual ~WidgetPropertiesReader0300(){};
     
     virtual cocos2d::gui::Widget* createWidget(const rapidjson::Value& dic, const char* fullPath, const char* fileName);
-    virtual cocos2d::gui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic, float scale);
-	virtual void setPropsForWidgetFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
+    virtual cocos2d::gui::Widget* widgetFromJsonDictionary(const rapidjson::Value& dic);
+    virtual void setPropsForWidgetFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
     
     virtual void setColorPropsForWidgetFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
-	virtual void setPropsForButtonFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForCheckBoxFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForImageViewFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForLabelFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForLabelAtlasFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForLabelBMFontFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForLoadingBarFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForSliderFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForTextFieldFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
+    virtual void setPropsForButtonFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForCheckBoxFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForImageViewFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForLabelFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForLabelAtlasFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForLabelBMFontFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForLoadingBarFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForSliderFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForTextFieldFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
     
-	virtual void setPropsForLayoutFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForPageViewFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForScrollViewFromJsonDictionary(cocos2d::gui::Widget*widget, const rapidjson::Value& options, float scale);
-	virtual void setPropsForListViewFromJsonDictionary(cocos2d::gui::Widget* widget, const rapidjson::Value& options, float scale);
+    virtual void setPropsForLayoutFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForPageViewFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForScrollViewFromJsonDictionary(cocos2d::gui::Widget*widget,const rapidjson::Value& options);
+    virtual void setPropsForListViewFromJsonDictionary(cocos2d::gui::Widget* widget, const rapidjson::Value& options);
 };
 
 NS_CC_EXT_END
