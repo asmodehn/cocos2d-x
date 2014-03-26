@@ -315,25 +315,25 @@ bool CCParticleSystem::initWithDictionary(CCDictionary *dictionary, const char *
                 // Try to get the texture from the cache
                 std::string textureName = dictionary->valueForKey("textureFileName")->getCString();
                 
-                size_t rPos = textureName.rfind('/');
+                //size_t rPos = textureName.rfind('/');
                
-                if (rPos != string::npos)
-                {
-                    string textureDir = textureName.substr(0, rPos + 1);
-                    
-                    if (dirname != NULL && textureDir != dirname)
-                    {
-                        textureName = textureName.substr(rPos+1);
-                        textureName = string(dirname) + textureName;
-                    }
-                }
-                else
-                {
-                    if (dirname != NULL)
-                    {
-                        textureName = string(dirname) + textureName;
-                    }
-                }
+                //if (rPos != string::npos)
+                //{
+                //    string textureDir = textureName.substr(0, rPos + 1);
+                //    
+                //    if (dirname != NULL && textureDir != dirname)
+                //    {
+                //        textureName = textureName.substr(rPos+1);
+                //        textureName = string(dirname) + textureName;
+                //    }
+                //}
+                //else
+                //{
+                //    if (dirname != NULL)
+                //    {
+                //        textureName = string(dirname) + textureName;
+                //    }
+                //}
                 
                 CCTexture2D *tex = NULL;
                 

@@ -253,6 +253,26 @@ void Widget::removeAllChildren()
     
 void Widget::removeAllChildrenWithCleanup(bool cleanup)
 {
+	if (_widgetChildren)
+	{
+		int count = _widgetChildren->count();
+		if (count > 0)
+		{
+			std::vector<cocos2d::CCNode*> childrenHandle(count);
+			for (int currentChild = 0; currentChild<count; ++currentChild)
+			{
+				childrenHandle[currentChild] = static_cast <cocos2d::CCNode*> (_widgetChildren->objectAtIndex(currentChild));
+			}
+
+			for (int currentChild = 0; currentChild < count; ++currentChild)
+			{
+				removeChild(childrenHandle[currentChild], cleanup);
+			}
+			childrenHandle.clear();
+		}
+	}
+
+	/*
     if(_widgetChildren && _widgetChildren->count() > 0)
     {
         CCObject* child;
@@ -262,6 +282,7 @@ void Widget::removeAllChildrenWithCleanup(bool cleanup)
         }
     }
     _widgetChildren->removeAllObjects();
+	*/
 }
 
 void Widget::setEnabled(bool enabled)

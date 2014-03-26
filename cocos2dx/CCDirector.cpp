@@ -131,6 +131,7 @@ bool CCDirector::init(void)
     m_pszFPS = new char[10];
     m_pLastUpdate = new struct cc_timeval();
     m_fSecondsPerFrame = 0.0f;
+	m_bNextDeltaTimeZero = true;
 
     // paused ?
     m_bPaused = false;
