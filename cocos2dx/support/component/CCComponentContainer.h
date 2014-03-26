@@ -39,6 +39,8 @@ class CC_DLL CCComponentContainer
 {
 protected:
     CCComponentContainer(CCNode *pNode);
+	CCComponentContainer(const CCComponentContainer &);
+	CCComponentContainer & operator=(const CCComponentContainer &);
     
 public:
     virtual ~CCComponentContainer(void);

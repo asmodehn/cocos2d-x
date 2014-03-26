@@ -35,6 +35,39 @@ CCComponentContainer::CCComponentContainer(CCNode *pNode)
 {
 }
 
+CCComponentContainer::CCComponentContainer(const CCComponentContainer & cc)
+: m_pComponents(cc.m_pComponents)
+, m_pOwner(cc.m_pOwner)
+{
+	//if we have some components, we need to retain the container and schedule update for this node.
+	if (m_pComponents != NULL)
+	{
+		m_pComponents->retain();
+		m_pOwner->scheduleUpdate();
+	}
+}
+
+
+CCComponentContainer & CCComponentContainer::operator=(const CCComponentContainer & cc)
+{
+	//replacing Components on the fly
+	if (m_pComponents != NULL)
+	{
+		CC_SAFE_RELEASE(m_pComponents);
+		m_pComponents = cc.m_pComponents;
+		m_pComponents->retain();
+		//update already scheduled
+	}
+	else
+	{
+		m_pComponents = cc.m_pComponents;
+		m_pComponents->retain();
+		m_pOwner->scheduleUpdate();
+	}
+	return *this;
+}
+
+
 CCComponentContainer::~CCComponentContainer(void)
 {
     CC_SAFE_RELEASE(m_pComponents);
