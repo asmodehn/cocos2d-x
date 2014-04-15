@@ -77,7 +77,7 @@ protected:
     CC_SYNTHESIZE_RETAIN(CCSprite*, m_pThumbSprite, ThumbSprite)
     CC_SYNTHESIZE_RETAIN(CCProgressTimer*, m_pProgressTimer, ProgressTimer)
     CC_SYNTHESIZE(CCPoint, m_tPreviousLocation, PreviousLocation)
-    /** Contains the receiver’s current value. */
+    /** Contains the receiver's current value. */
     float           m_fValue; 
     /** Contains the minimum value of the receiver. 
     * The default value of this property is 0.0. */
