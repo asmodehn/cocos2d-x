@@ -89,11 +89,23 @@ static CCDisplayLinkDirector *s_SharedDirector = NULL;
 #define kDefaultFPS        60  // 60 frames per second
 extern const char* cocos2dVersion(void);
 
-CCDirector* CCDirector::sharedDirector(void)
+CCDirector* CCDirector::sharedDirector()
+{
+	if (!s_SharedDirector)
+	{
+		return sharedDirector(new CCDisplayLinkDirector());
+	}
+	else
+	{
+		return s_SharedDirector;
+	}
+}
+
+CCDirector* CCDirector::sharedDirector(CCDisplayLinkDirector* dir)
 {
     if (!s_SharedDirector)
     {
-        s_SharedDirector = new CCDisplayLinkDirector();
+		s_SharedDirector = dir;
         s_SharedDirector->init();
     }
 

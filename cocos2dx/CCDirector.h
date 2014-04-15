@@ -73,6 +73,7 @@ class CCActionManager;
 class CCTouchDispatcher;
 class CCKeypadDispatcher;
 class CCAccelerometer;
+class CCDisplayLinkDirector;
 
 /**
 @brief Class that creates and handle the main Window and manages how
@@ -94,6 +95,7 @@ and when to execute the Scenes.
   - GL_COLOR_ARRAY is enabled
   - GL_TEXTURE_COORD_ARRAY is enabled
 */
+
 class CC_DLL CCDirector : public CCObject, public TypeInfo
 {
 public:
@@ -359,15 +361,17 @@ public:
 public:
     /** returns a shared instance of the director 
      *  @js getInstance
+	 *  @param dir : new director implementation. useful for extending director.
      */
-    static CCDirector* sharedDirector(void);
+	static CCDirector* sharedDirector(CCDisplayLinkDirector* dir );
+	static CCDirector* sharedDirector();
 
 protected:
 
     void purgeDirector();
     bool m_bPurgeDirecotorInNextLoop; // this flag will be set to true in end()
     
-    void setNextScene(void);
+    virtual void setNextScene(void);
     
     void showStats();
     void createStatsLabel();
@@ -454,7 +458,7 @@ protected:
  @js NA
  @lua NA
  */
-class CCDisplayLinkDirector : public CCDirector
+class CC_DLL CCDisplayLinkDirector : public CCDirector
 {
 public:
     CCDisplayLinkDirector(void) 
