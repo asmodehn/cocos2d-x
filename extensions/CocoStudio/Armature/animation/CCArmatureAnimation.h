@@ -199,7 +199,7 @@ public:
      */
     int getMovementCount();
 
-    void update(float dt);
+    virtual void update(float dt);
 
     /**
      * Get current movementID
@@ -242,7 +242,7 @@ protected:
      * Update(float dt) will call this handler, you can handle your logic here
      * @js NA
      */
-    void updateHandler();
+    virtual void updateHandler();
 
     /**
      * Update current key frame, and process auto stop, pause
@@ -254,12 +254,12 @@ protected:
      * Emit a frame event
      * @js NA
      */
-    void frameEvent(CCBone *bone, const char *frameEventName, int originFrameIndex, int currentFrameIndex);
+	virtual void frameEvent(CCBone *bone, const char *frameEventName, int originFrameIndex, int currentFrameIndex);
 
     /**
      * Emit a movement event
      */
-    void movementEvent(CCArmature *armature, MovementEventType movementType, const char *movementID);
+	virtual void movementEvent(CCArmature *armature, MovementEventType movementType, const char *movementID);
 
     void updateMovementList();
 
