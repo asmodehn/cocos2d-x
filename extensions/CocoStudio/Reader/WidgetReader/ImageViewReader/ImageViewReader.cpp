@@ -54,7 +54,18 @@ void ImageViewReader::setPropsFromJsonDictionary(ui::Widget *widget, const rapid
             break;
         }
         case 1:
-        {
+		{
+			const char *pPlist = DICTOOL->getStringValue_json(imageFileNameDic, "plistFile");
+			std::string strPlistFile = pPlist;
+			std::string strPngFile = pPlist;
+			std::string::size_type pos = strPngFile.find(".plist");
+			if (pos == strPngFile.npos)
+			{
+				break;
+			}
+			strPngFile.replace(pos, strPngFile.length(), ".png");
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(strPlistFile.c_str(), strPngFile.c_str());
+
             const char* imageFileName = DICTOOL->getStringValue_json(imageFileNameDic, "path");
             imageView->loadTexture(imageFileName, ui::UI_TEX_TYPE_PLIST);
             break;
