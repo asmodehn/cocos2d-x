@@ -57,7 +57,18 @@ void ButtonReader::setPropsFromJsonDictionary(ui::Widget *widget, const rapidjso
             break;
         }
         case 1:
-        {
+		{
+			const char *pPlist = DICTOOL->getStringValue_json(normalDic, "plistFile");
+			std::string strPlistFile = pPlist;
+			std::string strPngFile = pPlist;
+			std::string::size_type pos = strPngFile.find(".plist");
+			if (pos == strPngFile.npos)
+			{
+				break;
+			}
+			strPngFile.replace(pos, strPngFile.length(), ".png");
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(strPlistFile.c_str(), strPngFile.c_str());
+
             const char* normalFileName = DICTOOL->getStringValue_json(normalDic, "path");
             button->loadTextureNormal(normalFileName,ui::UI_TEX_TYPE_PLIST);
             break;
@@ -78,7 +89,18 @@ void ButtonReader::setPropsFromJsonDictionary(ui::Widget *widget, const rapidjso
             break;
         }
         case 1:
-        {
+		{
+			const char *pPlist = DICTOOL->getStringValue_json(pressedDic, "plistFile");
+			std::string strPlistFile = pPlist;
+			std::string strPngFile = pPlist;
+			std::string::size_type pos = strPngFile.find(".plist");
+			if (pos == strPngFile.npos)
+			{
+				break;
+			}
+			strPngFile.replace(pos, strPngFile.length(), ".png");
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(strPlistFile.c_str(), strPngFile.c_str());
+
             const char* pressedFileName = DICTOOL->getStringValue_json(pressedDic, "path");
             button->loadTexturePressed(pressedFileName,ui::UI_TEX_TYPE_PLIST);
             break;
@@ -99,7 +121,18 @@ void ButtonReader::setPropsFromJsonDictionary(ui::Widget *widget, const rapidjso
             break;
         }
         case 1:
-        {
+		{
+			const char *pPlist = DICTOOL->getStringValue_json(disabledDic, "plistFile");
+			std::string strPlistFile = pPlist;
+			std::string strPngFile = pPlist;
+			std::string::size_type pos = strPngFile.find(".plist");
+			if (pos == strPngFile.npos)
+			{
+				break;
+			}
+			strPngFile.replace(pos, strPngFile.length(), ".png");
+			CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(strPlistFile.c_str(), strPngFile.c_str());
+
             const char* disabledFileName = DICTOOL->getStringValue_json(disabledDic, "path");
             button->loadTextureDisabled(disabledFileName,ui::UI_TEX_TYPE_PLIST);
             break;
