@@ -12,7 +12,7 @@ if(WIN32)
   )
 elseif(APPLE)
 
-else()
+elseif(UNIX AND NOT CMAKE_TOOLCHAIN_FILE) #assumed linux
   set(AUDIO_SRC
     linux/SimpleAudioEngineFMOD.cpp
     linux/FmodAudioPlayer.cpp
@@ -21,14 +21,19 @@ else()
   include_directories(
     ../../external/linux-specific/fmod/include/${ARCH_DIR}
   )
-
+elseif( CMAKE_TOOLCHAIN_FILE)
+  set(AUDIO_SRC
+    android/cddSimpleAudioEngine.cpp
+    android/ccdandroidUtils.cpp
+    android/jni/cddandroidAndroidJavaEngine.cpp
+  )
 endif()
 
 add_library(audio STATIC
   ${AUDIO_SRC}
 )
 
-if((NOT APPLE) AND (NOT WIN32))
+if((NOT APPLE) AND (NOT WIN32) AND NOT CMAKE_TOOLCHAIN_FILE)
 
 if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 set(FMOD_LIB "fmodex64")

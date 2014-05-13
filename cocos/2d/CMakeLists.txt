@@ -13,7 +13,7 @@ set(PLATFORM_SRC
 
 elseif(APPLE)
 
-else()
+elseif(UNIX AND NOT CMAKE_TOOLCHAIN_FILE)
 
 set(PLATFORM_SRC
   platform/linux/CCStdC.cpp
@@ -22,6 +22,23 @@ set(PLATFORM_SRC
   platform/linux/CCApplication.cpp
   platform/desktop/CCGLView.cpp
   platform/linux/CCDevice.cpp
+)
+elseif(CMAKE_TOOLCHAIN_FILE)
+set(PLATFORM_SRC
+  platform/android/CCApplication.cpp
+  platform/android/CCCommon.cpp
+  platform/android/CCDevice.cpp
+  platform/android/CCGLView.cpp
+  platform/android/CCFileUtilsAndroid.cpp
+  platform/android/javaactivity.cpp
+  platform/android/jni/DPIJni.cpp
+  platform/android/jni/IMEJni.cpp
+  platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxAccelerometer.cpp
+  platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxBitmap.cpp
+  platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.cpp
+  platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp
+  platform/android/jni/JniHelper.cpp
+  platform/android/jni/TouchesJni.cpp
 )
 
 endif()
@@ -126,6 +143,7 @@ set(COCOS2D_SRC
   CCConfiguration.cpp
   CCDirector.cpp
   CCScheduler.cpp
+  CCUserDefault.cpp
   ccFPSImages.c
   ccTypes.cpp
   ../cocos2d.cpp
@@ -193,7 +211,7 @@ endif()
 
 elseif(APPLE)
 
-else()
+elseif(UNIX AND NOT CMAKE_TOOLCHAIN_FILE) #assumed linux
 set(COCOS_LINK
   jpeg
   webp
@@ -208,6 +226,20 @@ set(COCOS_LINK
   X11
   rt
   z
+)
+elseif(CMAKE_TOOLCHAIN_FILE) #assumed android
+set(COCOS_LINK
+  jpeg
+  webp
+  tiff
+  freetype
+  png
+  GLESv1_CM
+  GLESv2
+  EGL
+  log
+  z
+  android
 )
 endif()
 

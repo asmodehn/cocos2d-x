@@ -1,4 +1,5 @@
 
+if( NOT CMAKE_TOOLCHAIN_FILE) #not used for android
 SET(STORAGE_SOURCES
   local-storage/LocalStorage.cpp
   )
@@ -16,3 +17,6 @@ set_target_properties(storage
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 )
+
+endif( NOT CMAKE_TOOLCHAIN_FILE)
+

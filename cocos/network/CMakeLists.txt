@@ -6,7 +6,7 @@ if(WIN32)
   set(PLATFORM_LINK
     websockets
   )
-elseif(NOT APPLE)
+elseif(NOT APPLE AND UNIX AND NOT CMAKE_TOOLCHAIN_FILE) #assumed linux
   set(PLATFORM_SRC
     WebSocket.cpp
   )
@@ -15,6 +15,14 @@ elseif(NOT APPLE)
     websockets
     ssl
     crypto
+  )
+elseif(CMAKE_TOOLCHAIN_FILE) #assumed linux
+  set(PLATFORM_SRC
+    WebSocket.cpp
+  )
+
+  set(PLATFORM_LINK
+    websockets
   )
 endif()
 
