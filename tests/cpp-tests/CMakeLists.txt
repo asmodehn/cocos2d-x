@@ -202,15 +202,44 @@ add_executable(${APP_NAME}
 )
 endif()
 
+if ( BUILD_EDITOR_COCOSBUILDER )
+target_link_libraries(${APP_NAME}
+  cocosbuilder
+)
+endif()
+
+if ( BUILD_EDITOR_COCOSTUDIO )
+target_link_libraries(${APP_NAME}
+  cocostudio
+)
+endif()
+
+if ( BUILD_EDITOR_SPINE )
 target_link_libraries(${APP_NAME}
   spine
-  cocostudio
-  cocosbuilder
+)
+endif()
+
+if ( BUILD_EXTENSIONS )
+target_link_libraries(${APP_NAME}
   extensions
-  audio
-  cocos2d
+)
+endif()
+
+if ( USE_BOX2D )
+target_link_libraries(${APP_NAME}
   box2d
 )
+endif()
+
+target_link_libraries(${APP_NAME}
+  audio
+  cocos2d
+)
+
+
+
+
 
 set(APP_BIN_DIR "${CMAKE_BINARY_DIR}/bin/${APP_NAME}")
 
