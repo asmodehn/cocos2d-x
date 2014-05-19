@@ -191,9 +191,16 @@ include_directories(
 )
 
 # add the executable
+if (WIN32)
+add_executable(${APP_NAME}
+  WIN32
+  ${SAMPLE_SRC}
+)
+else ()
 add_executable(${APP_NAME}
   ${SAMPLE_SRC}
 )
+endif()
 
 target_link_libraries(${APP_NAME}
   spine
