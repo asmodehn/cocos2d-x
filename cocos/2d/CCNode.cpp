@@ -36,13 +36,14 @@ THE SOFTWARE.
 #include "base/CCEventDispatcher.h"
 #include "base/CCEvent.h"
 #include "base/CCEventTouch.h"
-#include "2d/ccCArray.h"
+#include "base/ccCArray.h"
 #include "2d/CCGrid.h"
 #include "2d/CCActionManager.h"
-#include "2d/CCScriptSupport.h"
+#include "base/CCScriptSupport.h"
 #include "2d/CCScene.h"
 #include "2d/CCComponent.h"
 #include "2d/CCComponentContainer.h"
+#include "2d/CCCameraView.h"
 #include "renderer/CCGLProgram.h"
 #include "renderer/CCGLProgramState.h"
 #include "math/TransformUtils.h"
@@ -718,7 +719,7 @@ void Node::childrenAlloc(void)
     _children.reserve(4);
 }
 
-Node* Node::getChildByTag(int tag)
+Node* Node::getChildByTag(int tag) const
 {
     CCASSERT( tag != Node::INVALID_TAG, "Invalid tag");
 
@@ -1846,6 +1847,18 @@ void Node::disableCascadeColor()
 __NodeRGBA::__NodeRGBA()
 {
     CCLOG("NodeRGBA deprecated.");
+}
+
+CameraView* Node::getCameraView()
+{
+	CameraView* camView = dynamic_cast<CameraView*>(this);
+
+	if (!camView && getParent())
+	{
+		camView = getParent()->getCameraView();
+	}
+
+	return camView;
 }
 
 NS_CC_END

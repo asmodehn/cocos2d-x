@@ -59,7 +59,7 @@ public:
 
     using Node::addChild;
     virtual std::string getDescription() const override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     Scene();
     virtual ~Scene();

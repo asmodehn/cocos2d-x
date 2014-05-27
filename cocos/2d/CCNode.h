@@ -32,11 +32,11 @@
 #include "base/ccMacros.h"
 #include "base/CCEventDispatcher.h"
 #include "base/CCVector.h"
+#include "base/CCScriptSupport.h"
+#include "base/CCProtocols.h"
 #include "math/CCAffineTransform.h"
 #include "math/CCMath.h"
 #include "renderer/ccGLStateCache.h"
-#include "2d/CCScriptSupport.h"
-#include "2d/CCProtocols.h"
 #include "CCGL.h"
 
 NS_CC_BEGIN
@@ -57,6 +57,7 @@ class GLProgramState;
 #if CC_USE_PHYSICS
 class PhysicsBody;
 #endif
+class CameraView;
 
 /**
  * @addtogroup base_nodes
@@ -643,7 +644,7 @@ public:
      *
      * @return a Node object whose tag equals to the input parameter
      */
-    virtual Node * getChildByTag(int tag);
+    virtual Node * getChildByTag(int tag) const;
     /**
      * Returns the array of the node's children
      *
@@ -1340,7 +1341,14 @@ public:
     
     virtual void setOpacityModifyRGB(bool bValue) {CC_UNUSED_PARAM(bValue);}
     virtual bool isOpacityModifyRGB() const { return false; };
-    
+
+	/**
+	* Get himself if node is a camera view, else try parent.
+	* Possibly one of the worst way to do it as it recurse and use dynamic_cast.
+	* Cocos2d event structure should change quite a bit to allow different input screen to view transformation.
+	*/
+	CameraView* getCameraView();
+
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
     Node();

@@ -41,7 +41,7 @@ Scene::Scene()
 #endif
 {
     _ignoreAnchorPointForPosition = true;
-    setAnchorPoint(Vec2(0.5f, 0.5f));
+	setAnchorPoint(Vec2(0.5f, 0.5f));
 }
 
 Scene::~Scene()
