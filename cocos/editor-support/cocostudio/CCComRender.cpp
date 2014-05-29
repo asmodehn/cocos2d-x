@@ -111,19 +111,14 @@ bool ComRender::serialize(void* r)
 		const char *file = DICTOOL->getStringValue_json(fileData, "path");
 		const char *plist = DICTOOL->getStringValue_json(fileData, "plistFile");
 		CC_BREAK_IF(file == nullptr && plist == nullptr);
-		std::string filePath;
-		std::string plistPath;
-		if (file != nullptr)
-		{
-			filePath.assign(cocos2d::CCFileUtils::getInstance()->fullPathForFilename(file));
-		}
-		if (plist != nullptr)
-		{
-			plistPath.assign(cocos2d::CCFileUtils::getInstance()->fullPathForFilename(plist));
-		}
 		int resType = DICTOOL->getIntValue_json(fileData, "resourceType", -1);
 		if (resType == 0)
 		{
+			std::string filePath;
+			if (file != nullptr)
+			{
+				filePath.assign(cocos2d::CCFileUtils::getInstance()->fullPathForFilename(file));
+			}
 			if (strcmp(className, "CCSprite") == 0 && filePath.find(".png") != std::string::npos)
 			{
 				_render = Sprite::create(filePath.c_str());
@@ -180,6 +175,11 @@ bool ComRender::serialize(void* r)
 		}
 		else if (resType == 1)
 		{
+			std::string plistPath;
+			if (plist != nullptr)
+			{
+				plistPath.assign(cocos2d::CCFileUtils::getInstance()->fullPathForFilename(plist));
+			}
 			if (strcmp(className, "CCSprite") == 0)
 			{
 				std::string strPngFile = plistPath;
@@ -190,7 +190,7 @@ bool ComRender::serialize(void* r)
 				}
 				strPngFile.replace(pos, strPngFile.length(), ".png");
 				SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plistPath.c_str(), strPngFile.c_str());
-				_render = Sprite::createWithSpriteFrameName(filePath.c_str());
+				_render = Sprite::createWithSpriteFrameName(file);
                 _render->retain();
 			}
 			else
