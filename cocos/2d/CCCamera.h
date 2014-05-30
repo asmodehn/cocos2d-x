@@ -35,6 +35,8 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 class EventListenerTouchOneByOne;
+class EventListenerMouse;
+class EventListenerTouchAllAtOnce;
 
 /**
 * Camera class. Use to control the view.
@@ -143,6 +145,43 @@ public:
 	*/
 	virtual void onTouchCancelled(Touch *touch, Event *unused_event);
 
+	/**
+	* Event receive when began multi touched
+	* @param touch Touch data
+	* @param unused_event Event data
+	*/
+	virtual bool onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event);
+
+	/**
+	* Event receive when multi touched moved
+	* @param touch Touch data
+	* @param unused_event Event data
+	*/
+	virtual void onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_event);
+
+	/**
+	* Event receive when multi touched ended
+	* @param touch Touch data
+	* @param unused_event Event data
+	*/
+	virtual void onTouchesEnded(const std::vector<Touch*>& touches, Event *unused_event);
+
+	/**
+	* Event receive when multi touched cancelled
+	* @param touch Touch data
+	* @param unused_event Event data
+	*/
+	virtual void onTouchesCancelled(const std::vector<Touch*>& touches, Event *unused_event);
+
+#ifdef _WINDOWS
+	/**
+	* Event receive when mouse is scrolling
+	* @param evt Event data
+	*/
+	virtual void onMouseScroll(Event* evt);
+
+#endif //_WINDOWS
+
 private:
 	/**
 	* Default constructor
@@ -175,6 +214,23 @@ private:
 	* Event listener
 	*/
 	EventListenerTouchOneByOne* _touchListener;
+
+	/**
+	* Event listener for zoom
+	*/
+	EventListenerTouchAllAtOnce*	_zoomListener;
+
+	/**
+	* Speed of scrooling when using a mouse
+	*/
+	float							_zoomVelocity;
+
+#ifdef _WINDOWS
+	/**
+	* Event listener for mouse (use for zoom on windows)
+	*/
+	EventListenerMouse*				_mouseListener;
+#endif //_WINDOWS
 };
 
 NS_CC_END
