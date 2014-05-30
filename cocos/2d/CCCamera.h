@@ -150,7 +150,7 @@ public:
 	* @param touch Touch data
 	* @param unused_event Event data
 	*/
-	virtual bool onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event);
+	virtual void onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event);
 
 	/**
 	* Event receive when multi touched moved

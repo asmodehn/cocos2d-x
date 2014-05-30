@@ -95,12 +95,8 @@ void Camera::onTouchCancelled(Touch *touch, Event *unused_event)
 {
 }
 
-bool Camera::onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event)
+void Camera::onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event)
 {
-	//if (touches.size() == 2)
-	{
-		return true;
-	}
 }
 
 void Camera::onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_event)
