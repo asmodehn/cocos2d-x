@@ -667,7 +667,7 @@ void Armature::setBody(cpBody *body)
                 {
                     detector->setBody(body);
                 }
-            });
+            }
         }
     }
 }
