@@ -387,7 +387,7 @@ Mat4 Bone::getNodeToArmatureTransform() const
 
 Mat4 Bone::getNodeToWorldTransform() const
 {
-    return TransformConcat(_worldTransform, _armature->getNodeToWorldTransform());
+    return TransformConcat(_armature->getNodeToWorldTransform(), _worldTransform);
 }
 
 Node *Bone::getDisplayRenderNode()
