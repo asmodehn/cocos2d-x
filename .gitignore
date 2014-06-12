@@ -140,4 +140,4 @@ project.properties
 
 #Ignore build by androidstudio
 cocos/2d/platform/android/java/build
-
+cocos/platform/android/java/build
