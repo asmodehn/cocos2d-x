@@ -112,10 +112,24 @@ public:
 	inline void setZoomLimit(float min, float max) { _zoomLimit.set(1.f / max, 1.f / min); }
 
 	/**
+	* Set panning boundaries
+	* @param min Min value of zoom (farthest)
+	* @param max Max value of zoom (nearest)
+	*/
+	inline void setPanLimit(Vec2 bottomLeft, Vec2 topRight) { _panLimit = std::pair<Vec2,Vec2>(bottomLeft,topRight); }
+
+
+	/**
 	* Compute the current camera projection matrix.
 	* @param projMatrix get the projection matrix computed
 	*/
 	virtual void getProjectionMatrix(Mat4& projMatrix);
+
+	/**
+	* Converts a Vec2 to world space coordinates. The result is in Points.
+	* This fixes positioning problems, because the camera view is centered on its position.
+	*/
+	Vec2 convertCenterToWorldSpace(const Vec2& nodePoint) const;
 
 	/**
 	* Event receive when began touched
@@ -209,6 +223,12 @@ private:
 	* Zoom boundaries
 	*/
 	Vec2			_zoomLimit;
+
+	/**
+	* Panning boundaries BOTTOM_LEFT / TOP_RIGHT
+	*/
+	std::pair<Vec2,Vec2>	_panLimit;
+
 
 	/**
 	* Event listener

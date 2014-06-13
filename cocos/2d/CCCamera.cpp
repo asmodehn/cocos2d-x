@@ -2,6 +2,7 @@
 #include "base/CCEventListenerTouch.h"
 #include "base/CCEventListenerMouse.h"
 
+#include <algorithm>
 
 NS_CC_BEGIN
 
@@ -64,17 +65,30 @@ void Camera::getProjectionMatrix(cocos2d::Mat4& projMatrix)
 	switch (_projectionType)
 	{
 	case cocos2d::Director::Projection::_2D:
-		int left = _position.x;
-		int right = _position.x + (_fov.x * _scaleX);
+		//we center the camera on its position
+		//-> the center of the view will be the position of the camera
+		int left = _position.x - (_fov.x * _scaleX)/2 ;
+		int right = _position.x + (_fov.x * _scaleX)/2 ;
 
-		int top = _position.y;
-		int bottom = _position.y + (_fov.y * _scaleX);
+		int bottom = _position.y - (_fov.y * _scaleX)/2;
+		int top = _position.y + (_fov.y * _scaleX)/2;
 
 		projMatrix.setIdentity();
-		cocos2d::Mat4::createOrthographicOffCenter(left, right, top, bottom, _range.x, _range.y, &projMatrix);
+		cocos2d::Mat4::createOrthographicOffCenter(left, right, bottom, top, _range.x, _range.y, &projMatrix);
 
 		break;
 	}
+}
+
+Vec2 Camera::convertCenterToWorldSpace(const Vec2& nodePoint) const
+{
+	Mat4 tmp = getNodeToWorldTransform();
+	//because _fov is the size of the camera viewport
+	//we can do the inverse transform on the nodePoint to compensate for centering camera
+	Vec3 vec3( nodePoint.x - _fov.x /2 , nodePoint.y -_fov.y /2, 0);
+	Vec3 ret;
+ 	tmp.transformPoint(vec3, &ret);
+	return Vec2(ret.x, ret.y);
 }
 
 bool Camera::onTouchBegan(Touch *touch, Event *unused_event)
@@ -84,7 +98,13 @@ bool Camera::onTouchBegan(Touch *touch, Event *unused_event)
 
 void Camera::onTouchMoved(Touch *touch, Event *unused_event)
 {
-	setPosition(getPosition() - touch->getDelta());
+	Vec2 newPos = getPosition() - touch->getDelta();
+	newPos.x = std::max(newPos.x, _panLimit.first.x);
+	newPos.x = std::min(newPos.x, _panLimit.second.x);
+	newPos.y = std::max(newPos.y, _panLimit.first.y);
+	newPos.y = std::min(newPos.y, _panLimit.second.y);
+
+	setPosition(newPos);
 }
 
 void Camera::onTouchEnded(Touch *touch, Event *unused_event)

@@ -874,7 +874,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
 						CameraView* camView = listener->_node->getCameraView();
 						if (camView && camView->getCamera())
 						{
-							(*touchesIter)->setTransformFunc(CC_CALLBACK_1(Node::convertToWorldSpace, camView->getCamera()));
+							(*touchesIter)->setTransformFunc(CC_CALLBACK_1(Camera::convertCenterToWorldSpace, camView->getCamera()));
 						}
 						else
 						{
@@ -895,7 +895,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
 					CameraView* camView = listener->_node->getCameraView();
 					if (camView && camView->getCamera())
 					{
-						(*touchesIter)->setTransformFunc(CC_CALLBACK_1(Node::convertToWorldSpace, camView->getCamera()));
+						(*touchesIter)->setTransformFunc(CC_CALLBACK_1(Camera::convertCenterToWorldSpace, camView->getCamera()));
 					}
 					{
 						(*touchesIter)->setTransformFunc(nullptr);
