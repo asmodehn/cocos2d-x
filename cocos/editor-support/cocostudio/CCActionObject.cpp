@@ -50,6 +50,7 @@ ActionObject::ActionObject()
 
 ActionObject::~ActionObject()
 {
+	stop();
 	_actionNodeList.clear();
 	CC_SAFE_RELEASE(_pScheduler);
 }
