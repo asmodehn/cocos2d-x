@@ -31,6 +31,11 @@ THE SOFTWARE.
 #include "base/CCEventMouse.h"
 #include "base/CCIMEDispatcher.h"
 
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#include "platform/win32/CCApplication.h"
+#endif
+
 #include <unordered_map>
 
 NS_CC_BEGIN
@@ -93,6 +98,21 @@ public:
         if (_view)
             _view->onGLFWWindowSizeFunCallback(window, width, height);
     }
+
+	static void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified)
+	{
+		if (_view)
+		{
+			if (iconified)
+			{
+				Application::getInstance()->applicationDidEnterBackground();
+			}
+			else
+			{
+				Application::getInstance()->applicationWillEnterForeground();
+			}
+		}
+	}
 
     static void setGLView(GLView* view)
     {
@@ -350,6 +370,7 @@ bool GLView::initWithRect(const std::string& viewName, Rect rect, float frameZoo
     glfwSetWindowPosCallback(_mainWindow, GLFWEventHandler::onGLFWWindowPosCallback);
     glfwSetFramebufferSizeCallback(_mainWindow, GLFWEventHandler::onGLFWframebuffersize);
     glfwSetWindowSizeCallback(_mainWindow, GLFWEventHandler::onGLFWWindowSizeFunCallback);
+	glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
 
     setFrameSize(rect.size.width, rect.size.height);
 
