@@ -98,6 +98,10 @@ bool Camera::onTouchBegan(Touch *touch, Event *unused_event)
 
 void Camera::onTouchMoved(Touch *touch, Event *unused_event)
 {
+	if (touch->getPreviousLocation().distanceSquared(touch->getLocation()) > 20.f)
+	{
+		_eventDispatcher->cancelEvent(_touchListener, touch);
+	}
 	Vec2 newPos = getPosition() - touch->getDelta();
 	newPos.x = std::max(newPos.x, _panLimit.first.x);
 	newPos.x = std::min(newPos.x, _panLimit.second.x);

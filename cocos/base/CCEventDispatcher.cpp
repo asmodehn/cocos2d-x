@@ -1034,6 +1034,56 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
     updateListeners(event);
 }
 
+void EventDispatcher::cancelEvent(EventListener* canceller, Touch* cancelled)
+{
+	auto oneByOneListeners = getListeners(EventListenerTouchOneByOne::LISTENER_ID);
+	auto allAtOnceListeners = getListeners(EventListenerTouchAllAtOnce::LISTENER_ID);
+
+	// If there aren't any touch listeners, return directly.
+	if (nullptr == oneByOneListeners && nullptr == allAtOnceListeners)
+		return;
+
+	//
+	// process the target handlers 1st
+	//
+	if (oneByOneListeners)
+	{
+		auto onCancelEvent = [&](EventListener* l) -> bool { // Return true to break
+			EventListenerTouchOneByOne* listener = static_cast<EventListenerTouchOneByOne*>(l);
+
+			// Skip if the listener was removed.
+			if (!listener->_isRegistered)
+				return false;
+
+			std::vector<Touch*>::iterator removedIter;
+			
+			// cancel touch
+			if (listener != canceller 
+				&& ((removedIter = std::find(listener->_claimedTouches.begin(), listener->_claimedTouches.end(), cancelled)) != listener->_claimedTouches.end()))
+			{
+				if (listener->onTouchCancelled)
+				{
+					listener->onTouchCancelled(cancelled, nullptr);
+				}
+				if (listener->_isRegistered)
+				{
+					listener->_claimedTouches.erase(removedIter);
+				}
+			}
+							
+			return false;
+		};
+
+		//
+		dispatchEventToListeners(oneByOneListeners, onCancelEvent);
+	}
+
+	//
+	// process standard handlers 2nd
+	//
+	// TODO
+}
+
 void EventDispatcher::updateListeners(Event* event)
 {
     CCASSERT(_inDispatch > 0, "If program goes here, there should be event in dispatch.");

@@ -40,6 +40,7 @@ NS_CC_BEGIN
 
 class Event;
 class EventTouch;
+class Touch;
 class Node;
 class EventCustom;
 class EventListenerCustom;
@@ -132,6 +133,11 @@ public:
 
     /** Dispatches a Custom Event with a event name an optional user data */
     void dispatchCustomEvent(const std::string &eventName, void *optionalUserData = nullptr);
+
+	/**
+	* Cancel event except for trigger
+	*/
+	void cancelEvent(EventListener* canceller, Touch* cancelled);
 
     /////////////////////////////////////////////
     
