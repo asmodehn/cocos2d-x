@@ -880,7 +880,7 @@ void Label::drawShadowWithoutBlur()
 void Label::draw(Renderer *renderer, const Mat4 &transform, bool transformUpdated)
 {
     // Don't do calculate the culling if the transform was not updated
-    _insideBounds = transformUpdated ? renderer->checkVisibility(transform, _contentSize) : _insideBounds;
+    _insideBounds = transformUpdated ? true/*renderer->checkVisibility(transform, _contentSize)*/ : _insideBounds;
 
     if(_insideBounds) {
         _customCommand.init(_globalZOrder);
