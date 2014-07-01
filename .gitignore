@@ -135,8 +135,9 @@ project.properties
 /external/wp8-specific/
 /external/version.json
 /templates/lua-template-runtime/runtime
-/v*-deps-*.zip
-/v*-lua-runtime-*.zip
+# don't ignore this files, source doesnt exist anymore
+#/v*-deps-*.zip
+#/v*-lua-runtime-*.zip
 
 #Ignore build by androidstudio
 cocos/2d/platform/android/java/build
