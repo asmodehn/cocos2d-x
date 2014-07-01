@@ -202,6 +202,9 @@ bool Sprite::initWithFile(const std::string &filename, const Rect& rect)
 
 bool Sprite::initWithSpriteFrameName(const std::string& spriteFrameName)
 {
+#if COCOS2D_DEBUG > 0
+	CCLOG("initWithSpriteFrameName with Name: %s", spriteFrameName.c_str());
+#endif
     CCASSERT(spriteFrameName.size() > 0, "Invalid spriteFrameName");
 
     SpriteFrame *frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
@@ -924,6 +927,9 @@ void Sprite::setSpriteFrame(const std::string &spriteFrameName)
     SpriteFrameCache *cache = SpriteFrameCache::getInstance();
     SpriteFrame *spriteFrame = cache->getSpriteFrameByName(spriteFrameName);
 
+#if COCOS2D_DEBUG > 0
+	CCLOG("setSpriteFrame with Name: %s", spriteFrameName.c_str());
+#endif
     CCASSERT(spriteFrame, "Invalid spriteFrameName");
 
     setSpriteFrame(spriteFrame);
