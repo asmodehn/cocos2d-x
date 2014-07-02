@@ -354,22 +354,22 @@ bool ParticleSystem::initWithDictionary(ValueMap& dictionary, const std::string&
                 // Try to get the texture from the cache
                 std::string textureName = dictionary["textureFileName"].asString();
                 
-                size_t rPos = textureName.rfind('/');
+                //size_t rPos = textureName.rfind('/');
                
-                if (rPos != string::npos)
-                {
-                    string textureDir = textureName.substr(0, rPos + 1);
-                    
-                    if (!dirname.empty() && textureDir != dirname)
-                    {
-                        textureName = textureName.substr(rPos+1);
-                        textureName = dirname + textureName;
-                    }
-                }
-                else if (!dirname.empty() && !textureName.empty())
-                {
-                	textureName = dirname + textureName;
-                }
+                //if (rPos != string::npos)
+                //{
+                //    string textureDir = textureName.substr(0, rPos + 1);
+                //    
+                //    if (!dirname.empty() && textureDir != dirname)
+                //    {
+                //        textureName = textureName.substr(rPos+1);
+                //        textureName = dirname + textureName;
+                //    }
+                //}
+                //else if (!dirname.empty() && !textureName.empty())
+                //{
+                //	textureName = dirname + textureName;
+                //}
                 
                 Texture2D *tex = nullptr;
                 
