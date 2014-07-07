@@ -34,6 +34,8 @@ THE SOFTWARE.
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 #include "platform/win32/CCApplication.h"
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+#include "platform/linux/CCApplication.h"
 #endif
 
 #include <unordered_map>
@@ -342,7 +344,7 @@ GLView* GLView::createWithFullScreen(const std::string& viewName, const GLFWvidm
         ret->autorelease();
         return ret;
     }
-    
+
     return nullptr;
 }
 
@@ -412,13 +414,13 @@ bool GLView::initWithFullscreen(const std::string &viewname, const GLFWvidmode &
     _monitor = monitor;
     if (nullptr == _monitor)
         return false;
-    
+
     //These are soft contraints. If the video mode is retrieved at runtime, the resulting window and context should match these exactly. If invalid attribs are passed (eg. from an outdated cache), window creation will NOT fail but the actual window/context may differ.
     glfwWindowHint(GLFW_REFRESH_RATE, videoMode.refreshRate);
     glfwWindowHint(GLFW_RED_BITS, videoMode.redBits);
     glfwWindowHint(GLFW_BLUE_BITS, videoMode.blueBits);
     glfwWindowHint(GLFW_GREEN_BITS, videoMode.greenBits);
-    
+
     return initWithRect(viewname, Rect(0, 0, videoMode.width, videoMode.height), 1.0f);
 }
 
