@@ -65,14 +65,14 @@ public:
 	* @param width Width of view
 	* @param height Height of view
 	*/
-	inline void setFOV(int width, int height){ _fov.set(width, height); }
+	inline void setFOV(int width, int height){ _fov.set(static_cast<float>(width), static_cast<float>(height)); }
 
 	/**
 	* Set near and far range
 	* @param nearRange Near range of the camera
 	* @param farRange Far range of the camera
 	*/
-	inline void setRange(int nearRange, int farRange){ _range.set(nearRange, farRange); }
+	inline void setRange(int nearRange, int farRange){ _range.set(static_cast<float>(nearRange), static_cast<float>(farRange)); }
 
 	/**
 	* Get zoom value.
