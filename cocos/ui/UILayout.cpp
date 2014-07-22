@@ -128,7 +128,7 @@ void LinearVerticalLayoutExecutant::doLayout(const cocos2d::Size &layoutSize, Ve
     for (auto& subWidget : container)
     {
         Widget* child = dynamic_cast<Widget*>(subWidget);
-        if (child)
+		if (child && child->isVisible())
         {
             LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter(LayoutParameter::Type::LINEAR));
             
@@ -169,7 +169,7 @@ void LinearHorizontalLayoutExecutant::doLayout(const cocos2d::Size &layoutSize, 
     for (auto& subWidget : container)
     {
         Widget* child = dynamic_cast<Widget*>(subWidget);
-        if (child)
+		if (child && child->isVisible())
         {
             LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter(LayoutParameter::Type::LINEAR));
             if (layoutParameter)
