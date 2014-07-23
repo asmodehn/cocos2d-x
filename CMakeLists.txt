@@ -212,10 +212,14 @@ else()
 endif()
 
 # chipmunk library
+if(USE_CHIPMUNK)
 add_subdirectory(external/chipmunk/src)
+endif(USE_CHIPMUNK)
 
 # box2d library
+if(USE_BOX2D)
 add_subdirectory(external/Box2D)
+endif(USE_BOX2D)
 
 # unzip library
 add_subdirectory(external/unzip)
@@ -267,8 +271,7 @@ add_subdirectory(cocos/scripting/lua-bindings)
 endif(BUILD_LIBS_LUA)
 
 # build tests 
-
-add_subdirectory(tests/cpp-empty-test)
+#add_subdirectory(tests/cpp-empty-test)
 
 if(BUILD_CppTests)
 add_subdirectory(tests/cpp-tests)
