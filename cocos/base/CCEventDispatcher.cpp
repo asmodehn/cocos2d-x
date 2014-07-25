@@ -897,6 +897,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
 					{
 						(*touchesIter)->setTransformFunc(CC_CALLBACK_1(Camera::convertCenterToWorldSpace, camView->getCamera()));
 					}
+					else
 					{
 						(*touchesIter)->setTransformFunc(nullptr);
 					}
