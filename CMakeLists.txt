@@ -38,7 +38,6 @@ option(USE_CHIPMUNK "Use chipmunk for physics library" ON)
 option(USE_BOX2D "Use box2d for physics library" OFF)
 option(DEBUG_MODE "Debug or release?" ON)
 option(BUILD_LIBS_LUA "Build lua libraries" OFF)
-option(BUILD_EXTENSIONS "Build extension library" ON)
 option(BUILD_EDITOR_SPINE "Build editor support for spine" ON)
 option(BUILD_EDITOR_COCOSTUDIO "Build editor support for cocostudio" ON)
 option(BUILD_EDITOR_COCOSBUILDER "Build editor support for cocosbuilder" ON)
@@ -51,7 +50,6 @@ option(USE_CHIPMUNK "Use chipmunk for physics library" ON)
 option(USE_BOX2D "Use box2d for physics library" OFF)
 option(DEBUG_MODE "Debug or release?" ON)
 option(BUILD_LIBS_LUA "Build lua libraries" ON)
-option(BUILD_EXTENSIONS "Build extension library" ON)
 option(BUILD_EDITOR_SPINE "Build editor support for spine" ON)
 option(BUILD_EDITOR_COCOSTUDIO "Build editor support for cocostudio" ON)
 option(BUILD_EDITOR_COCOSBUILDER "Build editor support for cocosbuilder" ON)
@@ -236,10 +234,8 @@ add_subdirectory(cocos/audio)
 # cocos2d library
 add_subdirectory(cocos)
 
-if(BUILD_EXTENSIONS)
 # extensions
 add_subdirectory(extensions)
-endif(BUILD_EXTENSIONS)
 
 ## Editor Support
 
