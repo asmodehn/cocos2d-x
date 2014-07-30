@@ -23,6 +23,10 @@ Camera::Camera() :
 	// Arbitrary value
 	_zoomLimit.set(0.1f, 2.f);
 	setZOrder(-1000);
+
+	// set max limit
+	_panLimit.first.set(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
+	_panLimit.second.set(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 }
 	
 Camera::~Camera()
