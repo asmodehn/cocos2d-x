@@ -92,6 +92,7 @@ endif()
 
 target_link_libraries(cocos2d
   chipmunk_static
+  extensions
   tinyxml2
   unzip
   xxhash
