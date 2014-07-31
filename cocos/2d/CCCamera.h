@@ -68,6 +68,12 @@ public:
 	inline void setFOV(int width, int height){ _fov.set(static_cast<float>(width), static_cast<float>(height)); }
 
 	/**
+	* Get field of view
+	* @return the field of view
+	*/
+	inline const Vec2& getFOV(){ return _fov; }
+
+	/**
 	* Set near and far range
 	* @param nearRange Near range of the camera
 	* @param farRange Far range of the camera
