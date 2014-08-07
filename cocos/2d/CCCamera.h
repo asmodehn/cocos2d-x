@@ -45,6 +45,13 @@ class EventListenerTouchAllAtOnce;
 class CC_DLL Camera : public cocos2d::Node
 {
 public:
+	enum CameraPanMode
+	{
+		PAN_CENTER		= 0,
+		PAN_BORDER
+	};
+
+public:
 	/**
 	* Create camera function
 	*/
@@ -124,6 +131,11 @@ public:
 	*/
 	inline void setPanLimit(Vec2 bottomLeft, Vec2 topRight) { _panLimit = std::pair<Vec2,Vec2>(bottomLeft,topRight); }
 
+	/**
+	* Change pan mode
+	* @param mode Mode camera should use for panning
+	*/
+	inline void setPanMode(CameraPanMode mode) { _panMode = mode; }
 
 	/**
 	* Compute the current camera projection matrix.
@@ -257,6 +269,11 @@ private:
 	*/
 	EventListenerMouse*				_mouseListener;
 #endif //_WINDOWS
+
+	/**
+	* Panning mode
+	*/
+	CameraPanMode					_panMode;
 };
 
 NS_CC_END

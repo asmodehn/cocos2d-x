@@ -2,20 +2,22 @@
 #include "base/CCEventListenerTouch.h"
 #include "base/CCEventListenerMouse.h"
 
+
 #include <algorithm>
 
 NS_CC_BEGIN
 
-Camera::Camera() :
-	_projectionType(Director::Projection::_2D),
-	_touchListener(nullptr),
-	_zoomListener(nullptr)
+Camera::Camera() 
+	: _projectionType(Director::Projection::_2D)
+	, _touchListener(nullptr)
+	, _zoomListener(nullptr)
 #ifdef _WINDOWS
 	, _mouseListener(nullptr)
 	, _zoomVelocity(0.2f)
 #else
 	,_zoomVelocity(0.0000008f)
 #endif //_WINDOWS
+	, _panMode(PAN_CENTER)
 {
 	// Arbitrary value from Director::setProjection
 	_range.set(-1024, 1024);
@@ -107,10 +109,34 @@ void Camera::onTouchMoved(Touch *touch, Event *unused_event)
 		_eventDispatcher->cancelEvent(_touchListener, touch);
 	}
 	Vec2 newPos = getPosition() - touch->getDelta();
-	newPos.x = std::max(newPos.x, _panLimit.first.x);
-	newPos.x = std::min(newPos.x, _panLimit.second.x);
-	newPos.y = std::max(newPos.y, _panLimit.first.y);
-	newPos.y = std::min(newPos.y, _panLimit.second.y);
+
+	switch (_panMode)
+	{
+	case PAN_CENTER:
+		newPos.x = std::max(newPos.x, _panLimit.first.x);
+		newPos.x = std::min(newPos.x, _panLimit.second.x);
+		newPos.y = std::max(newPos.y, _panLimit.first.y);
+		newPos.y = std::min(newPos.y, _panLimit.second.y);
+		break;
+	case PAN_BORDER:
+		if (getZoom() > 1.2)
+		{
+			newPos.x = std::max(newPos.x, _panLimit.first.x + 300);
+			newPos.x = std::min(newPos.x, _panLimit.second.x - 70);
+			newPos.y = std::max(newPos.y, _panLimit.first.y + 100);
+			newPos.y = std::min(newPos.y, _panLimit.second.y - 10);
+		}
+		else
+		{
+
+			newPos.x = std::max(newPos.x, _panLimit.first.x);
+			newPos.x = std::min(newPos.x, _panLimit.second.x);
+			newPos.y = std::max(newPos.y, _panLimit.first.y);
+			newPos.y = std::min(newPos.y, _panLimit.second.y);
+		}
+
+		break;
+	}
 
 	setPosition(newPos);
 }
