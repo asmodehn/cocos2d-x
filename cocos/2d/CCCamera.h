@@ -122,7 +122,7 @@ public:
 	* @param min Min value of zoom (farthest)
 	* @param max Max value of zoom (nearest)
 	*/
-	inline void setZoomLimit(float min, float max) { _zoomLimit.set(1.f / max, 1.f / min); }
+	inline void setZoomLimit(float min, float max) { _zoomLimit.set(min, max); }
 
 	/**
 	* Set panning boundaries
@@ -148,6 +148,12 @@ public:
 	* This fixes positioning problems, because the camera view is centered on its position.
 	*/
 	Vec2 convertCenterToWorldSpace(const Vec2& nodePoint) const;
+
+	/**
+	* Converts a Vec2 to camera space coordinates. The result is in Points.
+	* This fixes positioning problems, because the camera view is centered on its position.
+	*/
+	Vec2 convertWorldSpaceToCenter(const Vec2& worldPoint) const;
 
 	/**
 	* Event receive when began touched

@@ -90,9 +90,20 @@ Vec2 Camera::convertCenterToWorldSpace(const Vec2& nodePoint) const
 	Mat4 tmp = getNodeToWorldTransform();
 	//because _fov is the size of the camera viewport
 	//we can do the inverse transform on the nodePoint to compensate for centering camera
-	Vec3 vec3( nodePoint.x - _fov.x /2 , nodePoint.y -_fov.y /2, 0);
+	Vec3 vec3(nodePoint.x - _fov.x / 2, nodePoint.y - _fov.y / 2, 0);
 	Vec3 ret;
  	tmp.transformPoint(vec3, &ret);
+	return Vec2(ret.x, ret.y);
+}
+
+Vec2 Camera::convertWorldSpaceToCenter(const Vec2& worldPoint) const
+{
+	Mat4 tmp = getWorldToNodeTransform();
+	//because _fov is the size of the camera viewport
+	//we can do the inverse transform on the nodePoint to compensate for centering camera
+	Vec3 vec3(worldPoint.x + _fov.x * _scaleX / 2, worldPoint.y + _fov.y * _scaleX / 2, 0);
+	Vec3 ret;
+	tmp.transformPoint(vec3, &ret);
 	return Vec2(ret.x, ret.y);
 }
 
