@@ -130,11 +130,17 @@ void Camera::onTouchMoved(Touch *touch, Event *unused_event)
 		newPos.y = std::min(newPos.y, _panLimit.second.y);
 		break;
 	case PAN_BORDER:
-		newPos.x = std::max(newPos.x, _panLimit.first.x *(2.08f - getZoom()));
-		newPos.x = std::min(newPos.x, _panLimit.second.x *(1 - getZoom() + 1));
-		newPos.y = std::max(newPos.y, _panLimit.first.y *(2.3f - getZoom()));
-		newPos.y = std::min(newPos.y, _panLimit.second.y *(1 - getZoom() + 1));
-		//printf("zoom is %f and %f and pan is %f", getZoom(), Director::getInstance()->getWinSize().height, _panLimit.first.y);
+		//newPos.x = std::max(newPos.x, _panLimit.first.x *(2.08f - getZoom()));
+		//newPos.x = std::min(newPos.x, _panLimit.second.x *(1 - getZoom() + 1));
+		//newPos.y = std::max(newPos.y, _panLimit.first.y *(2.3f - getZoom()));
+		//newPos.y = std::min(newPos.y, _panLimit.second.y *(1 - getZoom() + 1));
+		newPos.x = std::max(newPos.x, _panLimit.first.x + (_fov.x * getZoom() - _fov.x) / 2);
+		newPos.x = std::min(newPos.x, _panLimit.second.x - (_fov.x * getZoom() - _fov.x) / 2);
+		newPos.y = std::max(newPos.y, _panLimit.first.y + (_fov.y  * getZoom() - _fov.y) / 2);
+		newPos.y = std::min(newPos.y, _panLimit.second.y - (_fov.y * getZoom() - _fov.y) / 2);
+
+
+		printf("zoom is %f and %f and pan is %f", getZoom(), Director::getInstance()->getWinSize().height, _panLimit.first.y);
 		break;
 	}
 	
