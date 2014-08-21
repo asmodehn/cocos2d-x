@@ -119,31 +119,10 @@ void Camera::onTouchMoved(Touch *touch, Event *unused_event)
 	{
 		_eventDispatcher->cancelEvent(_touchListener, touch);
 	}
-	Vec2 newPos = getPosition() - touch->getDelta();
+	Vec2 newPos = getPosition() - touch->getDelta() * getZoom();
 	
-	switch (_panMode)
-	{
-	case PAN_CENTER:
-		newPos.x = std::max(newPos.x, _panLimit.first.x);
-		newPos.x = std::min(newPos.x, _panLimit.second.x);
-		newPos.y = std::max(newPos.y, _panLimit.first.y);
-		newPos.y = std::min(newPos.y, _panLimit.second.y);
-		break;
-	case PAN_BORDER:
-		//newPos.x = std::max(newPos.x, _panLimit.first.x *(2.08f - getZoom()));
-		//newPos.x = std::min(newPos.x, _panLimit.second.x *(1 - getZoom() + 1));
-		//newPos.y = std::max(newPos.y, _panLimit.first.y *(2.3f - getZoom()));
-		//newPos.y = std::min(newPos.y, _panLimit.second.y *(1 - getZoom() + 1));
-		newPos.x = std::max(newPos.x, _panLimit.first.x + (_fov.x * getZoom() - _fov.x) / 2);
-		newPos.x = std::min(newPos.x, _panLimit.second.x - (_fov.x * getZoom() - _fov.x) / 2);
-		newPos.y = std::max(newPos.y, _panLimit.first.y + (_fov.y  * getZoom() - _fov.y) / 2);
-		newPos.y = std::min(newPos.y, _panLimit.second.y - (_fov.y * getZoom() - _fov.y) / 2);
+	newPos = clampToLimit(newPos);
 
-
-		printf("zoom is %f and %f and pan is %f", getZoom(), Director::getInstance()->getWinSize().height, _panLimit.first.y);
-		break;
-	}
-	
 	setPosition(newPos);
 }
 
@@ -170,6 +149,10 @@ void Camera::onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_ev
 		float zoomValue = (touches[0]->getPreviousLocation().getDistanceSq(touches[1]->getPreviousLocation()) - touches[0]->getLocation().getDistanceSq(touches[1]->getLocation())) * _zoomVelocity;
 		//CCLOG("Zoom value is %f", zoomValue);
 		addZoom(zoomValue);
+
+		Vec2 newPos = getPosition();
+		newPos = clampToLimit(newPos);
+		setPosition(newPos);
 	}
 }
 
@@ -186,8 +169,32 @@ void Camera::onMouseScroll(Event* evt)
 	float zoom = e->getScrollY() * _zoomVelocity;
 
 	addZoom(zoom);
+	Vec2 newPos = getPosition();
+	newPos = clampToLimit(newPos);
+	setPosition(newPos);
 }
 #else //_WINDOWS
 #endif //_WINDOWS
 
+cocos2d::Vec2 Camera::clampToLimit(const cocos2d::Vec2& camPos)
+{
+	cocos2d::Vec2 clampPos = camPos;
+	switch (_panMode)
+	{
+	case PAN_CENTER:
+		clampPos.x = std::max(clampPos.x, _panLimit.first.x);
+		clampPos.x = std::min(clampPos.x, _panLimit.second.x);
+		clampPos.y = std::max(clampPos.y, _panLimit.first.y);
+		clampPos.y = std::min(clampPos.y, _panLimit.second.y);
+		break;
+	case PAN_BORDER:
+		clampPos.x = std::max(clampPos.x, _panLimit.first.x + (_fov.x * getZoom() - _fov.x) / 2);
+		clampPos.x = std::min(clampPos.x, _panLimit.second.x - (_fov.x * getZoom() - _fov.x) / 2);
+		clampPos.y = std::max(clampPos.y, _panLimit.first.y + (_fov.y  * getZoom() - _fov.y) / 2);
+		clampPos.y = std::min(clampPos.y, _panLimit.second.y - (_fov.y * getZoom() - _fov.y) / 2);
+		break;
+	}
+
+	return clampPos;
+}
 NS_CC_END

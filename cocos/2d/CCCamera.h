@@ -228,6 +228,11 @@ private:
 	Camera();
 
 	/**
+	* Clamp camera to its limit, including zoom
+	*/
+	cocos2d::Vec2 clampToLimit(const cocos2d::Vec2& camPos);
+
+	/**
 	* Camera projection 2d or 3d (ortho or persp)
 	* Only 2d so far
 	*/
