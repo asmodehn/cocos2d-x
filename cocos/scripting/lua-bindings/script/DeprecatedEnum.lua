@@ -402,10 +402,10 @@ _G.LAYOUT_COLOR_NONE              = ccui.LayoutBackGroundColorType.none
 _G.LAYOUT_COLOR_SOLID             = ccui.LayoutBackGroundColorType.solid
 _G.LAYOUT_COLOR_GRADIENT          = ccui.LayoutBackGroundColorType.gradient
 
-_G.LAYOUT_ABSOLUTE                = ccui.Type.ABSOLUTE
-_G.LAYOUT_LINEAR_VERTICAL         = ccui.Type.VERTICAL
-_G.LAYOUT_LINEAR_HORIZONTAL       = ccui.Type.HORIZONTAL
-_G.LAYOUT_RELATIVE                = ccui.Type.RELATIVE
+_G.LAYOUT_ABSOLUTE                = ccui.LayoutType.ABSOLUTE
+_G.LAYOUT_LINEAR_VERTICAL         = ccui.LayoutType.VERTICAL
+_G.LAYOUT_LINEAR_HORIZONTAL       = ccui.LayoutType.HORIZONTAL
+_G.LAYOUT_RELATIVE                = ccui.LayoutType.RELATIVE
 
 _G.BRIGHT_NONE               = ccui.BrightStyle.none
 _G.BRIGHT_NORMAL             = ccui.BrightStyle.normal
@@ -491,4 +491,6 @@ ccui.LayoutType.absolute = ccui.LayoutType.ABSOLUTE
 ccui.LayoutType.linearVertical = ccui.LayoutType.VERTICAL
 ccui.LayoutType.linearHorizontal = ccui.LayoutType.HORIZONTAL
 ccui.LayoutType.relative = ccui.LayoutType.RELATIVE
+
+ccui.ListViewEventType.onsSelectedItem = ccui.ListViewEventType.ONSELECTEDITEM_START
 

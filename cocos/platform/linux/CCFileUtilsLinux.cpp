@@ -71,8 +71,6 @@ bool FileUtilsLinux::init()
     fullpath[length] = '\0';
     std::string appPath = fullpath;
     _defaultResRootPath = appPath.substr(0, appPath.find_last_of("/"));
-    // no needed to behave like win32.
-    //_defaultResRootPath += "/Resources/";
     _defaultResRootPath += "/";
 
     // Set writable path to $XDG_CONFIG_HOME or ~/.config/<app name>/ if $XDG_CONFIG_HOME not exists.

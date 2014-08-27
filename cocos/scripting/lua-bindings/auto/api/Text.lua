@@ -2,6 +2,7 @@
 --------------------------------
 -- @module Text
 -- @extend Widget
+-- @parent_module ccui
 
 --------------------------------
 -- @function [parent=#Text] getStringLength 
@@ -24,14 +25,24 @@
 -- @return int#int ret (return value: int)
         
 --------------------------------
+-- @function [parent=#Text] enableOutline 
+-- @param self
+-- @param #color4b_table color4b
+-- @param #int int
+        
+--------------------------------
 -- @function [parent=#Text] getTextVerticalAlignment 
 -- @param self
--- @return TextVAlignment#TextVAlignment ret (return value: cc.TextVAlignment)
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- @function [parent=#Text] getString 
 -- @param self
 -- @return string#string ret (return value: string)
+        
+--------------------------------
+-- @function [parent=#Text] enableShadow 
+-- @param self
         
 --------------------------------
 -- @function [parent=#Text] setString 
@@ -41,12 +52,17 @@
 --------------------------------
 -- @function [parent=#Text] getTextHorizontalAlignment 
 -- @param self
--- @return TextHAlignment#TextHAlignment ret (return value: cc.TextHAlignment)
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- @function [parent=#Text] setTextVerticalAlignment 
 -- @param self
--- @param #cc.TextVAlignment textvalignment
+-- @param #int textvalignment
+        
+--------------------------------
+-- @function [parent=#Text] enableGlow 
+-- @param self
+-- @param #color4b_table color4b
         
 --------------------------------
 -- @function [parent=#Text] getTextAreaSize 
@@ -56,7 +72,7 @@
 --------------------------------
 -- @function [parent=#Text] setTextHorizontalAlignment 
 -- @param self
--- @param #cc.TextHAlignment texthalignment
+-- @param #int texthalignment
         
 --------------------------------
 -- @function [parent=#Text] setFontSize 
@@ -71,7 +87,11 @@
 --------------------------------
 -- @function [parent=#Text] getType 
 -- @param self
--- @return Text::Type#Text::Type ret (return value: ccui.Text::Type)
+-- @return int#int ret (return value: int)
+        
+--------------------------------
+-- @function [parent=#Text] disableEffect 
+-- @param self
         
 --------------------------------
 -- @function [parent=#Text] getFontName 
@@ -84,10 +104,8 @@
 -- @param #size_table size
         
 --------------------------------
--- overload function: create(string, string, int)
---          
--- overload function: create()
---          
+-- @overload self, string, string, int         
+-- @overload self         
 -- @function [parent=#Text] create
 -- @param self
 -- @param #string str

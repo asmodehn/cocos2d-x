@@ -58,7 +58,7 @@ option(BUILD_CppTests "Only build TestCpp sample" ON)
 option(BUILD_LuaTests "Only build TestLua sample" ON)
 endif()#temp
 
-
+#This is ignored on multi configuration IDE like MSVC
 if(DEBUG_MODE)
   set(CMAKE_BUILD_TYPE DEBUG)
 else(DEBUG_MODE)
@@ -66,17 +66,20 @@ else(DEBUG_MODE)
 endif(DEBUG_MODE)
 
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DCOCOS2D_DEBUG=1")
-set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DCOCOS2D_DEBUG=1")
 
 if(WIN32)
-  ADD_DEFINITIONS (-D_USRDLL -DCOCOS2DXWIN32_EXPORTS -D_WINDOWS -DWIN32)
-
+  ADD_DEFINITIONS (-D_USRDLL -D_USEGUIDLL -D_USREXDLL -DIGNORE_EXPORT -DCOCOS2DXWIN32_EXPORTS -D_WINDOWS -DWIN32)
+  if(BUILD_EDITOR_COCOSTUDIO)
+    ADD_DEFINITIONS (-D_USRSTUDIODLL)
+  endif(BUILD_EDITOR_COCOSTUDIO)
   if(MSVC)
     ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS 
 					-D_SCL_SECURE_NO_WARNINGS 
 					-wd4251 -wd4244 -wd4334 
 					-wd4005 -wd4820 -wd4710
-					-wd4514 -wd4056 -wd4996 -wd4099
+					-wd4514 -wd4056 -wd4996 
+					-wd4099 -wd4819
 					-MP -Qpar)
   else(MSVC)#MINGW
   
@@ -98,6 +101,9 @@ endif()
 
 if(MINGW)
   add_definitions(-DGLEW_STATIC)
+  add_definitions(-D__SSIZE_T)
+  set(CMAKE_C_STANDARD_LIBRARIES "${CMAKE_C_STANDARD_LIBRARIES} -lws2_32")
+  set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lws2_32")
 endif()
 
 
@@ -150,9 +156,10 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/external/freetype2/include/${PLATFORM_FOLDER}
   ${CMAKE_CURRENT_SOURCE_DIR}/external/websockets/include/${PLATFORM_FOLDER}
   ${CMAKE_CURRENT_SOURCE_DIR}/external/xxhash
+  ${CMAKE_CURRENT_SOURCE_DIR}/external/xxtea
 )
 
-if(WIN32)
+if(WIN32 AND NOT MINGW)
   include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/gles/include/OGLES
     ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/icon/include
@@ -180,15 +187,15 @@ if(WIN32)
     ${CMAKE_CURRENT_SOURCE_DIR}/external/jpeg/prebuilt/${PLATFORM_FOLDER}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/tiff/prebuilt/${PLATFORM_FOLDER}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/png/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/sqlite3/libraries/${PLATFORM_FOLDER}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/freetype2/prebuilt/${PLATFORM_FOLDER}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/curl/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/sqlite3/libraries/${PLATFORM_FOLDER}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/websockets/prebuilt/${PLATFORM_FOLDER}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/webp/prebuilt/${PLATFORM_FOLDER}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/glfw3/prebuilt/${PLATFORM_FOLDER}
-	${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/gles/prebuilt
     ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/icon/prebuilt
     ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/zlib/prebuilt
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/gles/prebuilt
   )
   endif()
 
@@ -264,12 +271,14 @@ add_subdirectory(external/lua/tolua)
 
 # luabinding
 add_subdirectory(cocos/scripting/lua-bindings)
+
+# xxtea
+add_subdirectory(external/xxtea)
 endif(BUILD_LIBS_LUA)
 
 # build tests 
-#add_subdirectory(tests/cpp-empty-test)
-
 if(BUILD_CppTests)
+add_subdirectory(tests/cpp-empty-test)
 add_subdirectory(tests/cpp-tests)
 endif(BUILD_CppTests)
 
