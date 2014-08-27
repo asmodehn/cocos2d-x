@@ -136,7 +136,12 @@ public:
      *
      * @return true if the widget is enabled, false if the widget is disabled.
      */
-    bool isEnabled() const;
+	bool isEnabled() const;
+
+	/**
+	 * Change color based on access status
+	 */
+	void switchEnableColor();
 
     /**
      * Sets whether the widget is bright
@@ -674,8 +679,10 @@ protected:
     Vec2 _positionPercent;
     bool _reorderWidgetChildDirty;
     bool _hitted;
-    EventListenerTouchOneByOne* _touchListener;
-    Color3B _color;
+	EventListenerTouchOneByOne* _touchListener;
+	Color3B _color;
+	Color3B _activeColor;
+	Color3B _inactiveColor;
     GLubyte _opacity;
     bool _flippedX;
     bool _flippedY;

@@ -157,6 +157,9 @@ bool Director::init(void)
 
     _renderer = new Renderer;
 
+	//
+	_defaultDisableColor = Color3B::GRAY;
+
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
     _console = new Console;
 #endif

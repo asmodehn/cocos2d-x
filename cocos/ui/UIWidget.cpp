@@ -58,6 +58,8 @@ _reorderWidgetChildDirty(true),
 _hitted(false),
 _touchListener(nullptr),
 _color(Color3B::WHITE),
+_activeColor(Color3B::WHITE),
+_inactiveColor(Color3B::WHITE),
 _opacity(255),
 _flippedX(false),
 _flippedY(false),
@@ -68,6 +70,7 @@ _focusEnabled(true)
     onNextFocusedWidget = nullptr;
     this->setAnchorPoint(Vec2(0.5f, 0.5f));
     this->setTouchEnabled(true);
+	_inactiveColor = Director::getInstance()->getDefaultDisableColor();
 }
 
 Widget::~Widget()
@@ -137,6 +140,31 @@ Widget* Widget::getWidgetParent()
 void Widget::setEnabled(bool enabled)
 {
     _enabled = enabled;
+	switchEnableColor();
+}
+
+void Widget::switchEnableColor()
+{
+	if (_enabled && isAncestorsEnabled())
+	{
+		setColor(_activeColor);
+	}
+	else
+	{
+		setColor(_inactiveColor);
+	}
+
+	for (auto& child : _children)
+	{
+		if (child)
+		{
+			Widget* widgetChild = dynamic_cast<Widget*>(child);
+			if (widgetChild)
+			{
+				widgetChild->switchEnableColor();
+			}
+		}
+	}
 }
 
 Widget* Widget::getChildByName(const std::string& name)

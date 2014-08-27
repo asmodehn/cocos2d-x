@@ -402,7 +402,17 @@ public:
     /**
      *  get Frame Rate
      */
-    float getFrameRate() const { return _frameRate; }
+	float getFrameRate() const { return _frameRate; }
+
+	/**
+	*  Set default disable color
+	*/
+	inline void setDefaultDisableColor(const Color3B& defaultDisableColor) { _defaultDisableColor = defaultDisableColor; }
+
+	/**
+	*  Get default disable color
+	*/
+	inline const Color3B& getDefaultDisableColor() { return _defaultDisableColor; }
 
 protected:
     void purgeDirector();
@@ -498,10 +508,13 @@ protected:
     float _contentScaleFactor;
 
     /* This object will be visited after the scene. Useful to hook a notification node */
-    Node *_notificationNode;
+	Node *_notificationNode;
 
-    /* Renderer for the Director */
-    Renderer *_renderer;
+	/* Renderer for the Director */
+	Renderer *_renderer;
+
+	/* Default disable color, mostly used for ui */
+	Color3B	_defaultDisableColor;
 
 #if  (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
     /* Console for the director */
