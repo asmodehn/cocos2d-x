@@ -175,22 +175,17 @@ namespace cocostudio
                                               const std::string &key,
                                               cocos2d::ui::Widget::TextureResType texType)
     {
-        std::string jsonPath = GUIReader::getInstance()->getFilePath();
+        std::string path;
         const char* imageFileName = DICTOOL->getStringValue_json(dict, key.c_str());
-        std::string imageFileName_tp;
-        if (nullptr != imageFileName)
-        {
-            if (texType == ui::Widget::TextureResType::LOCAL) {
-                imageFileName_tp = jsonPath + imageFileName;
-            }
-            else if(texType == ui::Widget::TextureResType::PLIST){
-                imageFileName_tp = imageFileName;
-            }
-            else{
-                CCASSERT(0, "invalid TextureResType!!!");
-            }
-        }
-        return imageFileName_tp;
+		if (imageFileName)
+		{
+			path = imageFileName;
+		}
+		else
+		{
+			CCLOG("No attribute %s", key.c_str());
+		}
+		return path;
     }
     
     void WidgetReader::setAnchorPointForWidget(cocos2d::ui::Widget *widget, const rapidjson::Value &options)

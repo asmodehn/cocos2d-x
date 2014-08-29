@@ -46,10 +46,10 @@ namespace cocostudio
         {
             case 0:
             {
-                std::string tp_c = jsonPath;
-                const char* cmfPath = DICTOOL->getStringValue_json(cmftDic, "path");
-                const char* cmf_tp = tp_c.append(cmfPath).c_str();
-                labelBMFont->setFntFile(cmf_tp);
+				const char* cmfPath = DICTOOL->getStringValue_json(cmftDic, "path");
+				std::string tp_c = cocos2d::FileUtils::getInstance()->fullPathForFilename(cmfPath);
+                
+				labelBMFont->setFntFile(tp_c);
                 break;
             }
             case 1:
