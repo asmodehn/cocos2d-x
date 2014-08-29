@@ -56,7 +56,7 @@ public:
 	* Apply camera projection for rendering,
 	* Then visit children.
 	*/
-	virtual void visit(Renderer *renderer, const Mat4& parentTransform, bool parentTransformUpdated);
+	virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
 	/**
 	* Needed for compilation
