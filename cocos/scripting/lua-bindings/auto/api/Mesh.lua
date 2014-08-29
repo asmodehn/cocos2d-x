@@ -2,6 +2,7 @@
 --------------------------------
 -- @module Mesh
 -- @extend Ref
+-- @parent_module cc
 
 --------------------------------
 -- @function [parent=#Mesh] restore 
@@ -15,7 +16,7 @@
 --------------------------------
 -- @function [parent=#Mesh] getIndexFormat 
 -- @param self
--- @return Mesh::IndexFormat#Mesh::IndexFormat ret (return value: cc.Mesh::IndexFormat)
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- @function [parent=#Mesh] getVertexSizeInBytes 
@@ -25,7 +26,7 @@
 --------------------------------
 -- @function [parent=#Mesh] getPrimitiveType 
 -- @param self
--- @return Mesh::PrimitiveType#Mesh::PrimitiveType ret (return value: cc.Mesh::PrimitiveType)
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- @function [parent=#Mesh] getIndexCount 
@@ -53,14 +54,5 @@
 -- @param self
 -- @param #int int
 -- @return bool#bool ret (return value: bool)
-        
---------------------------------
--- @function [parent=#Mesh] create 
--- @param self
--- @param #array_table array
--- @param #array_table array
--- @param #array_table array
--- @param #array_table vector<short, std::allocator<short> >
--- @return Mesh#Mesh ret (return value: cc.Mesh)
         
 return nil

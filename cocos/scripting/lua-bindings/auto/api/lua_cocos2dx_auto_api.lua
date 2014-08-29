@@ -67,6 +67,11 @@
 
 
 --------------------------------------------------------
+-- the cc Scene
+-- @field [parent=#cc] Scene#Scene Scene preloaded module
+
+
+--------------------------------------------------------
 -- the cc Director
 -- @field [parent=#cc] Director#Director Director preloaded module
 
@@ -737,11 +742,6 @@
 
 
 --------------------------------------------------------
--- the cc LabelTTF
--- @field [parent=#cc] LabelTTF#LabelTTF LabelTTF preloaded module
-
-
---------------------------------------------------------
 -- the cc GLProgram
 -- @field [parent=#cc] GLProgram#GLProgram GLProgram preloaded module
 
@@ -754,11 +754,6 @@
 --------------------------------------------------------
 -- the cc Label
 -- @field [parent=#cc] Label#Label Label preloaded module
-
-
---------------------------------------------------------
--- the cc LabelBMFont
--- @field [parent=#cc] LabelBMFont#LabelBMFont LabelBMFont preloaded module
 
 
 --------------------------------------------------------
@@ -779,11 +774,6 @@
 --------------------------------------------------------
 -- the cc LayerMultiplex
 -- @field [parent=#cc] LayerMultiplex#LayerMultiplex LayerMultiplex preloaded module
-
-
---------------------------------------------------------
--- the cc Scene
--- @field [parent=#cc] Scene#Scene Scene preloaded module
 
 
 --------------------------------------------------------
@@ -1219,6 +1209,16 @@
 --------------------------------------------------------
 -- the cc Mesh
 -- @field [parent=#cc] Mesh#Mesh Mesh preloaded module
+
+
+--------------------------------------------------------
+-- the cc Animation3D
+-- @field [parent=#cc] Animation3D#Animation3D Animation3D preloaded module
+
+
+--------------------------------------------------------
+-- the cc Animate3D
+-- @field [parent=#cc] Animate3D#Animate3D Animate3D preloaded module
 
 
 --------------------------------------------------------

@@ -23,14 +23,14 @@ _camera(nullptr)
 CameraView::~CameraView()
 {}
 
-void CameraView::visit(Renderer *renderer, const Mat4& parentTransform, bool parentTransformUpdated)
+void CameraView::visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
 	if (_camera)
 	{
 		Director::getInstance()->getRenderer()->addCommand(&_pushProj);
 	}
 
-	Node::visit(renderer, parentTransform, parentTransformUpdated);
+	Node::visit(renderer, parentTransform, parentFlags);
 
 	if (_camera)
 	{

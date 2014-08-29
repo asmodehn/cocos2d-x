@@ -26,6 +26,7 @@ THE SOFTWARE.
 #define __UILOADINGBAR_H__
 
 #include "ui/UIWidget.h"
+#include "ui/GUIExport.h"
 
 NS_CC_BEGIN
 
@@ -35,7 +36,7 @@ namespace ui {
 *   @js NA
 *   @lua NA
 */
-class LoadingBar : public Widget
+class CC_GUI_DLL LoadingBar : public Widget
 {
     
     DECLARE_CLASS_GUI_INFO
@@ -71,7 +72,7 @@ public:
      *
      * @see Direction  LEFT means progress left to right, RIGHT otherwise.
      *
-     * @param Direction
+     * @param direction Direction
      */
     void setDirection(Direction direction);
     
@@ -87,9 +88,9 @@ public:
     /**
      * Load texture for loadingbar.
      *
-     * @param fileName   file name of texture.
+     * @param texture   file name of texture.
      *
-     * @param texType    @see UI_TEX_TYPE_LOCAL
+     * @param texType    @see TextureResType
      */
     void loadTexture(const std::string& texture,TextureResType texType = TextureResType::LOCAL);
     
@@ -103,18 +104,18 @@ public:
     /**
      * Gets the progress direction of loadingbar.
      *
-     * @return percent    percent value from 1 to 100.
+     * @return percent value from 1 to 100.
      */
     float getPercent() const;
     
     /**
      * Sets if loadingbar is using scale9 renderer.
      *
-     * @param true that using scale9 renderer, false otherwise.
+     * @param enabled true that using scale9 renderer, false otherwise.
      */
     void setScale9Enabled(bool enabled);
     
-    bool isScale9Enabled();
+    bool isScale9Enabled()const;
     
     /**
      * Sets capinsets for loadingbar, if loadingbar is using scale9 renderer.
@@ -123,7 +124,7 @@ public:
      */
     void setCapInsets(const Rect &capInsets);
     
-    const Rect& getCapInsets();
+    const Rect& getCapInsets()const;
     
     //override "ignoreContentAdaptWithSize" method of widget.
     virtual void ignoreContentAdaptWithSize(bool ignore) override;
@@ -141,14 +142,14 @@ public:
 protected:
     virtual void initRenderer() override;
     virtual void onSizeChanged() override;
-    virtual void updateTextureColor() override;
-    virtual void updateTextureOpacity() override;
-    virtual void updateTextureRGBA() override;
+   
     void setScale9Scale();
     void barRendererScaleChangedWithSize();
+    
+    virtual void adaptRenderers() override;
+    
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
-    virtual void adaptRenderers() override;
 protected:
     Direction _direction;
     float _percent;

@@ -23,7 +23,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ui/UILoadingBar.h"
-#include "extensions/GUI/CCControlExtension/CCScale9Sprite.h"
+#include "ui/UIScale9Sprite.h"
+#include "2d/CCSprite.h"
 
 NS_CC_BEGIN
 
@@ -122,7 +123,7 @@ LoadingBar::Direction LoadingBar::getDirection()const
 }
     
 
-    void LoadingBar::loadTexture(const std::string& texture,TextureResType texType)
+void LoadingBar::loadTexture(const std::string& texture,TextureResType texType)
 {
     if (texture.empty())
     {
@@ -135,7 +136,7 @@ LoadingBar::Direction LoadingBar::getDirection()const
         case TextureResType::LOCAL:
             if (_scale9Enabled)
             {
-                extension::Scale9Sprite* barRendererScale9 = static_cast<extension::Scale9Sprite*>(_barRenderer);
+                Scale9Sprite* barRendererScale9 = static_cast<Scale9Sprite*>(_barRenderer);
                 barRendererScale9->initWithFile(texture);
                 barRendererScale9->setCapInsets(_capInsets);
             }
@@ -147,7 +148,7 @@ LoadingBar::Direction LoadingBar::getDirection()const
         case TextureResType::PLIST:
             if (_scale9Enabled)
             {
-                extension::Scale9Sprite* barRendererScale9 = static_cast<extension::Scale9Sprite*>(_barRenderer);
+                Scale9Sprite* barRendererScale9 = static_cast<Scale9Sprite*>(_barRenderer);
                 barRendererScale9->initWithSpriteFrameName(texture);
                 barRendererScale9->setCapInsets(_capInsets);
             }
@@ -159,7 +160,7 @@ LoadingBar::Direction LoadingBar::getDirection()const
         default:
             break;
     }
-    updateRGBAToRenderer(_barRenderer);
+    
     _barRendererTextureSize = _barRenderer->getContentSize();
     
     switch (_direction)
@@ -195,7 +196,7 @@ void LoadingBar::setScale9Enabled(bool enabled)
     _barRenderer = nullptr;
     if (_scale9Enabled)
     {
-        _barRenderer = extension::Scale9Sprite::create();
+        _barRenderer = Scale9Sprite::create();
     }
     else
     {
@@ -217,7 +218,7 @@ void LoadingBar::setScale9Enabled(bool enabled)
     setPercent(_percent);
 }
 
-bool LoadingBar::isScale9Enabled()
+bool LoadingBar::isScale9Enabled()const
 {
     return _scale9Enabled;
 }
@@ -229,10 +230,10 @@ void LoadingBar::setCapInsets(const Rect &capInsets)
     {
         return;
     }
-    static_cast<extension::Scale9Sprite*>(_barRenderer)->setCapInsets(capInsets);
+    static_cast<Scale9Sprite*>(_barRenderer)->setCapInsets(capInsets);
 }
 
-const Rect& LoadingBar::getCapInsets()
+const Rect& LoadingBar::getCapInsets()const
 {
     return _capInsets;
 }
@@ -314,7 +315,7 @@ void LoadingBar::barRendererScaleChangedWithSize()
     }
     else
     {
-        _totalLength = _size.width;
+        _totalLength = _contentSize.width;
         if (_scale9Enabled)
         {
             setScale9Scale();
@@ -328,8 +329,8 @@ void LoadingBar::barRendererScaleChangedWithSize()
                 _barRenderer->setScale(1.0f);
                 return;
             }
-            float scaleX = _size.width / textureSize.width;
-            float scaleY = _size.height / textureSize.height;
+            float scaleX = _contentSize.width / textureSize.width;
+            float scaleY = _contentSize.height / textureSize.height;
             _barRenderer->setScaleX(scaleX);
             _barRenderer->setScaleY(scaleY);
         }
@@ -350,27 +351,12 @@ void LoadingBar::barRendererScaleChangedWithSize()
 void LoadingBar::setScale9Scale()
 {
     float width = (float)(_percent) / 100.0f * _totalLength;
-    static_cast<extension::Scale9Sprite*>(_barRenderer)->setPreferredSize(Size(width, _size.height));
+    static_cast<Scale9Sprite*>(_barRenderer)->setPreferredSize(Size(width, _contentSize.height));
 }
 
 std::string LoadingBar::getDescription() const
 {
     return "LoadingBar";
-}
-    
-void LoadingBar::updateTextureColor()
-{
-    updateColorToRenderer(_barRenderer);
-}
-
-void LoadingBar::updateTextureOpacity()
-{
-    updateOpacityToRenderer(_barRenderer);
-}
-
-void LoadingBar::updateTextureRGBA()
-{
-    updateRGBAToRenderer(_barRenderer);
 }
 
 Widget* LoadingBar::createCloneInstance()

@@ -26,8 +26,11 @@ THE SOFTWARE.
 #define __UIBUTTON_H__
 
 #include "ui/UIWidget.h"
+#include "ui/GUIExport.h"
 
 NS_CC_BEGIN
+
+class Label;
 
 namespace ui{
 
@@ -35,12 +38,13 @@ namespace ui{
 *   @js NA
 *   @lua NA
 */
-class Button : public Widget
+class CC_GUI_DLL Button : public Widget
 {
     
     DECLARE_CLASS_GUI_INFO
     
 public:
+
     /**
      * Default constructor
      */
@@ -68,7 +72,6 @@ public:
                           const std::string& disableImage = "",
                           TextureResType texType = TextureResType::LOCAL);
     
-
     /**
      * Load textures for button.
      *
@@ -78,7 +81,7 @@ public:
      *
      * @param disabled    disabled state texture name.
      *
-     * @param texType    @see UI_TEX_TYPE_LOCAL
+     * @param texType    @see TextureResType
      */
     void loadTextures(const std::string& normal,
                       const std::string& selected,
@@ -90,7 +93,7 @@ public:
      *
      * @param normal    normal state texture.
      *
-     * @param texType    @see UI_TEX_TYPE_LOCAL
+     * @param texType    @see TextureResType
      */
     void loadTextureNormal(const std::string& normal, TextureResType texType = TextureResType::LOCAL);
 
@@ -99,7 +102,7 @@ public:
      *
      * @param selected    selected state texture.
      *
-     * @param texType    @see UI_TEX_TYPE_LOCAL
+     * @param texType    @see TextureResType
      */
     void loadTexturePressed(const std::string& selected, TextureResType texType = TextureResType::LOCAL);
 
@@ -108,7 +111,7 @@ public:
      *
      * @param disabled    dark state texture.
      *
-     * @param texType    @see UI_TEX_TYPE_LOCAL
+     * @param texType    @see TextureResType
      */
     void loadTextureDisabled(const std::string& disabled, TextureResType texType = TextureResType::LOCAL);
 
@@ -126,7 +129,7 @@ public:
      */
     void setCapInsetsNormalRenderer(const Rect &capInsets);
 
-    const Rect& getCapInsetsNormalRenderer();
+    const Rect& getCapInsetsNormalRenderer()const;
 
     /**
      * Sets capinsets for button, if button is using scale9 renderer.
@@ -135,7 +138,7 @@ public:
      */
     void setCapInsetsPressedRenderer(const Rect &capInsets);
 
-    const Rect& getCapInsetsPressedRenderer();
+    const Rect& getCapInsetsPressedRenderer()const;
 
     /**
      * Sets capinsets for button, if button is using scale9 renderer.
@@ -144,7 +147,7 @@ public:
      */
     void setCapInsetsDisabledRenderer(const Rect &capInsets);
 
-    const Rect& getCapInsetsDisabledRenderer();
+    const Rect& getCapInsetsDisabledRenderer()const;
 
     /**
      * Sets if button is using scale9 renderer.
@@ -153,7 +156,7 @@ public:
      */
     virtual void setScale9Enabled(bool able);
 
-    bool isScale9Enabled();
+    bool isScale9Enabled()const;
 
     /**
      * Changes if button can be clicked zoom effect.
@@ -199,18 +202,22 @@ protected:
     virtual void onPressStateChangedToPressed() override;
     virtual void onPressStateChangedToDisabled() override;
     virtual void onSizeChanged() override;
-    virtual void updateTextureColor() override;
-    virtual void updateTextureOpacity() override;
-    virtual void updateTextureRGBA() override;
+  
     virtual void updateFlippedX() override;
     virtual void updateFlippedY() override;
+    
+    void updateTexturesRGBA();
+    
     void normalTextureScaleChangedWithSize();
     void pressedTextureScaleChangedWithSize();
     void disabledTextureScaleChangedWithSize();
-    virtual Widget* createCloneInstance() override;
-    virtual void copySpecialProperties(Widget* model) override;
+    
     virtual void adaptRenderers() override;
     void updateTitleLocation();
+    
+    virtual Widget* createCloneInstance() override;
+    virtual void copySpecialProperties(Widget* model) override;
+   
 protected:
     Node* _buttonNormalRenderer;
     Node* _buttonClickedRenderer;
@@ -231,7 +238,6 @@ protected:
     Size _pressedTextureSize;
     Size _disabledTextureSize;
     bool _pressedActionEnabled;
-    Color3B _titleColor;
     float _normalTextureScaleXInSize;
     float _normalTextureScaleYInSize;
     float _pressedTextureScaleXInSize;
@@ -242,6 +248,17 @@ protected:
     bool _normalTextureAdaptDirty;
     bool _pressedTextureAdaptDirty;
     bool _disabledTextureAdaptDirty;
+
+private:
+    enum class FontType
+    {
+        SYSTEM,
+        TTF
+    };
+
+    std::string _fontName;
+    int _fontSize;
+    FontType _type;
 };
 
 }

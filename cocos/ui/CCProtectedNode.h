@@ -31,10 +31,11 @@
 
 
 #include "2d/CCNode.h"
+#include "ui/GUIExport.h"
 
 NS_CC_BEGIN
-
-class CC_DLL ProtectedNode : public Node
+	
+class  CC_GUI_DLL ProtectedNode : public Node
 {
 public:
     static ProtectedNode * create(void);
@@ -127,7 +128,7 @@ public:
     
     /// @} end of Children and Parent
     
-    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, bool transformUpdated) override;
+    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
     
     virtual void cleanup() override;
     
