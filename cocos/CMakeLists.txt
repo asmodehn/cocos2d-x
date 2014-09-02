@@ -1,7 +1,10 @@
+#when building DLL this must be defined only for this project and statically linked ones.
+ADD_DEFINITIONS (-D_USRDLL)
+
+
 if(WIN32)
 ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 endif()
-
 
 set(COCOS_SRC
   cocos2d.cpp
@@ -14,12 +17,11 @@ include(physics/CMakeLists.txt)
 include(math/CMakeLists.txt)
 include(renderer/CMakeLists.txt)
 include(base/CMakeLists.txt)
-include(ui/CMakeLists.txt)
 include(deprecated/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(storage/CMakeLists.txt)
 
-add_library(cocos2d STATIC
+add_library(cocos2d SHARED
   ${COCOS_SRC}
   ${COCOS_2D_SRC}
   ${COCOS_3D_SRC}
@@ -28,7 +30,6 @@ add_library(cocos2d STATIC
   ${COCOS_RENDERER_SRC}
   ${COCOS_MATH_SRC}
   ${COCOS_PHYSICS_SRC}
-  ${COCOS_UI_SRC}
   ${COCOS_NETWORK_SRC}
   ${COCOS_STORAGE_SRC}
   ${COCOS_DEPRECATED_SRC}
@@ -91,9 +92,7 @@ set(COCOS_LINK
 endif()
 
 target_link_libraries(cocos2d
-  extensions
   chipmunk_static
-  extensions
   tinyxml2
   unzip
   xxhash

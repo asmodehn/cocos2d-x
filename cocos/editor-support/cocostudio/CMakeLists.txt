@@ -1,3 +1,5 @@
+ADD_DEFINITIONS (-D_USRSTUDIODLL)
+
 set(CS_SRC
   CCActionFrame.cpp
   CCActionFrameEasing.cpp
@@ -59,11 +61,14 @@ include_directories(
   ..
 )
 
-add_library(cocostudio STATIC
+add_library(cocostudio SHARED
   ${CS_SRC}
 )
 
 target_link_libraries(cocostudio
+  cocos2d
+  cocosui
+  audio
 )
 
 set_target_properties(cocostudio

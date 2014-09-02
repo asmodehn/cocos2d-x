@@ -1,3 +1,5 @@
+ADD_DEFINITIONS(-D_USREXDLL)
+
 set(EXTENSIONS_SRC
   assets-manager/AssetsManager.cpp
   GUI/CCControlExtension/CCControl.cpp
@@ -39,9 +41,13 @@ include_directories(
   ..
 )
 
-add_library(extensions STATIC
+add_library(extensions SHARED
   ${EXTENSIONS_SRC}
   ${PLATFORM_EXTENSIONS_SRC}
+)
+
+target_link_libraries(extensions 
+  cocos2d
 )
 
 set_target_properties(extensions
