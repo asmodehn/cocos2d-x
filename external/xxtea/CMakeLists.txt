@@ -1,3 +1,5 @@
+ADD_DEFINITIONS (-D_USRDLL)
+
 set(XXTEA
   xxtea.cpp
 )

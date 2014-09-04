@@ -35,7 +35,7 @@ set(COCOS_PLATFORM_SRC
   platform/CCFileUtils.cpp
   platform/CCImage.cpp
   platform/desktop/CCGLView.cpp
-  ../external/edtaa3func/edtaa3func.cpp
+  ../external-bin/edtaa3func/edtaa3func.cpp
   ../external/ConvertUTF/ConvertUTFWrapper.cpp
   ../external/ConvertUTF/ConvertUTF.c
   ${COCOS_PLATFORM_SPECIFIC_SRC}

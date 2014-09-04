@@ -140,39 +140,40 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/cocos/scripting/lua-bindings/manual
   ${CMAKE_CURRENT_SOURCE_DIR}/extensions
   ${CMAKE_CURRENT_SOURCE_DIR}/external
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/tinyxml2
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/unzip
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/sqlite3/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/edtaa3func
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/tinyxml2
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/unzip
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/sqlite3/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/edtaa3func
   ${CMAKE_CURRENT_SOURCE_DIR}/external/chipmunk/include/chipmunk
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/jpeg/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/png/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/tiff/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/webp/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/glfw3/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/freetype2/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/websockets/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/xxhash
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/jpeg/include/${PLATFORM_FOLDER}
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/png/include/${PLATFORM_FOLDER}
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/tiff/include/${PLATFORM_FOLDER}
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/webp/include/${PLATFORM_FOLDER}
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/glfw3/include/${PLATFORM_FOLDER}
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/freetype2/include/${PLATFORM_FOLDER}
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/websockets/include/${PLATFORM_FOLDER}
+  ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/xxhash
   ${CMAKE_CURRENT_SOURCE_DIR}/external/xxtea
 )
 
 if(WIN32 AND NOT MINGW)
   include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/gles/include/OGLES
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/icon/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/zlib/include
-    external/curl/include/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/${PLATFORM_FOLDER}-specific/gles/include/OGLES
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/${PLATFORM_FOLDER}-specific/icon/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/${PLATFORM_FOLDER}-specific/zlib/include
+    external-bin/curl/include/${PLATFORM_FOLDER}
   )
 elseif(APPLE)
   include_directories(
-  	${CMAKE_CURRENT_SOURCE_DIR}/external/curl/include/${PLATFORM_FOLDER}
+  	${CMAKE_CURRENT_SOURCE_DIR}/external-bin/curl/include/${PLATFORM_FOLDER}
   )
 else()
   include_directories(
     /usr/include
     /usr/include/GLFW
     /usr/local/include/GLFW
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/fmod/include/${ARCH_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/${PLATFORM_FOLDER}-specific/fmod/include/${ARCH_DIR}
   )
 endif()
 
@@ -181,18 +182,18 @@ if(WIN32)
 
   if(NOT MINGW)
   link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/jpeg/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/tiff/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/png/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/sqlite3/libraries/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/freetype2/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/curl/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/websockets/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/webp/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/glfw3/prebuilt/${PLATFORM_FOLDER}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/icon/prebuilt
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/zlib/prebuilt
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/gles/prebuilt
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/jpeg/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/tiff/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/png/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/sqlite3/libraries/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/freetype2/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/curl/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/websockets/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/webp/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/glfw3/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/${PLATFORM_FOLDER}-specific/icon/prebuilt
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/${PLATFORM_FOLDER}-specific/zlib/prebuilt
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/${PLATFORM_FOLDER}-specific/gles/prebuilt
   )
   endif()
 
@@ -202,13 +203,13 @@ else()
 
   link_directories(
     /usr/local/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/jpeg/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/tiff/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/webp/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/png/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/freetype2/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/websockets/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/${PLATFORM_FOLDER}-specific/fmod/prebuilt/${ARCH_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/jpeg/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/tiff/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/webp/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/png/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/freetype2/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/websockets/prebuilt/${PLATFORM_FOLDER}/${ARCH_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/${PLATFORM_FOLDER}-specific/fmod/prebuilt/${ARCH_DIR}
   )
 
 endif()
@@ -224,13 +225,13 @@ add_subdirectory(external/Box2D)
 endif(USE_BOX2D)
 
 # unzip library
-add_subdirectory(external/unzip)
+add_subdirectory(external-bin/unzip)
 
 # tinyxml2 library
-add_subdirectory(external/tinyxml2)
+add_subdirectory(external-bin/tinyxml2)
 
 # xxhash library
-add_subdirectory(external/xxhash)
+add_subdirectory(external-bin/xxhash)
 
 # xxtea library
 add_subdirectory(external/xxtea)
@@ -267,10 +268,10 @@ endif(BUILD_EDITOR_COCOSTUDIO)
 ## Scripting
 if(BUILD_LIBS_LUA)
 # lua
-add_subdirectory(external/lua/lua)
+add_subdirectory(external-bin/lua/lua)
 
 # tolua
-add_subdirectory(external/lua/tolua)
+add_subdirectory(external-bin/lua/tolua)
 
 # luabinding
 add_subdirectory(cocos/scripting/lua-bindings)
