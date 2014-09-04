@@ -595,6 +595,8 @@
     <ClCompile Include="..\storage\local-storage\LocalStorage.cpp">
       <Filter>storage</Filter>
     </ClCompile>
+    <ClCompile Include="CCCamera.cpp" />
+    <ClCompile Include="CCCameraView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\physics\CCPhysicsBody.h">
@@ -1210,6 +1212,8 @@
     <ClInclude Include="..\storage\local-storage\LocalStorage.h">
       <Filter>storage</Filter>
     </ClInclude>
+    <ClInclude Include="CCCamera.h" />
+    <ClInclude Include="CCCameraView.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\math\Mat4.inl">
