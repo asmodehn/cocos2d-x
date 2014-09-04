@@ -97,6 +97,7 @@ target_link_libraries(cocos2d
   tinyxml2
   unzip
   xxhash
+  xxtea
   ${COCOS_STORAGE_LINK}
   ${COCOS_NETWORK_LINK}
   ${COCOS_LINK}
