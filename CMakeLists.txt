@@ -232,6 +232,9 @@ add_subdirectory(external/tinyxml2)
 # xxhash library
 add_subdirectory(external/xxhash)
 
+# xxtea library
+add_subdirectory(external/xxtea)
+
 # audio
 add_subdirectory(cocos/audio)
 
@@ -272,8 +275,6 @@ add_subdirectory(external/lua/tolua)
 # luabinding
 add_subdirectory(cocos/scripting/lua-bindings)
 
-# xxtea
-add_subdirectory(external/xxtea)
 endif(BUILD_LIBS_LUA)
 
 # build tests 
