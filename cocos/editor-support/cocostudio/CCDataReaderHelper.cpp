@@ -1328,10 +1328,10 @@ void DataReaderHelper::addDataFromJsonCache(const std::string& fileContent, Data
             }
             else
             {
-                std::string plistPath = filePath + ".plist";
-                std::string pngPath =  filePath + ".png";
+                std::string plistPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(filePath + ".plist");
+				std::string pngPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(filePath + ".png");
 
-                ArmatureDataManager::getInstance()->addSpriteFrameFromFile((dataInfo->baseFilePath + plistPath).c_str(), (dataInfo->baseFilePath + pngPath).c_str(), dataInfo->filename.c_str());
+                ArmatureDataManager::getInstance()->addSpriteFrameFromFile(plistPath, pngPath);
             }
         }
     }

@@ -1182,8 +1182,7 @@ Widget* WidgetPropertiesReader0300::createWidget(const rapidjson::Value& data, c
     for (int i=0; i<texturesCount; i++)
     {
         const char* file = DICTOOL->getStringValueFromArray_json(data, "textures", i);
-        std::string tp = fullPath;
-        tp.append(file);
+        std::string tp = cocos2d::FileUtils::getInstance()->fullPathForFilename(file);
         SpriteFrameCache::getInstance()->addSpriteFramesWithFile(tp.c_str());
     }
     float fileDesignWidth = DICTOOL->getFloatValue_json(data, "designWidth");
