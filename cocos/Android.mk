@@ -181,31 +181,35 @@ physics/chipmunk/CCPhysicsShapeInfo_chipmunk.cpp \
 physics/chipmunk/CCPhysicsWorldInfo_chipmunk.cpp \
 ../external/ConvertUTF/ConvertUTFWrapper.cpp \
 ../external/ConvertUTF/ConvertUTF.c \
-../external/tinyxml2/tinyxml2.cpp \
-../external/unzip/ioapi.cpp \
-../external/unzip/unzip.cpp \
-../external/edtaa3func/edtaa3func.cpp \
-../external/xxhash/xxhash.c
+../external-bin/tinyxml2/tinyxml2.cpp \
+../external-bin/unzip/ioapi.cpp \
+../external-bin/unzip/unzip.cpp \
+../external-bin/edtaa3func/edtaa3func.cpp \
+../external-bin/xxhash/xxhash.c \
+../external/xxtea/xxtea.cpp
 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/. \
                     $(LOCAL_PATH)/platform/android \
-                    $(LOCAL_PATH)/../external/tinyxml2 \
-                    $(LOCAL_PATH)/../external/unzip \
+                    $(LOCAL_PATH)/../external-bin/tinyxml2 \
+                    $(LOCAL_PATH)/../external-bin/unzip \
                     $(LOCAL_PATH)/../external/chipmunk/include/chipmunk \
-                    $(LOCAL_PATH)/../external/xxhash \
+                    $(LOCAL_PATH)/../external-bin/xxhash \
+                    $(LOCAL_PATH)/../external/xxtea \
                     $(LOCAL_PATH)/../external/nslog
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/. \
                     $(LOCAL_PATH)/platform/android \
                     $(LOCAL_PATH)/../external \
-                    $(LOCAL_PATH)/../external/tinyxml2 \
-                    $(LOCAL_PATH)/../external/unzip \
+                    $(LOCAL_PATH)/../external-bin \
+                    $(LOCAL_PATH)/../external-bin/tinyxml2 \
+                    $(LOCAL_PATH)/../external-bin/unzip \
                     $(LOCAL_PATH)/../external/chipmunk/include/chipmunk \
-                    $(LOCAL_PATH)/../external/edtaa3func \
-                    $(LOCAL_PATH)/../external/xxhash \
+                    $(LOCAL_PATH)/../external-bin/edtaa3func \
+                    $(LOCAL_PATH)/../external-bin/xxhash \
+                    $(LOCAL_PATH)/../external/xxtea \
                     $(LOCAL_PATH)/../external/ConvertUTF \
                     $(LOCAL_PATH)/../external/nslog
 LOCAL_EXPORT_LDLIBS := -lGLESv2 \

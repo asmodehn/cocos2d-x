@@ -61,10 +61,12 @@ ActionTimeline/CCTimeLine.cpp \
 ActionTimeline/CCActionTimeline.cpp
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/.. \
-$(LOCAL_PATH)/../../../external
+$(LOCAL_PATH)/../../../external \
+$(LOCAL_PATH)/../../../external-bin
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../.. \
 $(LOCAL_PATH)/../../../external \
+$(LOCAL_PATH)/../../../external-bin \
 $(LOCAL_PATH)/.. \
 $(LOCAL_PATH)/../..
 

@@ -39,32 +39,32 @@ LOCAL_SRC_FILES := manual/CCLuaBridge.cpp \
           auto/lua_cocos2dx_physics_auto.cpp \
           auto/lua_cocos2dx_experimental_auto.cpp \
           auto/lua_cocos2dx_experimental_video_auto.cpp \
-          ../../../external/lua/tolua/tolua_event.c \
-          ../../../external/lua/tolua/tolua_is.c \
-          ../../../external/lua/tolua/tolua_map.c \
-          ../../../external/lua/tolua/tolua_push.c \
-          ../../../external/lua/tolua/tolua_to.c \
-          ../../../external/lua/luasocket/auxiliar.c \
-          ../../../external/lua/luasocket/buffer.c \
-          ../../../external/lua/luasocket/except.c \
-          ../../../external/lua/luasocket/inet.c \
-          ../../../external/lua/luasocket/io.c \
-          ../../../external/lua/luasocket/luasocket.c \
-          ../../../external/lua/luasocket/mime.c \
-          ../../../external/lua/luasocket/options.c \
-          ../../../external/lua/luasocket/select.c \
-          ../../../external/lua/luasocket/serial.c \
-          ../../../external/lua/luasocket/tcp.c \
-          ../../../external/lua/luasocket/timeout.c \
-          ../../../external/lua/luasocket/udp.c \
-          ../../../external/lua/luasocket/unix.c \
-          ../../../external/lua/luasocket/usocket.c \
+          ../../../external-bin/lua/tolua/tolua_event.c \
+          ../../../external-bin/lua/tolua/tolua_is.c \
+          ../../../external-bin/lua/tolua/tolua_map.c \
+          ../../../external-bin/lua/tolua/tolua_push.c \
+          ../../../external-bin/lua/tolua/tolua_to.c \
+          ../../../external-bin/lua/luasocket/auxiliar.c \
+          ../../../external-bin/lua/luasocket/buffer.c \
+          ../../../external-bin/lua/luasocket/except.c \
+          ../../../external-bin/lua/luasocket/inet.c \
+          ../../../external-bin/lua/luasocket/io.c \
+          ../../../external-bin/lua/luasocket/luasocket.c \
+          ../../../external-bin/lua/luasocket/mime.c \
+          ../../../external-bin/lua/luasocket/options.c \
+          ../../../external-bin/lua/luasocket/select.c \
+          ../../../external-bin/lua/luasocket/serial.c \
+          ../../../external-bin/lua/luasocket/tcp.c \
+          ../../../external-bin/lua/luasocket/timeout.c \
+          ../../../external-bin/lua/luasocket/udp.c \
+          ../../../external-bin/lua/luasocket/unix.c \
+          ../../../external-bin/lua/luasocket/usocket.c \
           ../../../external/xxtea/xxtea.cpp
 
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../external/lua/tolua \
-                    $(LOCAL_PATH)/../../../external/lua/luajit/include \
-                    $(LOCAL_PATH)/../../../external/lua \
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../external-bin/lua/tolua \
+                    $(LOCAL_PATH)/../../../external-bin/lua/luajit/include \
+                    $(LOCAL_PATH)/../../../external-bin/lua \
                     $(LOCAL_PATH)/../../../extensions \
                     $(LOCAL_PATH)/../../editor-support/spine \
                     $(LOCAL_PATH)/../../editor-support/cocosbuilder \
@@ -79,9 +79,10 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../../external/lua/tolua \
                     $(LOCAL_PATH)/../../../external/xxtea
 
 
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../external/lua/tolua \
-                           $(LOCAL_PATH)/../../../external/lua/luajit/include \
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../../external-bin/lua/tolua \
+                           $(LOCAL_PATH)/../../../external-bin/lua/luajit/include \
                            $(LOCAL_PATH)/../external \
+                           $(LOCAL_PATH)/../external-bin \
                            $(LOCAL_PATH)/auto \
                            $(LOCAL_PATH)/manual
 

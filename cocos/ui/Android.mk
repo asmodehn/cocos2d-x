@@ -38,6 +38,7 @@ $(LOCAL_PATH)/../editor-support
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. \
 $(LOCAL_PATH)/../../external \
+$(LOCAL_PATH)/../../external-bin \
 $(LOCAL_PATH)/.. \
 $(LOCAL_PATH)/../.. \
 $(LOCAL_PATH)/../editor-support
