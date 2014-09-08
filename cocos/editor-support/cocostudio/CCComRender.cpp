@@ -137,17 +137,12 @@ bool ComRender::serialize(void* r)
 		{
 			setName(className);
 		}
-        
-		if (file != nullptr)
-		{
-			filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
-		}
-		if (plist != nullptr)
-		{
-			plistPath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(plist));
-		}
 		if (resType == 0)
 		{
+			if (file != nullptr)
+			{
+				filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
+			}
 			if (strcmp(className, "CCSprite") == 0 && (filePath.find(".png") != filePath.npos || filePath.find(".pvr.ccz") != filePath.npos))
 			{
 				_render = CCSprite::create(filePath.c_str());
@@ -314,6 +309,14 @@ bool ComRender::serialize(void* r)
 		}
 		else if (resType == 1)
 		{
+			if (file != nullptr)
+			{
+				filePath.assign(file);
+			}
+			if (plist != nullptr)
+			{
+				plistPath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(plist));
+			}
 			if (strcmp(className, "CCSprite") == 0)
 			{
 				std::string strPngFile = plistPath;
