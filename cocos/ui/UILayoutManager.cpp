@@ -50,7 +50,7 @@ void LinearHorizontalLayoutManager::doLayout(LayoutProtocol* layout)
     for (auto& subWidget : container)
     {
         Widget* child = dynamic_cast<Widget*>(subWidget);
-        if (child)
+        if (child && child->isVisible())
         {
             LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
             if (layoutParameter)
@@ -81,7 +81,7 @@ void LinearHorizontalLayoutManager::doLayout(LayoutProtocol* layout)
                 leftBoundary = child->getRightBoundary() + mg.right;
             }
         }
-    }
+	}
 }
     
     
@@ -105,9 +105,9 @@ void LinearVerticalLayoutManager::doLayout(LayoutProtocol* layout)
     float topBoundary = layoutSize.height;
     
     for (auto& subWidget : container)
-    {
-        LayoutParameterProtocol* child = dynamic_cast<LayoutParameterProtocol*>(subWidget);
-        if (child)
+	{
+		Widget* child = dynamic_cast<Widget*>(subWidget);
+		if (child && child->isVisible())
         {
             LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
             

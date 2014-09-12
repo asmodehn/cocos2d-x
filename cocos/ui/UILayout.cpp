@@ -1075,21 +1075,24 @@ Size Layout::getLayoutAccumulatedSize()const
     int widgetCount =0;
     for(const auto& widget : children)
     {
-        Layout *layout = dynamic_cast<Layout*>(widget);
-        if (nullptr != layout)
-        {
-            layoutSize = layoutSize + layout->getLayoutAccumulatedSize();
-        }
-        else
-        {
-            Widget *w = dynamic_cast<Widget*>(widget);
-            if (w)
-            {
-                widgetCount++;
-                Margin m = w->getLayoutParameter()->getMargin();
-                layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left,  m.top + m.bottom) * 0.5;
-            }
-        }
+		if (widget->isVisible())
+		{
+			Layout *layout = dynamic_cast<Layout*>(widget);
+			if (nullptr != layout)
+			{
+				layoutSize = layoutSize + layout->getLayoutAccumulatedSize();
+			}
+			else
+			{
+				Widget *w = dynamic_cast<Widget*>(widget);
+				if (w)
+				{
+					widgetCount++;
+					Margin m = w->getLayoutParameter()->getMargin();
+					layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left, m.top + m.bottom) * 0.5;
+				}
+			}
+		}
     }
     
     //substract extra size
