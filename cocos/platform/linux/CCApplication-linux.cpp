@@ -23,16 +23,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "base/CCPlatformConfig.h"
+#include "platform/CCPlatformConfig.h"
 #if CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
 
-#include "CCApplication.h"
+#include "CCApplication-linux.h"
 #include <unistd.h>
 #include <sys/time.h>
 #include <string>
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
-#include "CCGLView.h"
 
 NS_CC_BEGIN
 
@@ -64,6 +63,7 @@ Application::~Application()
 
 int Application::run()
 {
+    initGLContextAttrs();
     // Initialize instance and cocos2d.
     if (! applicationDidFinishLaunching())
     {

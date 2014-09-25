@@ -23,43 +23,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CC_EGLVIEW_ANDROID_H__
-#define __CC_EGLVIEW_ANDROID_H__
+#ifndef __PLATFORM_CCAPPLICATION_H__
+#define __PLATFORM_CCAPPLICATION_H__
 
 #include "base/CCPlatformConfig.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-#include "base/CCRef.h"
-#include "math/CCGeometry.h"
-#include "platform/CCGLViewProtocol.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#include "platform/mac/CCApplication-mac.h"
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#include "platform/ios/CCApplication-ios.h"
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#include "platform/android/CCApplication-android.h"
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#include "platform/win32/CCApplication-win32.h"
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_WP8
+#include "platform/winrt/CCApplication.h"
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+#include "platform/linux/CCApplication-linux.h"
+#endif
 
-NS_CC_BEGIN
-
-class CC_DLL GLView : public GLViewProtocol, public Ref
-{
-public:
-
-    // static function
-    static GLView* create(const std::string &viewname);
-    static GLView* createWithRect(const std::string& viewName, Rect rect, float frameZoomFactor = 1.0f);
-    static GLView* createWithFullScreen(const std::string& viewName);
-
-    bool isOpenGLReady() override;
-    void end() override;
-    void swapBuffers() override;
-    void setIMEKeyboardState(bool bOpen) override;
-
-protected:
-    GLView();
-    virtual ~GLView();
-
-    bool initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor);
-    bool initWithFullScreen(const std::string& viewName);
-};
-
-NS_CC_END
-
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-
-#endif    // end of __CC_EGLVIEW_ANDROID_H__
-
+#endif /* __PLATFORM_CCAPPLICATION_H__*/

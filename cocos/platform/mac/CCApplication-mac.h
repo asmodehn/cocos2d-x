@@ -1,5 +1,5 @@
 /****************************************************************************
-Copyright (c) 2011      Laschweinski
+Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2014 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -23,87 +23,100 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef CCAPLICATION_H_
-#define CCAPLICATION_H_
+#ifndef __CC_APPLICATION_MAC_H__
+#define __CC_APPLICATION_MAC_H__
 
-#include "base/CCPlatformConfig.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+#include "platform/CCPlatformConfig.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
 #include "platform/CCCommon.h"
 #include "platform/CCApplicationProtocol.h"
 #include <string>
 
 NS_CC_BEGIN
-class Rect;
 
-class Application : public ApplicationProtocol
+class CC_DLL Application : public ApplicationProtocol
 {
 public:
     /**
      * @js ctor
      */
-	Application();
+    Application();
     /**
      * @js NA
      * @lua NA
      */
-	virtual ~Application();
-
-	/**
-	 @brief	Callback by Director for limit FPS.
-	 @param interval    The time, which expressed in second in second, between current frame and next.
-	 */
-	void setAnimationInterval(double interval);
-
-	/**
-	 @brief	Run the message loop.
-	 */
-	int run();
-
-	/**
-	 @brief	Get current applicaiton instance.
-	 @return Current application instance pointer.
-	 */
-	static Application* getInstance();
+    virtual ~Application();
+        
+    /**
+    @brief	Callback by Director for limit FPS.
+    @param interval The time, which expressed in second in second, between current frame and next.
+    */
+    virtual void setAnimationInterval(double interval);
+        
+    /**
+    @brief	Get status bar rectangle in GLView window.
+    */
+        
+    /**
+    @brief	Run the message loop.
+    * @js NA
+    * @lua NA
+    */
+    int run();
+        
+    /**
+    @brief	Get current applicaiton instance.
+    @return Current application instance pointer.
+    */
+    static Application* getInstance();
 
     /** @deprecated Use getInstance() instead */
     CC_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
     
-	/* override functions */
-	virtual LanguageType getCurrentLanguage();
-
-	/**
+    /**
+    @brief Get current language config
+    @return Current language config
+    */
+    virtual LanguageType getCurrentLanguage();
+		
+    /**
     @brief Get current language iso 639-1 code
     @return Current language iso 639-1 code
     */
     virtual const char * getCurrentLanguageCode();
+			
+    /**
+     @brief Get target platform
+     */
+    virtual Platform getTargetPlatform();
 
-
-	/**
+    /**
      *  Sets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
     CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
     
-	/** 
+    /** 
      *  Gets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead. 
      */
     CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath(void);
     
-    /**
-     @brief Get target platform
-     */
-    virtual Platform getTargetPlatform();
-protected:
-    long       _animationInterval;  //micro second
-    std::string _resourceRootPath;
+    void setStartupScriptFilename(const std::string& startupScriptFile);
     
-	static Application * sm_pSharedApplication;
+    const std::string& getStartupScriptFilename(void);
+    
+protected:
+    static Application * sm_pSharedApplication;
+    
+    long _animationInterval;  //micro second
+    std::string _resourceRootPath;
+    std::string _startupScriptFilename;
 };
 
 NS_CC_END
 
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
-#endif /* CCAPLICATION_H_ */
+#endif	// end of __CC_APPLICATION_MAC_H__;

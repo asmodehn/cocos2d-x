@@ -31,7 +31,7 @@
 #include <string>
 #include "jni/JniHelper.h"
 #include "base/CCDirector.h"
-#include "CCGLView.h"
+#include "platform/CCGLView.h"
 #include "base/CCEventListenerKeyboard.h"
 
 //-----------------------------------------------------------------------------------------------------------

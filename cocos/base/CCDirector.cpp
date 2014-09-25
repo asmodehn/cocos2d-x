@@ -60,8 +60,8 @@ THE SOFTWARE.
 #include "base/CCConfiguration.h"
 #include "base/CCNS.h"
 #include "math/CCMath.h"
-#include "CCApplication.h"
-#include "CCGLView.h"
+#include "platform/CCApplication.h"
+#include "platform/CCGLView.h"
 
 /**
  Position of the FPS

@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "CCTextFieldTTF.h"
 
 #include "base/CCDirector.h"
-#include "CCGLView.h"
+#include "platform/CCGLView.h"
 
 NS_CC_BEGIN
 

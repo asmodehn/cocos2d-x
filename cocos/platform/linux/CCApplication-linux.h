@@ -1,5 +1,5 @@
 /****************************************************************************
-Copyright (c) 2010-2012 cocos2d-x.org
+Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2014 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
@@ -22,90 +22,88 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __CC_APPLICATION_WIN32_H__
-#define __CC_APPLICATION_WIN32_H__
 
-#include "base/CCPlatformConfig.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#ifndef CCAPLICATION_H_
+#define CCAPLICATION_H_
 
-#include "CCStdC.h"
+#include "platform/CCPlatformConfig.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
+
 #include "platform/CCCommon.h"
 #include "platform/CCApplicationProtocol.h"
 #include <string>
 
 NS_CC_BEGIN
-
 class Rect;
 
-class CC_DLL Application : public ApplicationProtocol
+class Application : public ApplicationProtocol
 {
 public:
     /**
      * @js ctor
      */
-    Application();
+	Application();
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~Application();
+	virtual ~Application();
 
-    /**
-    @brief    Run the message loop.
-    */
-    int run();
+	/**
+	 @brief	Callback by Director for limit FPS.
+	 @param interval    The time, which expressed in second in second, between current frame and next.
+	 */
+	void setAnimationInterval(double interval);
 
-    /**
-    @brief    Get current applicaiton instance.
-    @return Current application instance pointer.
-    */
-    static Application* getInstance();
+	/**
+	 @brief	Run the message loop.
+	 */
+	int run();
+
+	/**
+	 @brief	Get current applicaiton instance.
+	 @return Current application instance pointer.
+	 */
+	static Application* getInstance();
 
     /** @deprecated Use getInstance() instead */
     CC_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
     
-    /* override functions */
-    virtual void setAnimationInterval(double interval);
-    virtual LanguageType getCurrentLanguage();
+	/* override functions */
+	virtual LanguageType getCurrentLanguage();
 
-	virtual const char * getCurrentLanguageCode();
+	/**
+    @brief Get current language iso 639-1 code
+    @return Current language iso 639-1 code
+    */
+    virtual const char * getCurrentLanguageCode();
+
+
+	/**
+     *  Sets the Resource root path.
+     *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
+     */
+    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
+    
+	/** 
+     *  Gets the Resource root path.
+     *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead. 
+     */
+    CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath(void);
     
     /**
      @brief Get target platform
      */
     virtual Platform getTargetPlatform();
-
-    /**
-     *  Sets the Resource root path.
-     *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
-     */
-    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
-
-    /** 
-     *  Gets the Resource root path.
-     *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead. 
-     */
-    CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath(void);
-
-    void setStartupScriptFilename(const std::string& startupScriptFile);
-
-    const std::string& getStartupScriptFilename(void)
-    {
-        return _startupScriptFilename;
-    }
-
 protected:
-    HINSTANCE           _instance;
-    HACCEL              _accelTable;
-    LARGE_INTEGER       _animationInterval;
-    std::string         _resourceRootPath;
-    std::string         _startupScriptFilename;
-
-    static Application * sm_pSharedApplication;
+    long       _animationInterval;  //micro second
+    std::string _resourceRootPath;
+    
+	static Application * sm_pSharedApplication;
 };
 
 NS_CC_END
 
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_LINUX
 
-#endif    // __CC_APPLICATION_WIN32_H__
+#endif /* CCAPLICATION_H_ */

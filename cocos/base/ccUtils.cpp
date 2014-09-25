@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include "renderer/CCRenderer.h"
 #include "platform/CCImage.h"
 #include "platform/CCFileUtils.h"
-#include "CCGLView.h"
+#include "platform/CCGLView.h"
 
 NS_CC_BEGIN
 

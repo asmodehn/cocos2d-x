@@ -7,10 +7,10 @@ LOCAL_MODULE := cocos2dxandroid_static
 LOCAL_MODULE_FILENAME := libcocos2dxandroid
 
 LOCAL_SRC_FILES := \
-CCApplication.cpp \
+CCApplication-android.cpp \
 CCCommon.cpp \
 CCDevice.cpp \
-CCGLView.cpp \
+CCGLViewImpl-android.cpp \
 CCFileUtilsAndroid.cpp \
 javaactivity.cpp \
 jni/DPIJni.cpp \

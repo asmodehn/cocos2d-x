@@ -22,18 +22,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-
-#ifndef __CC_APPLICATION_MAC_H__
-#define __CC_APPLICATION_MAC_H__
+#ifndef __CC_APPLICATION_WIN32_H__
+#define __CC_APPLICATION_WIN32_H__
 
 #include "base/CCPlatformConfig.h"
-#if CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
+#include "platform/win32/CCStdC.h"
 #include "platform/CCCommon.h"
 #include "platform/CCApplicationProtocol.h"
 #include <string>
 
 NS_CC_BEGIN
+
+class Rect;
 
 class CC_DLL Application : public ApplicationProtocol
 {
@@ -47,26 +49,14 @@ public:
      * @lua NA
      */
     virtual ~Application();
-        
+
     /**
-    @brief	Callback by Director for limit FPS.
-    @param interval The time, which expressed in second in second, between current frame and next.
-    */
-    virtual void setAnimationInterval(double interval);
-        
-    /**
-    @brief	Get status bar rectangle in GLView window.
-    */
-        
-    /**
-    @brief	Run the message loop.
-    * @js NA
-    * @lua NA
+    @brief    Run the message loop.
     */
     int run();
-        
+
     /**
-    @brief	Get current applicaiton instance.
+    @brief    Get current applicaiton instance.
     @return Current application instance pointer.
     */
     static Application* getInstance();
@@ -74,18 +64,12 @@ public:
     /** @deprecated Use getInstance() instead */
     CC_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
     
-    /**
-    @brief Get current language config
-    @return Current language config
-    */
+    /* override functions */
+    virtual void setAnimationInterval(double interval);
     virtual LanguageType getCurrentLanguage();
-		
-    /**
-    @brief Get current language iso 639-1 code
-    @return Current language iso 639-1 code
-    */
-    virtual const char * getCurrentLanguageCode();
-			
+
+	virtual const char * getCurrentLanguageCode();
+    
     /**
      @brief Get target platform
      */
@@ -96,27 +80,32 @@ public:
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
     CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
-    
+
     /** 
      *  Gets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead. 
      */
     CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath(void);
-    
+
     void setStartupScriptFilename(const std::string& startupScriptFile);
-    
-    const std::string& getStartupScriptFilename(void);
-    
+
+    const std::string& getStartupScriptFilename(void)
+    {
+        return _startupScriptFilename;
+    }
+
 protected:
+    HINSTANCE           _instance;
+    HACCEL              _accelTable;
+    LARGE_INTEGER       _animationInterval;
+    std::string         _resourceRootPath;
+    std::string         _startupScriptFilename;
+
     static Application * sm_pSharedApplication;
-    
-    long _animationInterval;  //micro second
-    std::string _resourceRootPath;
-    std::string _startupScriptFilename;
 };
 
 NS_CC_END
 
-#endif // CC_TARGET_PLATFORM == CC_PLATFORM_MAC
+#endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
-#endif	// end of __CC_APPLICATION_MAC_H__;
+#endif    // __CC_APPLICATION_WIN32_H__

@@ -523,7 +523,7 @@ protected:
 #endif
 
     // GLViewProtocol will recreate stats labels to fit visible rect
-    friend class GLViewProtocol;
+    friend class GLView;
 };
 
 /** 

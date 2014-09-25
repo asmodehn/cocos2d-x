@@ -23,13 +23,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __CCGLVIEWPROTOCOL_H__
-#define __CCGLVIEWPROTOCOL_H__
+#ifndef __CCGLVIEW_H__
+#define __CCGLVIEW_H__
 
 #include "base/ccTypes.h"
 #include "base/CCEventTouch.h"
 
 #include <vector>
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#include <windows.h>
+#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+typedef void* id;
+#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
 
 enum class ResolutionPolicy
 {
@@ -56,6 +64,16 @@ enum class ResolutionPolicy
     UNKNOWN,
 };
 
+struct GLContextAttrs
+{
+    int redBits;
+    int greenBits;
+    int blueBits;
+    int alphaBits;
+    int depthBits;
+    int stencilBits;
+};
+
 NS_CC_BEGIN
 
 /**
@@ -63,18 +81,18 @@ NS_CC_BEGIN
  * @{
  */
 
-class CC_DLL GLViewProtocol
+class CC_DLL GLView : public Ref
 {
 public:
     /**
      * @js ctor
      */
-    GLViewProtocol();
+    GLView();
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~GLViewProtocol();
+    virtual ~GLView();
 
     /** Force destroying EGL view, subclass must implement this method. */
     virtual void end() = 0;
@@ -87,12 +105,21 @@ public:
 
     /** Open or close IME keyboard , subclass must implement this method. */
     virtual void setIMEKeyboardState(bool open) = 0;
+    
+    virtual bool windowShouldClose() { return false; };
+
+    //static method and member so that we can modify it on all platforms before create OpenGL context
+    static void setGLContextAttrs(GLContextAttrs& glContextAttrs);
+    static GLContextAttrs getGLContextAttrs();
+    static GLContextAttrs _glContextAttrs;
 
     /**
      * Polls input events. Subclass must implement methods if platform
      * does not provide event callbacks.
      */
-    virtual void pollInputEvents();
+    CC_DEPRECATED_ATTRIBUTE virtual void pollInputEvents();
+
+    virtual void pollEvents();
 
     /**
      * Get the frame size of EGL view.
@@ -105,6 +132,30 @@ public:
      */
     virtual void setFrameSize(float width, float height);
 
+    /** Set and get zoom factor for frame. This two methods are for
+     debugging big resolution (e.g.new ipad) app on desktop.*/
+    virtual void setFrameZoomFactor(float zoomFactor) {}
+    virtual float getFrameZoomFactor() const { return 1.0; }
+    
+    /** Get retina factor */
+    virtual int getRetinaFactor() const { return 1; }
+
+    /** only works on ios platform*/
+    virtual bool setContentScaleFactor(float scaleFactor) { return false; }
+    virtual float getContentScaleFactor() const { return 1.0; }
+    
+    /** returns whether or not the view is in Retina Display mode */
+    virtual bool isRetinaDisplay() const { return false; }
+ 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    virtual void* getEAGLView() const { return nullptr; }
+#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+	virtual Size getRenerTargetSize() const = 0;
+	virtual const Mat4& getOrientationMatrix() const = 0;
+	virtual const Mat4& getReverseOrientationMatrix() const = 0;
+#endif
     /**
      * Get the visible area size of opengl viewport.
      */
@@ -169,6 +220,11 @@ public:
      * Get the opengl view port rectangle.
      */
     const Rect& getViewPortRect() const;
+    
+    /**
+     * Get list of all active touches
+     */
+    std::vector<Touch*> getAllTouches() const;
 
     /**
      * Get scale factor of the horizontal direction.
@@ -183,6 +239,14 @@ public:
     /** returns the current Resolution policy */
     ResolutionPolicy getResolutionPolicy() const { return _resolutionPolicy; }
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+    virtual HWND getWin32Window() = 0;
+#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+    virtual id getCocoaWindow() = 0;
+#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
+    
 protected:
     void updateDesignResolutionSize();
     
@@ -207,4 +271,4 @@ protected:
 
 NS_CC_END
 
-#endif /* __CCGLVIEWPROTOCOL_H__ */
+#endif /* __CCGLVIEW_H__ */
