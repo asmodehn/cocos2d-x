@@ -105,7 +105,14 @@ public:
     inline void setOriginalTarget(Node *originalTarget) { _originalTarget = originalTarget; }
 
     inline int getTag() const { return _tag; }
-    inline void setTag(int tag) { _tag = tag; }
+	inline void setTag(int tag) { _tag = tag; }
+
+	/**
+	* Target set by user overriding default behavior.
+	* Enable the user to have action on different element in one sequence.
+	*/
+	inline Node* getOverrideTarget() const { return _overrideTarget; }
+	inline void setOverrideTarget(Node *target) { _overrideTarget = target; }
 
 protected:
     Action();
@@ -118,6 +125,13 @@ protected:
     The target is 'assigned', it is not 'retained'.
     */
     Node    *_target;
+
+	/**
+	* permanent override target to avoid being modified by any other function.
+	* Set by user, be careful to manage the handle properly.
+	*/
+	Node	*_overrideTarget;
+
     /** The action tag. An identifier of the action */
     int     _tag;
 

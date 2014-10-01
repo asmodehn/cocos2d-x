@@ -39,6 +39,7 @@ NS_CC_BEGIN
 Action::Action()
 :_originalTarget(nullptr)
 ,_target(nullptr)
+, _overrideTarget(nullptr)
 ,_tag(Action::INVALID_TAG)
 {
 }
