@@ -229,7 +229,7 @@ public:
     virtual std::string getDescription() const override;
     
 
-    virtual void setLayoutType(Type type);
+    virtual void setLayoutType(Type type, bool reverse = false);
     
     virtual  Type getLayoutType() const;
 
@@ -487,6 +487,7 @@ protected:
     Layout* _clippingParent;
     bool _doLayoutDirty;
     bool _clippingRectDirty;
+	bool _reverseDirection;
     
     //clipping
 

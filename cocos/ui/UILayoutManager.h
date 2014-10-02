@@ -51,23 +51,35 @@ public:
 class CC_GUI_DLL LinearVerticalLayoutManager : public LayoutManager
 {
 private:
-    LinearVerticalLayoutManager(){};
+	LinearVerticalLayoutManager(bool reverse);
     virtual ~LinearVerticalLayoutManager(){};
-    static LinearVerticalLayoutManager* create();
+    static LinearVerticalLayoutManager* create(bool reverse);
     virtual void doLayout(LayoutProtocol *layout) override;
     
     friend class Layout;
+
+	/**
+	* Default is Top Down.
+	* If reverse is true, layout will do bottom up
+	*/
+	bool _reverse;
 };
 
 class CC_GUI_DLL LinearHorizontalLayoutManager : public LayoutManager
 {
 private:
-    LinearHorizontalLayoutManager(){};
+	LinearHorizontalLayoutManager(bool reverse);
     virtual ~LinearHorizontalLayoutManager(){};
-    static LinearHorizontalLayoutManager* create();
+	static LinearHorizontalLayoutManager* create(bool reverse);
     virtual void doLayout(LayoutProtocol *layout) override;
     
-    friend class Layout;
+	friend class Layout;
+
+	/**
+	* Default is Left Right.
+	* If reverse is true, layout will do Right left
+	*/
+	bool _reverse;
 };
 
 class CC_GUI_DLL RelativeLayoutManager : public LayoutManager

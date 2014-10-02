@@ -151,7 +151,7 @@ public:
      *
      * @param type LayoutType
      */
-    virtual void setLayoutType(Type type) override{};
+	virtual void setLayoutType(Type type, bool reverse = false) override{};
     
     /**
      * Gets LayoutType.
