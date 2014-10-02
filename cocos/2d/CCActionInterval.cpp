@@ -319,7 +319,14 @@ void Sequence::update(float t)
 
         if( _last == -1 ) {
             // action[0] was skipped, execute it.
-            _actions[0]->startWithTarget(_target);
+			if (_actions[0]->getOverrideTarget())
+			{
+				_actions[0]->startWithTarget(_actions[0]->getOverrideTarget());
+			}
+			else
+			{
+				_actions[0]->startWithTarget(_target);
+			}
             _actions[0]->update(1.0f);
             _actions[0]->stop();
         }
@@ -348,7 +355,14 @@ void Sequence::update(float t)
     // Last action found and it is done
     if( found != _last )
     {
-        _actions[found]->startWithTarget(_target);
+		if (_actions[found]->getOverrideTarget())
+		{
+			_actions[found]->startWithTarget(_actions[found]->getOverrideTarget());
+		}
+		else
+		{
+			_actions[found]->startWithTarget(_target);
+		}
     }
 
     _actions[found]->update(new_t);
