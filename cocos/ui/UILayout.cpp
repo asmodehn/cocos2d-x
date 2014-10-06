@@ -74,6 +74,7 @@ _clippingRect(Rect::ZERO),
 _clippingParent(nullptr),
 _doLayoutDirty(true),
 _clippingRectDirty(true),
+_reverseDirection(false),
 _currentStencilEnabled(GL_FALSE),
 _currentStencilWriteMask(~0),
 _currentStencilFunc(GL_ALWAYS),
@@ -927,9 +928,10 @@ const Size& Layout::getBackGroundImageTextureSize() const
     return _backGroundImageTextureSize;
 }
 
-void Layout::setLayoutType(Type type)
+void Layout::setLayoutType(Type type, bool reverse /*= false*/)
 {
     _layoutType = type;
+	_reverseDirection = reverse;
    
     for (auto& child : _children)
     {
@@ -976,10 +978,10 @@ LayoutManager* Layout::createLayoutManager()
     switch (_layoutType)
     {
         case Type::VERTICAL:
-            exe = LinearVerticalLayoutManager::create();
+            exe = LinearVerticalLayoutManager::create(_reverseDirection);
             break;
         case Type::HORIZONTAL:
-            exe = LinearHorizontalLayoutManager::create();
+			exe = LinearHorizontalLayoutManager::create(_reverseDirection);
             break;
         case Type::RELATIVE:
             exe = RelativeLayoutManager::create();
@@ -1039,7 +1041,7 @@ void Layout::copySpecialProperties(Widget *widget)
         setBackGroundColor(layout->_gStartColor, layout->_gEndColor);
         setBackGroundColorOpacity(layout->_cOpacity);
         setBackGroundColorVector(layout->_alongVector);
-        setLayoutType(layout->_layoutType);
+		setLayoutType(layout->_layoutType, layout->_reverseDirection);
         setClippingEnabled(layout->_clippingEnabled);
         setClippingType(layout->_clippingType);
         _loopFocus = layout->_loopFocus;

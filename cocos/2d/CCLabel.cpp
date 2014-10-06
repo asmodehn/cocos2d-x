@@ -465,6 +465,8 @@ void Label::setString(const std::string& text)
     if (text.compare(_originalUTF8String))
     {
         _originalUTF8String = text;
+		parseStringEvent();
+
         _contentDirty = true;
 
         std::u16string utf16String;
@@ -1300,7 +1302,10 @@ void Label::updateColor()
         return;
     }
 
-    Color4B color4( _displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity );
+	Color4B color4(_displayedColor.r, _displayedColor.g, _displayedColor.b, _displayedOpacity);
+	std::vector<Color4B> colorStack;
+
+	colorStack.push_back(color4);
 
     // special opacity for premultiplied textures
     if (_isOpacityModifyRGB)
@@ -1320,10 +1325,12 @@ void Label::updateColor()
 
         for (int index = 0; index < count; ++index)
         {
-            quads[index].bl.colors = color4;
-            quads[index].br.colors = color4;
-            quads[index].tl.colors = color4;
-            quads[index].tr.colors = color4;
+			checkColorEvent(colorStack, index);
+			quads[index].bl.colors = colorStack[colorStack.size() - 1];
+			quads[index].br.colors = colorStack[colorStack.size() - 1];
+			quads[index].tl.colors = colorStack[colorStack.size() - 1];
+			quads[index].tr.colors = colorStack[colorStack.size() - 1];
+
             textureAtlas->updateQuad(&quads[index], index);
         }
     }
@@ -1368,6 +1375,131 @@ void Label::setBlendFunc(const BlendFunc &blendFunc)
             _shadowNode->setBlendFunc(blendFunc);
         }
     }
+}
+
+void Label::parseStringEvent()
+{
+	// sort out parameters
+	size_t paramBegin = std::string::npos;
+	size_t paramEnd = std::string::npos;
+	size_t offset = 0;
+
+	std::vector<TextEvent*> stack;
+	do
+	{
+		paramBegin = _originalUTF8String.find('<', offset);
+		paramEnd = _originalUTF8String.find('>', offset + 1);
+
+		assert((paramBegin == std::string::npos && paramEnd == std::string::npos) || (paramBegin != std::string::npos && paramEnd != std::string::npos) && "Invalid arguments syntax!");
+
+		if (paramBegin != std::string::npos)
+		{
+			// init in case arg is not found
+			offset = paramEnd;
+
+			std::string arg = _originalUTF8String.substr(paramBegin + 1, paramEnd - paramBegin - 1);
+			size_t closeTag = arg.find("/");
+			if (closeTag != std::string::npos)
+			{
+				stack[stack.size() - 1]->_end = paramBegin;
+				stack.pop_back();
+			}
+			else
+			{
+				//find all argument, separate by space " "
+				std::vector<std::pair<std::string, std::string>> argsList;
+				size_t argPos = 0;
+				size_t prevPos = std::string::npos;
+				std::string tag;
+
+				do
+				{
+					argPos = arg.find(" ", argPos + 1);
+					if (prevPos == std::string::npos)
+					{
+						if (argPos == std::string::npos)
+						{
+							tag = arg;
+						}
+						else
+						{
+							tag = arg.substr(0, argPos);
+						}
+					}
+					else if (argPos != std::string::npos || prevPos != std::string::npos)
+					{
+						std::string argTmp;
+						if (argPos != std::string::npos)
+						{
+							argTmp = arg.substr(prevPos + 1, argPos);
+						}
+						else
+						{
+							argTmp = arg.substr(prevPos + 1);
+						}
+						size_t delimiter = argTmp.find("=");
+						std::string id = argTmp.substr(0, delimiter);
+						std::string value = argTmp.substr(delimiter + 1);
+
+						argsList.push_back(std::pair<std::string, std::string>(id, value));
+
+					}
+					prevPos = argPos;
+
+				} while (argPos != std::string::npos);
+
+
+				if (tag == "COLOR")
+				{
+					ColorEvent* evt = new ColorEvent();
+
+					for (auto curArg = argsList.begin(); curArg != argsList.end(); ++curArg)
+					{
+						if ((*curArg).first == "R")
+						{
+							evt->_color.r = atoi((*curArg).second.c_str());
+						}
+						else if ((*curArg).first == "G")
+						{
+							evt->_color.g = atoi((*curArg).second.c_str());
+						}
+						else if ((*curArg).first == "B")
+						{
+							evt->_color.b = atoi((*curArg).second.c_str());
+						}
+					}
+					evt->_color.a = _displayedOpacity;
+					evt->_start = paramBegin;
+					_events.push_back(evt);
+					stack.push_back(evt);
+				}
+			}
+			_originalUTF8String.erase(paramBegin, paramEnd - paramBegin + 1);
+			offset = paramBegin;
+		}
+	} while (paramEnd != std::string::npos);
+}
+
+void Label::checkColorEvent(std::vector<Color4B>& colorStack, int index)
+{
+	for (auto curEvent = _events.begin(); curEvent != _events.end(); ++curEvent)
+	{
+		TextEvent* evt = *curEvent;
+		if ((*curEvent)->_start == index)
+		{
+			if (ColorEvent* color = static_cast<ColorEvent*>(evt))
+			{
+				colorStack.push_back(color->_color);
+			}
+		}
+		else if ((*curEvent)->_end == index)
+		{
+			if (ColorEvent* color = static_cast<ColorEvent*>(evt))
+			{
+				colorStack.pop_back();
+			}
+		}
+	}
 }
 
 NS_CC_END
