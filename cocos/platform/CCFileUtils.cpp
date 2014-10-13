@@ -693,7 +693,7 @@ std::string FileUtils::getPathForFilename(const std::string& filename, const std
 }
 
 
-std::string FileUtils::fullPathForFilename(const std::string &filename)
+std::string FileUtils::fullPathForFilename(const std::string &filename, bool log_if_not_found)
 {
     if (filename.empty())
     {
@@ -732,7 +732,10 @@ std::string FileUtils::fullPathForFilename(const std::string &filename)
         }
     }
     
-    CCLOG("cocos2d: fullPathForFilename: No file found at %s. Possible missing file.", filename.c_str());
+	if (log_if_not_found)
+	{
+		CCLOG("cocos2d: fullPathForFilename: No file found at %s. Possible missing file.", filename.c_str());
+	}
 
     // XXX: Should it return nullptr ? or an empty string ?
     // The file wasn't found, return the file name passed in.
@@ -892,7 +895,7 @@ std::string FileUtils::searchFullPathForFilename(const std::string& filename) co
     {
         return filename;
     }
-    std::string path = const_cast<FileUtils*>(this)->fullPathForFilename(filename);
+    std::string path = const_cast<FileUtils*>(this)->fullPathForFilename(filename,false);
     if (0 == path.compare(filename))
     {
         return "";

@@ -156,7 +156,7 @@ public:
 
      @since v2.1
      */
-    virtual std::string fullPathForFilename(const std::string &filename);
+    virtual std::string fullPathForFilename(const std::string &filename, bool log_if_not_found = true);
     
     /**
      * Loads the filenameLookup dictionary from the contents of a filename.
