@@ -158,6 +158,11 @@ public:
      */
     virtual std::string fullPathForFilename(const std::string &filename, bool log_if_not_found = true);
     
+	/**
+	* Inverse function of fullPathForFilename
+	*/
+	virtual std::string filenameForFullPath(const std::string &fullpath, bool log_if_not_found = true);
+
     /**
      * Loads the filenameLookup dictionary from the contents of a filename.
      * 
@@ -430,6 +435,12 @@ protected:
      */
     virtual std::string getPathForFilename(const std::string& filename, const std::string& resolutionDirectory, const std::string& searchPath);
     
+	/**
+	*  Gets filename resolution directory and search path, from fullpath
+	*  Exact inverse function of getPathForFilename
+	*/
+	virtual std::tuple<std::string,std::string,std::string> getFilenameForPath(const std::string& fullpath);
+
     /**
      *  Gets full path for the directory and the filename.
      *
@@ -442,6 +453,13 @@ protected:
      */
     virtual std::string getFullPathForDirectoryAndFilename(const std::string& directory, const std::string& filename);
     
+	/**
+	*  Gets the directory and the filename from a fullpath.
+	*  Inverse function of getFullPathForDirectoryAndFilename
+	*  If the fullpath is a directory, trialing slash is removed, and last directory treated as filename
+	*/
+	virtual std::tuple<std::string,std::string> getDirectoryAndFilenameforFullPath(std::string fullpath);
+
     /** 
      *  Returns the fullpath for a given filename.
      *  This is an alternative for fullPathForFilename, there are two main differences:

@@ -692,6 +692,45 @@ std::string FileUtils::getPathForFilename(const std::string& filename, const std
     return path;
 }
 
+std::tuple<std::string, std::string, std::string> FileUtils::getFilenameForPath(const std::string& afullpath)
+{
+	std::string filename = "";
+	std::string resolutionDirectory = "";
+	std::string searchPath = "";
+	std::string fullpath = afullpath;
+
+	while ("" == searchPath)
+	{
+		auto dirfile = getDirectoryAndFilenameforFullPath(fullpath);
+		std::string dir = std::get<0>(dirfile);
+
+		//looking in possible combination of paths and resolutionOrder
+		for (auto searchIt = _searchPathArray.cbegin(); searchIt != _searchPathArray.cend(); ++searchIt)
+		{
+			for (auto resolutionIt = _searchResolutionsOrderArray.cbegin(); resolutionIt != _searchResolutionsOrderArray.cend(); ++resolutionIt)
+			{
+				if (dir == *searchIt + *resolutionIt)
+				{
+					resolutionDirectory = *resolutionIt;
+					searchPath = *searchIt;
+					break;
+				}
+			}
+		}
+		if ("" != filename)
+		{
+			//readding trialing slash in front if needed
+			filename = "/" + filename;
+		}
+		filename = std::get<1>(dirfile) + filename; 
+		if ("" == searchPath) // if still not found we check it s parent to see if it matches a combination of search and res dirs.
+		{
+			fullpath = dir;
+		}
+	}
+
+	return make_tuple(filename,resolutionDirectory,searchPath);
+}
 
 std::string FileUtils::fullPathForFilename(const std::string &filename, bool log_if_not_found)
 {
@@ -740,6 +779,20 @@ std::string FileUtils::fullPathForFilename(const std::string &filename, bool log
     // XXX: Should it return nullptr ? or an empty string ?
     // The file wasn't found, return the file name passed in.
     return filename;
+}
+
+std::string FileUtils::filenameForFullPath(const std::string &fullpath, bool log_if_not_found)
+{
+	auto pathcomps = getFilenameForPath(fullpath);
+
+	std::string filename = std::get<0>(pathcomps);
+
+	if (log_if_not_found && ! isFileExist(filename))
+	{
+		CCLOG("cocos2d: filenameForFullPath: No file found at %s. Missing file.", fullpath.c_str());
+	}
+
+	return filename;
 }
 
 std::string FileUtils::fullPathFromRelativeFile(const std::string &filename, const std::string &relativeFile)
@@ -887,6 +940,23 @@ std::string FileUtils::getFullPathForDirectoryAndFilename(const std::string& dir
         ret = "";
     }
     return ret;
+}
+
+std::tuple<std::string, std::string> FileUtils::getDirectoryAndFilenameforFullPath(std::string fullpath)
+{
+	std::string directory;
+	std::string filename;
+
+	if ('/' == fullpath.back())//remove trailing slash on filename ( fullpath is a directory so we will get parent )
+	{
+		fullpath.pop_back();
+	}
+	size_t idx = fullpath.find_last_of('/');
+
+	directory = fullpath.substr(0, idx + 1); //trailing slash included in directory string ( like for search paths )
+	filename = fullpath.substr(idx+1);
+
+	return make_tuple(directory,filename);
 }
 
 std::string FileUtils::searchFullPathForFilename(const std::string& filename) const
