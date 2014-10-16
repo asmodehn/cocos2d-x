@@ -465,7 +465,6 @@ void Label::setString(const std::string& text)
     if (text.compare(_originalUTF8String))
     {
         _originalUTF8String = text;
-		parseStringEvent();
 
         _contentDirty = true;
 
@@ -473,7 +472,8 @@ void Label::setString(const std::string& text)
         if (StringUtils::UTF8ToUTF16(_originalUTF8String, utf16String))
         {
             _currentUTF16String  = utf16String;
-        }
+			parseStringEvent();
+		}
     }
 }
 
@@ -938,7 +938,8 @@ void Label::updateContent()
     std::u16string utf16String;
     if (StringUtils::UTF8ToUTF16(_originalUTF8String, utf16String))
     {
-        _currentUTF16String  = utf16String;
+		_currentUTF16String = utf16String;
+		parseStringEvent();
     }
 
     computeStringNumLines();
@@ -1380,26 +1381,28 @@ void Label::setBlendFunc(const BlendFunc &blendFunc)
 void Label::parseStringEvent()
 {
 	// sort out parameters
-	size_t paramBegin = std::string::npos;
-	size_t paramEnd = std::string::npos;
+	size_t paramBegin = std::u16string::npos;
+	size_t paramEnd = std::u16string::npos;
 	size_t offset = 0;
+
+	_events.clear();
 
 	std::vector<TextEvent*> stack;
 	do
 	{
-		paramBegin = _originalUTF8String.find('<', offset);
-		paramEnd = _originalUTF8String.find('>', offset + 1);
+		paramBegin = _currentUTF16String.find('<', offset);
+		paramEnd = _currentUTF16String.find('>', offset + 1);
 
-		assert((paramBegin == std::string::npos && paramEnd == std::string::npos) || (paramBegin != std::string::npos && paramEnd != std::string::npos) && "Invalid arguments syntax!");
+		assert((paramBegin == std::u16string::npos && paramEnd == std::u16string::npos) || (paramBegin != std::u16string::npos && paramEnd != std::u16string::npos) && "Invalid arguments syntax!");
 
-		if (paramBegin != std::string::npos)
+		if (paramBegin != std::u16string::npos)
 		{
 			// init in case arg is not found
 			offset = paramEnd;
 
-			std::string arg = _originalUTF8String.substr(paramBegin + 1, paramEnd - paramBegin - 1);
-			size_t closeTag = arg.find("/");
-			if (closeTag != std::string::npos)
+			std::u16string arg = _currentUTF16String.substr(paramBegin + 1, paramEnd - paramBegin - 1);
+			size_t closeTag = arg.find('/');
+			if (closeTag != std::u16string::npos)
 			{
 				stack[stack.size() - 1]->_end = paramBegin;
 				stack.pop_back();
@@ -1407,17 +1410,17 @@ void Label::parseStringEvent()
 			else
 			{
 				//find all argument, separate by space " "
-				std::vector<std::pair<std::string, std::string>> argsList;
+				std::vector<std::pair<std::u16string, std::u16string>> argsList;
 				size_t argPos = 0;
-				size_t prevPos = std::string::npos;
-				std::string tag;
+				size_t prevPos = std::u16string::npos;
+				std::u16string tag;
 
 				do
 				{
-					argPos = arg.find(" ", argPos + 1);
-					if (prevPos == std::string::npos)
+					argPos = arg.find(' ', argPos + 1);
+					if (prevPos == std::u16string::npos)
 					{
-						if (argPos == std::string::npos)
+						if (argPos == std::u16string::npos)
 						{
 							tag = arg;
 						}
@@ -1426,10 +1429,10 @@ void Label::parseStringEvent()
 							tag = arg.substr(0, argPos);
 						}
 					}
-					else if (argPos != std::string::npos || prevPos != std::string::npos)
+					else if (argPos != std::u16string::npos || prevPos != std::u16string::npos)
 					{
-						std::string argTmp;
-						if (argPos != std::string::npos)
+						std::u16string argTmp;
+						if (argPos != std::u16string::npos)
 						{
 							argTmp = arg.substr(prevPos + 1, argPos);
 						}
@@ -1437,35 +1440,48 @@ void Label::parseStringEvent()
 						{
 							argTmp = arg.substr(prevPos + 1);
 						}
-						size_t delimiter = argTmp.find("=");
-						std::string id = argTmp.substr(0, delimiter);
-						std::string value = argTmp.substr(delimiter + 1);
+						size_t delimiter = argTmp.find('=');
+						std::u16string id = argTmp.substr(0, delimiter);
+						std::u16string value = argTmp.substr(delimiter + 1);
 
-						argsList.push_back(std::pair<std::string, std::string>(id, value));
+						argsList.push_back(std::pair<std::u16string, std::u16string>(id, value));
 
 					}
 					prevPos = argPos;
 
-				} while (argPos != std::string::npos);
+				} while (argPos != std::u16string::npos);
 
-
-				if (tag == "COLOR")
+				std::u16string currentTag;
+				StringUtils::UTF8ToUTF16("COLOR", currentTag);
+				if (tag == currentTag)
 				{
 					ColorEvent* evt = new ColorEvent();
 
 					for (auto curArg = argsList.begin(); curArg != argsList.end(); ++curArg)
 					{
-						if ((*curArg).first == "R")
+						std::u16string attR;
+						std::u16string attG;
+						std::u16string attB;
+						StringUtils::UTF8ToUTF16("R", attR);
+						StringUtils::UTF8ToUTF16("G", attG);
+						StringUtils::UTF8ToUTF16("B", attB);
+						if ((*curArg).first == attR)
 						{
-							evt->_color.r = atoi((*curArg).second.c_str());
+							std::string value;
+							StringUtils::UTF16ToUTF8((*curArg).second, value);
+							evt->_color.r = atoi(value.c_str());
 						}
-						else if ((*curArg).first == "G")
+						else if ((*curArg).first == attG)
 						{
-							evt->_color.g = atoi((*curArg).second.c_str());
+							std::string value;
+							StringUtils::UTF16ToUTF8((*curArg).second, value);
+							evt->_color.g = atoi(value.c_str());
 						}
-						else if ((*curArg).first == "B")
+						else if ((*curArg).first == attB)
 						{
-							evt->_color.b = atoi((*curArg).second.c_str());
+							std::string value;
+							StringUtils::UTF16ToUTF8((*curArg).second, value);
+							evt->_color.b = atoi(value.c_str());
 						}
 					}
 					evt->_color.a = _displayedOpacity;
@@ -1474,10 +1490,10 @@ void Label::parseStringEvent()
 					stack.push_back(evt);
 				}
 			}
-			_originalUTF8String.erase(paramBegin, paramEnd - paramBegin + 1);
+			_currentUTF16String.erase(paramBegin, paramEnd - paramBegin + 1);
 			offset = paramBegin;
 		}
-	} while (paramEnd != std::string::npos);
+	} while (paramEnd != std::u16string::npos);
 }
 
 void Label::checkColorEvent(std::vector<Color4B>& colorStack, int index)
