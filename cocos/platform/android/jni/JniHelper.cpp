@@ -211,7 +211,7 @@ namespace cocos2d {
 
         jmethodID methodID = env->GetMethodID(classID, methodName, paramCode);
         if (! methodID) {
-            LOGE("Failed to find method id of %s/%s%s", classID, methodName, paramCode );
+            LOGE("Failed to find method id of %s/%s%s", className, methodName, paramCode );
             env->ExceptionClear();
             return false;
         }
@@ -247,7 +247,7 @@ namespace cocos2d {
 
         jmethodID methodID = env->GetMethodID(classID, methodName, paramCode);
         if (! methodID) {
-            LOGE("Failed to find method id of %s/%s%s", classID, methodName, paramCode);
+            LOGE("Failed to find method id of %s/%s%s", className, methodName, paramCode);
             env->ExceptionClear();
             return false;
         }
