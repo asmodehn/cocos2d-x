@@ -211,7 +211,7 @@ namespace cocos2d {
 
         jmethodID methodID = env->GetMethodID(classID, methodName, paramCode);
         if (! methodID) {
-            LOGE("Failed to find method id of %s", methodName);
+            LOGE("Failed to find method id of %s/%s%s", classID, methodName, paramCode );
             env->ExceptionClear();
             return false;
         }
@@ -247,7 +247,7 @@ namespace cocos2d {
 
         jmethodID methodID = env->GetMethodID(classID, methodName, paramCode);
         if (! methodID) {
-            LOGE("Failed to find method id of %s", methodName);
+            LOGE("Failed to find method id of %s/%s%s", classID, methodName, paramCode);
             env->ExceptionClear();
             return false;
         }
@@ -274,6 +274,20 @@ namespace cocos2d {
         env->ReleaseStringUTFChars(jstr, chars);
 
         return ret;
+    }
+
+    jstring JniHelper::string2jstring(std::string s)
+    {
+        if(!s.size()) {
+            return jstring("");
+        }
+        
+        JNIEnv *env = JniHelper::getEnv();
+        if (!env) {
+            return nullptr;
+        }
+        
+        return env->NewStringUTF(s.c_str());
     }
 
 } //namespace cocos2d

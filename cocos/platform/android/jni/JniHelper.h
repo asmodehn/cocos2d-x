@@ -56,6 +56,7 @@ public:
                               const char *paramCode);
 
     static std::string jstring2string(jstring str);
+    static jstring string2jstring(std::string s);
 
     static jmethodID loadclassMethod_methodID;
     static jobject classloader;
