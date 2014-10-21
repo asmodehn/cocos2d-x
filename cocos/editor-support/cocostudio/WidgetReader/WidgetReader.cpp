@@ -277,7 +277,7 @@ namespace cocostudio
 		}
 		else
 		{
-			CCLOG("No attribute %s", key.c_str());
+			//CCLOG("No attribute %s", key.c_str());
 		}
 		return path;
     }

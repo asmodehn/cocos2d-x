@@ -68,6 +68,12 @@ public:
 	virtual bool init();
 
 	/**
+	* Set camera position, within the view.
+	*/
+	virtual void setPosition(const Vec2 &position);
+	virtual void setPosition(float x, float y);
+
+	/**
 	* Set field of view
 	* @param width Width of view
 	* @param height Height of view

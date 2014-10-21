@@ -65,6 +65,18 @@ bool Camera::init()
 	return true;
 }
 
+void Camera::setPosition(const Vec2 &position)
+{
+	Vec2 newPos = clampToLimit(position);
+	Node::setPosition(newPos);
+}
+
+void Camera::setPosition(float x, float y)
+{
+	Vec2 newPos = clampToLimit(cocos2d::Vec2(x, y));
+	Node::setPosition(newPos);
+}
+
 void Camera::getProjectionMatrix(cocos2d::Mat4& projMatrix)
 {
 	switch (_projectionType)
@@ -121,8 +133,6 @@ void Camera::onTouchMoved(Touch *touch, Event *unused_event)
 	}
 	Vec2 newPos = getPosition() - touch->getDelta() * getZoom();
 	
-	newPos = clampToLimit(newPos);
-
 	setPosition(newPos);
 }
 
@@ -150,9 +160,7 @@ void Camera::onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_ev
 		//CCLOG("Zoom value is %f", zoomValue);
 		addZoom(zoomValue);
 
-		Vec2 newPos = getPosition();
-		newPos = clampToLimit(newPos);
-		setPosition(newPos);
+		setPosition(getPosition());
 	}
 }
 
@@ -169,9 +177,7 @@ void Camera::onMouseScroll(Event* evt)
 	float zoom = e->getScrollY() * _zoomVelocity;
 
 	addZoom(zoom);
-	Vec2 newPos = getPosition();
-	newPos = clampToLimit(newPos);
-	setPosition(newPos);
+	setPosition(getPosition());
 }
 #else //_WINDOWS
 #endif //_WINDOWS
