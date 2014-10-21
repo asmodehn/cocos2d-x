@@ -70,8 +70,8 @@ public:
 	/**
 	* Set camera position, within the view.
 	*/
-	virtual void setPosition(const Vec2 &position);
-	virtual void setPosition(float x, float y);
+	virtual void setPosition(const Vec2 &position) override;
+	virtual void setPosition(float x, float y) override;
 
 	/**
 	* Set field of view
