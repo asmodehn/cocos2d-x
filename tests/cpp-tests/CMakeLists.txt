@@ -13,16 +13,22 @@ else()
   )
 endif()
 
+if ( USE_BOX2D )
+  set(BOX2D_TEST_SRC
+      Classes/Box2DTest/Box2dTest.cpp
+      Classes/Box2DTestBed/Box2dView.cpp
+      Classes/Box2DTestBed/GLES-Render.cpp
+      Classes/Box2DTestBed/Test.cpp
+      Classes/Box2DTestBed/TestEntries.cpp
+  )
+endif()
+
 set(SAMPLE_SRC
   Classes/ActionManagerTest/ActionManagerTest.cpp
   Classes/ActionsEaseTest/ActionsEaseTest.cpp
   Classes/ActionsProgressTest/ActionsProgressTest.cpp
   Classes/ActionsTest/ActionsTest.cpp
-  Classes/Box2DTest/Box2dTest.cpp
-  Classes/Box2DTestBed/Box2dView.cpp
-  Classes/Box2DTestBed/GLES-Render.cpp
-  Classes/Box2DTestBed/Test.cpp
-  Classes/Box2DTestBed/TestEntries.cpp
+  ${BOX2D_TEST_SRC}
   Classes/BugsTest/Bug-1159.cpp
   Classes/BugsTest/Bug-1174.cpp
   Classes/BugsTest/Bug-350.cpp
@@ -35,6 +41,7 @@ set(SAMPLE_SRC
   Classes/BugsTest/Bug-914.cpp
   Classes/BugsTest/BugsTest.cpp
   Classes/BugsTest/Bug-Child.cpp
+  Classes/CameraTest/CameraTest.cpp
   Classes/ChipmunkTest/ChipmunkTest.cpp
   Classes/ClickAndMoveTest/ClickAndMoveTest.cpp
   Classes/ClippingNodeTest/ClippingNodeTest.cpp
@@ -83,7 +90,7 @@ set(SAMPLE_SRC
   Classes/UITest/CocoStudioGUITest/UIScale9SpriteTest.cpp
   Classes/UITest/CocoStudioGUITest/UISceneManager.cpp
   Classes/UITest/CocoStudioGUITest/CocostudioParserTest/CocostudioParserJsonTest.cpp
-  Classes/UITest/CocoStudioGUITest/CocostudioParserTest.cpp 
+  Classes/UITest/CocoStudioGUITest/CocostudioParserTest.cpp
   Classes/UITest/CocoStudioGUITest/UIButtonTest/UIButtonTest.cpp
   Classes/UITest/CocoStudioGUITest/UIFocusTest/UIFocusTest.cpp
   Classes/UITest/CocoStudioGUITest/UICheckBoxTest/UICheckBoxTest.cpp
@@ -223,11 +230,9 @@ target_link_libraries(${APP_NAME}
 )
 endif()
 
-if ( BUILD_EXTENSIONS )
 target_link_libraries(${APP_NAME}
   extensions
 )
-endif()
 
 if ( USE_BOX2D )
 target_link_libraries(${APP_NAME}

@@ -39,8 +39,10 @@ Controller g_aTestNames[] = {
 	{ "Actions - Ease", [](){return new ActionsEaseTestScene();} },
 	{ "Actions - Progress", [](){return new ProgressActionsTestScene(); } },
 	{ "Audio - CocosDenshion", []() { return new CocosDenshionTestScene(); } },
+#if CC_ENABLE_BOX2D_INTEGRATION
 	{ "Box2d - Basic", []() { return new Box2DTestScene(); } },
 	{ "Box2d - TestBed", []() { return new Box2dTestBedScene(); } },
+#endif
 	{ "Bugs", []() { return new BugsTestScene(); } },
 	{ "Camera", []() { return new CameraTestScene(); } },
 	{ "Chipmunk", []() { return new ChipmunkAccelTouchTestScene(); } },
