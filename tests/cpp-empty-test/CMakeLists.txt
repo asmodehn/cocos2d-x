@@ -47,14 +47,29 @@ if(WIN32 AND MSVC)
                      COMMAND ${CMAKE_COMMAND} -E copy_directory
                          ${CMAKE_CURRENT_SOURCE_DIR}/Resources ${CMAKE_CURRENT_BINARY_DIR})
   #get our dlls
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					$<TARGET_FILE:cocos2d>
+					${CMAKE_CURRENT_BINARY_DIR})
+
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/sqlite3/libraries/win32/sqlite3.dll
+					${CMAKE_CURRENT_BINARY_DIR})
+
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/curl/prebuilt/win32/libcurl.dll
+					${CMAKE_CURRENT_BINARY_DIR})
+
   add_custom_command(TARGET ${APP_NAME} PRE_BUILD
                      COMMAND ${CMAKE_COMMAND} -E copy
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../../external/win32-specific/gles/prebuilt/glew32.dll 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/win32-specific/gles/prebuilt/glew32.dll
 					 ${CMAKE_CURRENT_BINARY_DIR})
 
   add_custom_command(TARGET ${APP_NAME} PRE_BUILD
                      COMMAND ${CMAKE_COMMAND} -E copy
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../../external/win32-specific/zlib/prebuilt/zlib1.dll 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/win32-specific/zlib/prebuilt/zlib1.dll
 					 ${CMAKE_CURRENT_BINARY_DIR})
 
   #Visual Studio Defaults to wrong type

@@ -245,10 +245,62 @@ target_link_libraries(${APP_NAME}
   cocos2d
 )
 
+if(WIN32)
+  #get our resources
+  add_custom_command(TARGET ${APP_NAME} PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E copy_directory
+                         ${CMAKE_CURRENT_SOURCE_DIR}/Resources ${CMAKE_CURRENT_BINARY_DIR})
+  #get our dlls
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					$<TARGET_FILE:cocos2d>
+					${CMAKE_CURRENT_BINARY_DIR})
 
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					$<TARGET_FILE:cocostudio>
+					${CMAKE_CURRENT_BINARY_DIR})
 
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					$<TARGET_FILE:cocosui>
+					${CMAKE_CURRENT_BINARY_DIR})
 
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					$<TARGET_FILE:extensions>
+					${CMAKE_CURRENT_BINARY_DIR})
 
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/sqlite3/libraries/win32/sqlite3.dll
+					${CMAKE_CURRENT_BINARY_DIR})
+
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/curl/prebuilt/win32/libcurl.dll
+					${CMAKE_CURRENT_BINARY_DIR})
+
+  add_custom_command( TARGET ${APP_NAME} PRE_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+					${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/websockets/prebuilt/win32/websockets.dll
+					${CMAKE_CURRENT_BINARY_DIR})
+
+  add_custom_command(TARGET ${APP_NAME} PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E copy
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/win32-specific/gles/prebuilt/glew32.dll
+					 ${CMAKE_CURRENT_BINARY_DIR})
+
+  add_custom_command(TARGET ${APP_NAME} PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E copy
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../../external-bin/win32-specific/zlib/prebuilt/zlib1.dll
+					 ${CMAKE_CURRENT_BINARY_DIR})
+    if (MSVC)
+      #Visual Studio Defaults to wrong type
+      set_target_properties(${APP_NAME} PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS")
+      set_target_properties(${APP_NAME} PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
+    endif()
+else()
 set(APP_BIN_DIR "${CMAKE_BINARY_DIR}/bin/${APP_NAME}")
 
 set_target_properties(${APP_NAME} PROPERTIES
@@ -258,3 +310,6 @@ pre_build(${APP_NAME}
   COMMAND ${CMAKE_COMMAND} -E remove_directory ${APP_BIN_DIR}/Resources
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Resources ${APP_BIN_DIR}/Resources
   )
+endif()
+
+
