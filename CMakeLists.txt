@@ -32,8 +32,6 @@ set(Cocos2dxSamples_VERSION_MINOR 0)
 
 include(build/BuildHelpers.CMakeLists.txt)
 
-if(WIN32 OR APPLE)
-
 option(USE_CHIPMUNK "Use chipmunk for physics library" ON)
 option(USE_BOX2D "Use box2d for physics library" OFF)
 option(DEBUG_MODE "Debug or release?" ON)
@@ -44,19 +42,6 @@ option(BUILD_EDITOR_COCOSBUILDER "Build editor support for cocosbuilder" ON)
 
 option(BUILD_CppTests "Only build TestCpp sample" ON)
 option(BUILD_LuaTests "Only build TestLua sample" OFF)
-else()#temp
-
-option(USE_CHIPMUNK "Use chipmunk for physics library" ON)
-option(USE_BOX2D "Use box2d for physics library" OFF)
-option(DEBUG_MODE "Debug or release?" ON)
-option(BUILD_LIBS_LUA "Build lua libraries" ON)
-option(BUILD_EDITOR_SPINE "Build editor support for spine" ON)
-option(BUILD_EDITOR_COCOSTUDIO "Build editor support for cocostudio" ON)
-option(BUILD_EDITOR_COCOSBUILDER "Build editor support for cocosbuilder" ON)
-
-option(BUILD_CppTests "Only build TestCpp sample" ON)
-option(BUILD_LuaTests "Only build TestLua sample" ON)
-endif()#temp
 
 #This is ignored on multi configuration IDE like MSVC
 if(DEBUG_MODE)
