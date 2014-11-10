@@ -40,8 +40,8 @@ fi
 
 if [ "${OSTYPE}" = "msys" ]; then
 
-  CC=`whereis gcc | awk '{print $2}'`
-  CXX=`whereis g++ | awk '{print $2}'`
+  CC=`whereis gcc.exe | awk '{print $2}'`
+  CXX=`whereis g++.exe | awk '{print $2}'`
   PP=mingw-w64-${HOST_ARCH}
   
   MINGW_PACKAGES=(glfw glew libwebp libjpeg-turbo libpng freetype libiconv zlib curl
@@ -58,5 +58,5 @@ if [ "${OSTYPE}" = "msys" ]; then
   cmake -G"CodeBlocks - MinGW Makefiles" -DCMAKE_MAKE_PROGRAM="mingw32-make" \
   -DCMAKE_C_COMPILER="${CC}" -DCMAKE_CXX_COMPILER="${CXX}" ../..
 
-  mingw32-make
+  mingw32-make -j4
 fi
