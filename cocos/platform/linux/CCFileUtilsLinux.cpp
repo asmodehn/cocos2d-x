@@ -29,7 +29,6 @@ THE SOFTWARE.
 #include "CCFileUtilsLinux.h"
 #include "platform/CCCommon.h"
 #include "base/ccMacros.h"
-#include "CCApplication.h"
 #include "deprecated/CCString.h"
 #include <unistd.h>
 #include <sys/stat.h>

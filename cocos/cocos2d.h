@@ -209,7 +209,7 @@ THE SOFTWARE.
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_MAC
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-    #include "platform/linux/CCApplication.h"
+    #include "platform/linux/CCApplication-linux.h"
     #include "platform/desktop/CCGLViewImpl-desktop.h"
     #include "platform/linux/CCGL.h"
     #include "platform/linux/CCStdC.h"
