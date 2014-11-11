@@ -43,6 +43,9 @@ option(BUILD_EDITOR_COCOSBUILDER "Build editor support for cocosbuilder" ON)
 option(BUILD_CppTests "Only build TestCpp sample" ON)
 option(BUILD_LuaTests "Only build TestLua sample" OFF)
 
+#Needed on everything but windows because we build shared libraries from static convenience libraries
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 #This is ignored on multi configuration IDE like MSVC
 if(DEBUG_MODE)
   set(CMAKE_BUILD_TYPE DEBUG)
