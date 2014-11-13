@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2013-2014 Chukong Technologies Inc.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,7 +44,7 @@ public:
     float top;
     float right;
     float bottom;
-    
+
 public:
     Margin();
     Margin(float l, float t, float r, float b);
@@ -52,7 +52,7 @@ public:
     Margin& operator= (const Margin& other);
     void setMargin(float l, float t, float r, float b);
     bool equals(const Margin& target) const;
-    
+
     static const Margin ZERO;
 
 };
@@ -85,27 +85,27 @@ public:
     {
         _layoutParameterType = Type::NONE;
     };
-    
+
     /**
      * Default destructor
      */
     virtual ~LayoutParameter(){};
-    
+
     /**
      * Allocates and initializes.
      * @return A initialized LayoutParameter which is marked as "autorelease".
      */
     static LayoutParameter* create();
-    
+
     /**
      * Sets Margin parameter for LayoutParameter.
-     * 
+     *
      * @see Margin
      *
      * @param margin
      */
     void setMargin(const Margin& margin);
-    
+
     /**
      * Gets Margin parameter of LayoutParameter.
      *
@@ -114,7 +114,7 @@ public:
      * @return const Margin&
      */
     const Margin& getMargin() const;
-    
+
     /**
      * Gets LayoutParameterType of LayoutParameter.
      *
@@ -123,7 +123,7 @@ public:
      * @return LayoutParameterType
      */
     Type getLayoutType() const;
-    
+
     LayoutParameter* clone();
     virtual LayoutParameter* createCloneInstance();
     virtual void copyProperties(LayoutParameter* model);
@@ -131,15 +131,15 @@ protected:
     Margin _margin;
     Type _layoutParameterType;
 };
-    
+
 class LayoutParameterProtocol
 {
 public:
-    
+
     virtual LayoutParameter* getLayoutParameter() const= 0;
 };
 
-    
+
 /**
 *   @js NA
 *   @lua NA
@@ -165,18 +165,18 @@ public:
     {
         _layoutParameterType = Type::LINEAR;
     };
-    
+
     /**
      * Default destructor
      */
     virtual ~LinearLayoutParameter(){};
-    
+
     /**
      * Allocates and initializes.
      * @return A initialized LayoutParameter which is marked as "autorelease".
      */
     static LinearLayoutParameter* create();
-    
+
     /**
      * Sets LinearGravity parameter for LayoutParameter.
      *
@@ -185,7 +185,7 @@ public:
      * @param LinearGravity
      */
     void setGravity(LinearGravity gravity);
-    
+
     /**
      * Gets LinearGravity parameter for LayoutParameter.
      *
@@ -199,14 +199,14 @@ public:
 protected:
     LinearGravity _linearGravity;
 };
-    
-    
+
+
 /**
 *   @js NA
 *   @lua NA
 */
 
-    
+
 class CC_GUI_DLL RelativeLayoutParameter : public LayoutParameter
 {
 public:
@@ -217,14 +217,14 @@ public:
         PARENT_TOP_CENTER_HORIZONTAL,
         PARENT_TOP_RIGHT,
         PARENT_LEFT_CENTER_VERTICAL,
-        
+
         CENTER_IN_PARENT,
-        
+
         PARENT_RIGHT_CENTER_VERTICAL,
         PARENT_LEFT_BOTTOM,
         PARENT_BOTTOM_CENTER_HORIZONTAL,
         PARENT_RIGHT_BOTTOM,
-        
+
         LOCATION_ABOVE_LEFTALIGN,
         LOCATION_ABOVE_CENTER,
         LOCATION_ABOVE_RIGHTALIGN,
@@ -249,18 +249,18 @@ public:
     {
         _layoutParameterType = Type::RELATIVE;
     };
-    
+
     /**
      * Default destructor
      */
     virtual ~RelativeLayoutParameter(){};
-    
+
     /**
      * Allocates and initializes.
      * @return A initialized LayoutParameter which is marked as "autorelease".
      */
     static RelativeLayoutParameter* create();
-    
+
     /**
      * Sets RelativeAlign parameter for LayoutParameter.
      *
@@ -269,7 +269,7 @@ public:
      * @param RelativeAlign
      */
     void setAlign(RelativeAlign align);
-    
+
     /**
      * Gets RelativeAlign parameter for LayoutParameter.
      *
@@ -278,35 +278,35 @@ public:
      * @return RelativeAlign
      */
     RelativeAlign getAlign() const;
-    
+
     /**
      * Sets a key for LayoutParameter. Witch widget named this is relative to.
      *
      * @param name
      */
     void setRelativeToWidgetName(const std::string& name);
-    
+
     /**
      * Gets the key of LayoutParameter. Witch widget named this is relative to.
      *
      * @return name
      */
     const std::string& getRelativeToWidgetName() const;
-    
+
     /**
      * Sets a name in Relative Layout for LayoutParameter.
      *
      * @param name
      */
     void setRelativeName(const std::string& name);
-    
+
     /**
      * Gets a name in Relative Layout of LayoutParameter.
      *
      * @return name
      */
     const std::string& getRelativeName() const;
-    
+
     virtual LayoutParameter* createCloneInstance() override;
     virtual void copyProperties(LayoutParameter* model) override;
 protected:

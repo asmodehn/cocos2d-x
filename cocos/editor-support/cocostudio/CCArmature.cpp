@@ -89,6 +89,7 @@ Armature::Armature()
     , _parentBone(nullptr)
     , _armatureTransformDirty(true)
     , _animation(nullptr)
+    , _body(nullptr)
 {
 }
 
@@ -357,12 +358,12 @@ void Armature::setAnimation(ArmatureAnimation *animation)
     _animation = animation;
 }
 
-ArmatureAnimation *Armature::getAnimation() const 
+ArmatureAnimation *Armature::getAnimation() const
 {
     return _animation;
 }
 
-bool Armature::getArmatureTransformDirty() const 
+bool Armature::getArmatureTransformDirty() const
 {
     return _armatureTransformDirty;
 }
@@ -401,9 +402,9 @@ void Armature::draw(cocos2d::Renderer *renderer, const Mat4 &transform, uint32_t
             {
                 Skin *skin = static_cast<Skin *>(node);
                 skin->updateTransform();
-                
+
                 BlendFunc func = bone->getBlendFunc();
-                
+
                 if (func.src != BlendFunc::ALPHA_PREMULTIPLIED.src || func.dst != BlendFunc::ALPHA_PREMULTIPLIED.dst)
                 {
                     skin->setBlendFunc(bone->getBlendFunc());
@@ -452,7 +453,7 @@ void Armature::onEnter()
             return;
     }
 #endif
-    
+
     Node::onEnter();
     scheduleUpdate();
 }
@@ -505,7 +506,7 @@ Rect Armature::getBoundingBox() const
         if (Bone *bone = dynamic_cast<Bone *>(object))
         {
             Rect r = bone->getDisplayManager()->getBoundingBox();
-            if (r.equals(Rect::ZERO)) 
+            if (r.equals(Rect::ZERO))
                 continue;
 
             if(first)
@@ -533,7 +534,7 @@ Rect Armature::getBoundingBox() const
     return RectApplyTransform(boundingBox, getNodeToParentTransform());
 }
 
-Bone *Armature::getBoneAtPoint(float x, float y) const 
+Bone *Armature::getBoneAtPoint(float x, float y) const
 {
     long length = _children.size();
     Bone *bs;

@@ -111,15 +111,17 @@ Renderer::Renderer()
 ,_lastBatchedMeshCommand(nullptr)
 ,_numQuads(0)
 ,_glViewAssigned(false)
+,_drawnBatches(0)
+,_drawnVertices(0)
 ,_isRendering(false)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
 ,_cacheTextureListener(nullptr)
 #endif
 {
     _groupCommandManager = new GroupCommandManager();
-    
+
     _commandGroupStack.push(DEFAULT_RENDER_QUEUE);
-    
+
     RenderQueue defaultRenderQueue;
     _renderGroups.push_back(defaultRenderQueue);
     _batchedQuadCommands.reserve(BATCH_QUADCOMMAND_RESEVER_SIZE);
@@ -129,9 +131,9 @@ Renderer::~Renderer()
 {
     _renderGroups.clear();
     _groupCommandManager->release();
-    
+
     glDeleteBuffers(2, _buffersVBO);
-    
+
     if (Configuration::getInstance()->supportsShareableVAO())
     {
         glDeleteVertexArrays(1, &_quadVAO);
@@ -149,14 +151,14 @@ void Renderer::initGLView()
         /** listen the event that renderer was recreated on Android/WP8 */
         this->setupBuffer();
     });
-    
+
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_cacheTextureListener, -1);
 #endif
 
     setupIndices();
-    
+
     setupBuffer();
-    
+
     _glViewAssigned = true;
 }
 
@@ -277,7 +279,7 @@ int Renderer::createRenderQueue()
 void Renderer::visitRenderQueue(const RenderQueue& queue)
 {
     ssize_t size = queue.size();
-    
+
     for (ssize_t index = 0; index < size; ++index)
     {
         auto command = queue[index];
@@ -290,16 +292,16 @@ void Renderer::visitRenderQueue(const RenderQueue& queue)
             if(_numQuads + cmd->getQuadCount() > VBO_SIZE)
             {
                 CCASSERT(cmd->getQuadCount()>= 0 && cmd->getQuadCount() < VBO_SIZE, "VBO is not big enough for quad data, please break the quad data down or use customized render command");
-                
+
                 //Draw batched quads if VBO is full
                 drawBatchedQuads();
             }
-            
+
             _batchedQuadCommands.push_back(cmd);
-            
+
             memcpy(_quads + _numQuads, cmd->getQuads(), sizeof(V3F_C4B_T2F_Quad) * cmd->getQuadCount());
             convertToWorldCoordinates(_quads + _numQuads, cmd->getQuadCount(), cmd->getModelView());
-            
+
             _numQuads += cmd->getQuadCount();
 
         }
@@ -351,7 +353,7 @@ void Renderer::render()
 
     //TODO setup camera or MVP
     _isRendering = true;
-    
+
     if (_glViewAssigned)
     {
         // cleanup

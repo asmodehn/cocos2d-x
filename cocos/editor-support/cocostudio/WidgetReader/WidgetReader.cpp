@@ -11,8 +11,8 @@ using namespace ui;
 
 namespace cocostudio
 {
-    
-    
+
+
     const char* P_IgnoreSize = "ignoreSize";
     const char* P_SizeType = "sizeType";
     const char* P_PositionType = "positionType";
@@ -44,7 +44,7 @@ namespace cocostudio
     const char* P_MarginRight = "marginRight";
     const char* P_MarginTop = "marginTop";
     const char* P_MarginDown = "marginDown";
-    
+
     const char* P_Opacity = "opacity";
     const char* P_ColorR = "colorR";
     const char* P_ColorG = "colorG";
@@ -53,16 +53,16 @@ namespace cocostudio
     const char* P_FlipY = "flipY";
     const char* P_AnchorPointX = "anchorPointX";
     const char* P_AnchorPointY = "anchorPointY";
-    
-    
+
+
     const char* P_ResourceType = "resourceType";
     const char* P_Path = "path";
 
-    
+
     static WidgetReader* instanceWidgetReader = nullptr;
-    
+
     IMPLEMENT_CLASS_WIDGET_READER_INFO(WidgetReader)
-    
+
     WidgetReader::WidgetReader()
     :_sizePercentX(0.0f),
     _sizePercentY(0.0f),
@@ -76,7 +76,7 @@ namespace cocostudio
         valueToInt = [=](const std::string& str) -> int{
             return atoi(str.c_str());
         };
-        
+
         valueToBool = [=](const std::string& str) -> bool{
             int intValue = valueToInt(str);
             if (1 == intValue) {
@@ -85,18 +85,18 @@ namespace cocostudio
                 return false;
             }
         };
-        
+
         valueToFloat = [=](const std::string& str) -> float{
             return utils::atof(str.c_str());
         };
     }
-    
+
     WidgetReader::~WidgetReader()
-   
+
     {
-        
+
     }
-    
+
     WidgetReader* WidgetReader::getInstance()
     {
         if (!instanceWidgetReader)
@@ -105,26 +105,26 @@ namespace cocostudio
         }
         return instanceWidgetReader;
     }
-    
+
     void WidgetReader::purge()
     {
         CC_SAFE_DELETE(instanceWidgetReader);
     }
-    
+
     void WidgetReader::setPropsFromJsonDictionary(Widget *widget, const rapidjson::Value &options)
-    {        
-   
+    {
+
         bool ignoreSizeExsit = DICTOOL->checkObjectExist_json(options, P_IgnoreSize);
         if (ignoreSizeExsit) {
             widget->ignoreContentAdaptWithSize(DICTOOL->getBooleanValue_json(options, P_IgnoreSize));
         }
-        
+
         widget->setSizeType((Widget::SizeType)DICTOOL->getIntValue_json(options, P_SizeType));
         widget->setPositionType((Widget::PositionType)DICTOOL->getIntValue_json(options, P_PositionType));
-        
+
         widget->setSizePercent(Vec2(DICTOOL->getFloatValue_json(options, P_SizePercentX), DICTOOL->getFloatValue_json(options, P_SizePercentY)));
         widget->setPositionPercent(Vec2(DICTOOL->getFloatValue_json(options, P_PositionPercentX), DICTOOL->getFloatValue_json(options, P_PositionPercentY)));
-        
+
         /* adapt screen */
         float w = 0, h = 0;
         bool adaptScrenn = DICTOOL->getBooleanValue_json(options, P_AdaptScreen);
@@ -140,26 +140,26 @@ namespace cocostudio
             h = DICTOOL->getFloatValue_json(options, P_Height);
         }
         widget->setContentSize(Size(w, h));
-        
+
         widget->setTag(DICTOOL->getIntValue_json(options, P_Tag));
         widget->setActionTag(DICTOOL->getIntValue_json(options, P_ActionTag));
         widget->setTouchEnabled(DICTOOL->getBooleanValue_json(options, P_TouchAble));
         const char* name = DICTOOL->getStringValue_json(options, P_Name);
-        const char* widgetName = name?name:"default";
+        std::string widgetName = name?std::string(name):"default";
         widget->setName(widgetName);
-        
+
         float x = DICTOOL->getFloatValue_json(options, P_X);
         float y = DICTOOL->getFloatValue_json(options, P_Y);
         widget->setPosition(Vec2(x,y));
-      
+
         widget->setScaleX(DICTOOL->getFloatValue_json(options, P_ScaleX,1.0));
-        
-       
+
+
         widget->setScaleY(DICTOOL->getFloatValue_json(options, P_ScaleY,1.0));
-        
-      
+
+
         widget->setRotation(DICTOOL->getFloatValue_json(options, P_Rotation,0));
-        
+
         bool vb = DICTOOL->checkObjectExist_json(options, P_Visbile);
         if (vb)
         {
@@ -167,7 +167,7 @@ namespace cocostudio
         }
         int z = DICTOOL->getIntValue_json(options, P_ZOrder);
         widget->setLocalZOrder(z);
-        
+
         bool layout = DICTOOL->checkObjectExist_json(options, P_LayoutParameter);
         if (layout)
         {
@@ -190,9 +190,9 @@ namespace cocostudio
                     parameter = RelativeLayoutParameter::create();
                     RelativeLayoutParameter* rParameter = (RelativeLayoutParameter*)parameter;
                     const char* relativeName = DICTOOL->getStringValue_json(layoutParameterDic, P_RelativeName);
-                    rParameter->setRelativeName(relativeName);
+                    rParameter->setRelativeName(std::string(relativeName));
                     const char* relativeToName = DICTOOL->getStringValue_json(layoutParameterDic, P_RelativeToName);
-                    rParameter->setRelativeToWidgetName(relativeToName);
+                    rParameter->setRelativeToWidgetName(std::string(relativeToName));
                     int align = DICTOOL->getIntValue_json(layoutParameterDic, P_Align);
                     rParameter->setAlign((cocos2d::ui::RelativeLayoutParameter::RelativeAlign)align);
                     break;
@@ -211,7 +211,7 @@ namespace cocostudio
             }
         }
     }
-    
+
     void WidgetReader::setColorPropsFromJsonDictionary(Widget *widget, const rapidjson::Value &options)
     {
         bool op = DICTOOL->checkObjectExist_json(options, P_Opacity);
@@ -226,15 +226,15 @@ namespace cocostudio
         int colorG = cg ? DICTOOL->getIntValue_json(options, P_ColorG) : 255;
         int colorB = cb ? DICTOOL->getIntValue_json(options, P_ColorB) : 255;
         widget->setColor(Color3B(colorR, colorG, colorB));
-        
+
         this->setAnchorPointForWidget(widget, options);
-        
+
         bool flipX = DICTOOL->getBooleanValue_json(options, P_FlipX);
         bool flipY = DICTOOL->getBooleanValue_json(options, P_FlipY);
         widget->setFlippedX(flipX);
         widget->setFlippedY(flipY);
     }
-    
+
     void WidgetReader::beginSetBasicProperties(cocos2d::ui::Widget *widget)
     {
         _position = widget->getPosition();
@@ -244,11 +244,11 @@ namespace cocostudio
         _opacity = widget->getOpacity();
         _originalAnchorPoint = widget->getAnchorPoint();
     }
-    
+
     void WidgetReader::endSetBasicProperties(Widget *widget)
     {
         Size screenSize = Director::getInstance()->getWinSize();
-        
+
         widget->setPositionPercent(Vec2(_positionPercentX, _positionPercentY));
         widget->setSizePercent(Vec2(_sizePercentX, _sizePercentY));
         if (_isAdaptScreen) {
@@ -264,7 +264,7 @@ namespace cocostudio
         widget->setPosition(_position);
         widget->setAnchorPoint(_originalAnchorPoint);
     }
-    
+
     std::string WidgetReader::getResourcePath(const rapidjson::Value &dict,
                                               const std::string &key,
                                               cocos2d::ui::Widget::TextureResType texType)
@@ -281,7 +281,7 @@ namespace cocostudio
 		}
 		return path;
     }
-    
+
     std::string WidgetReader::getResourcePath(CocoLoader *cocoLoader, stExpCocoNode *cocoNode, cocos2d::ui::Widget::TextureResType texType)
     {
         stExpCocoNode *backGroundChildren = cocoNode->GetChildArray(cocoLoader);
@@ -290,9 +290,9 @@ namespace cocostudio
         if (backgroundValue.size() < 3) {
             return "";
         }
-       
+
         std::string binaryPath = GUIReader::getInstance()->getFilePath();
-        
+
         std::string imageFileName_tp;
         if (!backgroundValue.empty())
         {
@@ -308,7 +308,7 @@ namespace cocostudio
         }
         return imageFileName_tp;
     }
-    
+
     void WidgetReader::setAnchorPointForWidget(cocos2d::ui::Widget *widget, const rapidjson::Value &options)
     {
         bool isAnchorPointXExists = DICTOOL->checkObjectExist_json(options, P_AnchorPointX);
@@ -318,7 +318,7 @@ namespace cocostudio
         }else{
             anchorPointXInFile = widget->getAnchorPoint().x;
         }
-        
+
         bool isAnchorPointYExists = DICTOOL->checkObjectExist_json(options, P_AnchorPointY);
         float anchorPointYInFile;
         if (isAnchorPointYExists) {
@@ -327,28 +327,28 @@ namespace cocostudio
         else{
             anchorPointYInFile = widget->getAnchorPoint().y;
         }
-        
+
         if (isAnchorPointXExists || isAnchorPointYExists) {
             widget->setAnchorPoint(Vec2(anchorPointXInFile, anchorPointYInFile));
         }
     }
-    
+
     void WidgetReader::setPropsFromBinary(cocos2d::ui::Widget *widget, cocostudio::CocoLoader *cocoLoader, cocostudio::stExpCocoNode *cocoNode)
     {
         stExpCocoNode *stChildArray = cocoNode->GetChildArray(cocoLoader);
-        
+
         this->beginSetBasicProperties(widget);
-        
+
         for (int i = 0; i < cocoNode->GetChildNum(); ++i) {
             std::string key = stChildArray[i].GetName(cocoLoader);
             std::string value = stChildArray[i].GetValue(cocoLoader);
-            
+
             CC_BASIC_PROPERTY_BINARY_READER
         }
-        
+
         this->endSetBasicProperties(widget);
     }
-    
+
 }
 
 
