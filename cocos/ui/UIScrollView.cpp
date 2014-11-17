@@ -23,6 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ui/UIScrollView.h"
+#include "base/CCDirector.h"
 
 NS_CC_BEGIN
 
@@ -59,7 +60,7 @@ _autoScrollDestination(Vec2::ZERO),
 _bePressed(false),
 _slidTime(0.0f),
 _moveChildPoint(Vec2::ZERO),
-_childFocusCancelOffset(5.0f),
+_childFocusCancelOffset(1.0f),
 _leftBounceNeeded(false),
 _topBounceNeeded(false),
 _rightBounceNeeded(false),
@@ -1556,8 +1557,31 @@ void ScrollView::interceptTouchEvent(Widget::TouchEventType event, Widget *sende
             
         case TouchEventType::MOVED:
         {
-            float offset = (sender->getTouchBeganPosition() - touchPoint).getLength();
-            if (offset > _childFocusCancelOffset)
+			cocos2d::Size view = cocos2d::Director::getInstance()->getVisibleSize();
+			float offset = (sender->getTouchBeganPosition() - touchPoint).getLength();
+			
+			float ratio = 0.f;
+			switch (_direction)
+			{
+			case Direction::VERTICAL: // vertical
+			{
+				ratio = offset / view.height;
+				break;
+			}
+			case Direction::HORIZONTAL: // horizontal
+			{
+				ratio = offset / view.width;
+				break;
+			}
+			case Direction::BOTH: // both
+			{
+				ratio = (offset * offset) / (view.width * view.width + view.height * view.height);
+				break;
+			}
+			default:
+				break;
+			}
+			if (ratio * 100.f > _childFocusCancelOffset)
             {
                 sender->setHighlighted(false);
                 _touchMovePosition = touch->getLocation();

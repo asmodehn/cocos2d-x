@@ -320,6 +320,11 @@ public:
      */
     virtual Widget* findNextFocusedWidget(FocusDirection direction, Widget* current) override;
 
+	/**
+	 * Set scoll Cancel offset, in percent of the screen size.
+	 */
+	inline void setCancelOffset(float offset){ _childFocusCancelOffset = offset; }
+
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
     
