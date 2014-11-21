@@ -167,6 +167,10 @@ public:
      */
     bool isAutoLoadSpriteFile();
 
+	/**
+	* Remove data when ref is 1;
+	*/
+	void removeUnusedData();
 
     const cocos2d::Map<std::string, ArmatureData*>&     getArmatureDatas() const;
     const cocos2d::Map<std::string, AnimationData*>&    getAnimationDatas() const;

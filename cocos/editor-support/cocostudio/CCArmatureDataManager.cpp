@@ -114,8 +114,8 @@ void ArmatureDataManager::removeArmatureFileInfo(const std::string& configFilePa
             SpriteFrameCache::getInstance()->removeSpriteFramesFromFile(str.c_str());
         }
 
-        _relativeDatas.erase(configFilePath);
         DataReaderHelper::getInstance()->removeConfigFile(configFilePath);
+        _relativeDatas.erase(configFilePath);
     }
 }
 
@@ -261,6 +261,74 @@ void CCArmatureDataManager::addRelativeData(const std::string& configFilePath)
 RelativeData *CCArmatureDataManager::getRelativeData(const std::string&  configFilePath)
 {
     return &_relativeDatas[configFilePath];
+}
+
+void CCArmatureDataManager::removeUnusedData()
+{
+	std::vector< std::string> remFile;
+
+	for (auto armature : _armarureDatas)
+	{
+		if (armature.second->getReferenceCount() == 1)
+		{
+			remFile.push_back(armature.first);
+		}
+	}
+
+	for (auto anim : _animationDatas)
+	{
+		if (anim.second->getReferenceCount() == 1)
+		{
+			remFile.push_back(anim.first);
+		}
+	}
+
+	for (auto texture : _textureDatas)
+	{
+		if (texture.second->getReferenceCount() == 1)
+		{
+			remFile.push_back(texture.first);
+		}
+	}
+
+	for (const auto& curID : remFile)
+	{
+		//auto remArmature = _armarureDatas.find(curID);
+		//if (remArmature != _armarureDatas.end())
+		//{
+		//	_armarureDatas.erase(remArmature);
+		//}
+		//auto remAnim = _animationDatas.find(curID);
+		//if (remAnim != _animationDatas.end())
+		//{
+		//	_animationDatas.erase(remAnim);
+		//}
+		//auto remTexture = _textureDatas.find(curID);
+		//if (remTexture != _textureDatas.end())
+		//{
+		//	_textureDatas.erase(remTexture);
+		//}
+
+		bool dataRemoved = false;
+		for (auto data = _relativeDatas.begin(); data != _relativeDatas.end(); ++data)
+		{
+			for (auto armaID : data->second.armatures)
+			{
+				if (armaID == curID)
+				{
+					removeArmatureFileInfo(data->first);
+					dataRemoved = true;
+					break;
+				}
+			}
+			if (dataRemoved)
+			{
+				break;
+			}
+
+		}
+	}
+
 }
 
 }
