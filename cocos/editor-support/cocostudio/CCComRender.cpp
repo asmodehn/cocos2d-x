@@ -141,7 +141,8 @@ bool ComRender::serialize(void* r)
 		{
 			if (file != nullptr)
 			{
-				filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
+				//filePath.assign(cocos2d::FileUtils::getInstance()->fullPathForFilename(file));
+				filePath.assign(file);
 			}
 			if (strcmp(className, "CCSprite") == 0 && (filePath.find(".png") != filePath.npos || filePath.find(".pvr.ccz") != filePath.npos))
 			{
