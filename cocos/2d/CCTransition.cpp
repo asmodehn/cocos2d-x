@@ -184,7 +184,7 @@ void TransitionScene::onExit()
 
     // _inScene should not receive the onEnter callback
     // only the onEnterTransitionDidFinish
-    _inScene->onEnterTransitionDidFinish();
+    //_inScene->onEnterTransitionDidFinish();
 }
 
 // custom cleanup

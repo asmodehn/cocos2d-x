@@ -1028,11 +1028,14 @@ void Director::setNextScene()
     _nextScene->retain();
     _nextScene = nullptr;
 
-    if ((! runningIsTransition) && _runningScene)
-    {
-        _runningScene->onEnter();
-        _runningScene->onEnterTransitionDidFinish();
-    }
+	if (_runningScene)
+	{
+		if ((!runningIsTransition))
+		{
+			_runningScene->onEnter();
+		}
+		_runningScene->onEnterTransitionDidFinish();
+	}
 }
 
 void Director::pause()
