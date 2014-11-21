@@ -1400,13 +1400,14 @@ void Label::parseStringEvent()
 	std::vector<TextEvent*> stack;
 	do
 	{
+		paramEnd = std::u16string::npos;
 		paramBegin = _currentUTF16String.find('<', offset);
-		paramEnd = _currentUTF16String.find('>', offset + 1);
-
-		assert((paramBegin == std::u16string::npos && paramEnd == std::u16string::npos) || (paramBegin != std::u16string::npos && paramEnd != std::u16string::npos) && "Invalid arguments syntax!");
-
 		if (paramBegin != std::u16string::npos)
 		{
+			paramEnd = _currentUTF16String.find('>', offset + 1);
+
+			//assert((paramBegin == std::u16string::npos && paramEnd == std::u16string::npos) || (paramBegin != std::u16string::npos && paramEnd != std::u16string::npos) && "Invalid arguments syntax!");
+
 			// init in case arg is not found
 			offset = paramEnd;
 
