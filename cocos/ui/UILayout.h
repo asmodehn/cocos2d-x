@@ -317,13 +317,13 @@ public:
      */
     std::function<int(FocusDirection, Widget*)> onPassFocusToChild;
 
+    //override "onSizeChanged" method of widget.
+    virtual void onSizeChanged() override;
 CC_CONSTRUCTOR_ACCESS:
     //override "init" method of widget.
     virtual bool init() override;
     
 protected:
-    //override "onSizeChanged" method of widget.
-    virtual void onSizeChanged() override;
     
     //init background image renderer.
     void addBackGroundImage();

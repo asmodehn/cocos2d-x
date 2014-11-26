@@ -168,7 +168,8 @@ void ScrollView::setInnerContainerSize(const Size &size)
     {
         innerSizeHeight = size.height;
     }
-    _innerContainer->setContentSize(Size(innerSizeWidth, innerSizeHeight));
+	_innerContainer->setContentSize(Size(innerSizeWidth, innerSizeHeight));
+	_innerContainer->onSizeChanged();
 
     switch (_direction)
     {
