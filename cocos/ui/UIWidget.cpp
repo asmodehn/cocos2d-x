@@ -283,38 +283,41 @@ void Widget::initRenderer()
 void Widget::setContentSize(const cocos2d::Size &contentSize)
 {
     ProtectedNode::setContentSize(contentSize);
-    
-    _customSize = contentSize;
-    if (_ignoreSize)
-    {
-        _contentSize = getVirtualRendererSize();
-    }
-    
-    if (_running)
-    {
-        Widget* widgetParent = getWidgetParent();
-        Size pSize;
-        if (widgetParent)
-        {
-            pSize = widgetParent->getContentSize();
-        }
-        else
-        {
-            pSize = _parent->getContentSize();
-        }
-        float spx = 0.0f;
-        float spy = 0.0f;
-        if (pSize.width > 0.0f)
-        {
-            spx = _customSize.width / pSize.width;
-        }
-        if (pSize.height > 0.0f)
-        {
-            spy = _customSize.height / pSize.height;
-        }
-        _sizePercent = Vec2(spx, spy);
-    }
-    onSizeChanged();
+
+	if (!contentSize.equals(_customSize))
+	{
+		_customSize = contentSize;
+		if (_ignoreSize)
+		{
+			_contentSize = getVirtualRendererSize();
+		}
+
+		if (_running)
+		{
+			Widget* widgetParent = getWidgetParent();
+			Size pSize;
+			if (widgetParent)
+			{
+				pSize = widgetParent->getContentSize();
+			}
+			else
+			{
+				pSize = _parent->getContentSize();
+			}
+			float spx = 0.0f;
+			float spy = 0.0f;
+			if (pSize.width > 0.0f)
+			{
+				spx = _customSize.width / pSize.width;
+			}
+			if (pSize.height > 0.0f)
+			{
+				spy = _customSize.height / pSize.height;
+			}
+			_sizePercent = Vec2(spx, spy);
+		}
+		onSizeChanged();
+	}
 }
 
 void Widget::setSize(const Size &size)

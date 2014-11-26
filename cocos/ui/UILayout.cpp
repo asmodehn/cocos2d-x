@@ -116,8 +116,8 @@ void Layout::onEnter()
     {
         _clippingStencil->onEnter();
     }
-    _doLayoutDirty = true;
-    _clippingRectDirty = true;
+    //_doLayoutDirty = true;
+    //_clippingRectDirty = true;
 }
     
 void Layout::onExit()
