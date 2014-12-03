@@ -281,13 +281,20 @@ public:
     static void setTexParameters(Texture2D *t, const Texture2D::TexParams &texParams);
     static void removeTexture(Texture2D *t);
     static void reloadAllTextures();
+
+	static void prepareReloading();
+	static void reloadNextTexture();
+
+	static bool isReloading();
 public:
     static std::list<VolatileTexture*> _textures;
     static bool _isReloading;
+
 private:
     // find VolatileTexture by Texture2D*
     // if not found, create a new one
     static VolatileTexture* findVolotileTexture(Texture2D *tt);
+	static std::list<VolatileTexture*>::iterator _curentTexture;
 };
 
 #endif
