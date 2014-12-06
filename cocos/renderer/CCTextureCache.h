@@ -286,6 +286,9 @@ public:
 	static void reloadNextTexture();
 
 	static bool isReloading();
+
+	static int getCurrentTexIndex() {return _currentTextureIndex;}
+	static unsigned int getTexCount() {return _textures.size();}
 public:
     static std::list<VolatileTexture*> _textures;
     static bool _isReloading;
@@ -294,7 +297,8 @@ private:
     // find VolatileTexture by Texture2D*
     // if not found, create a new one
     static VolatileTexture* findVolotileTexture(Texture2D *tt);
-	static std::list<VolatileTexture*>::iterator _curentTexture;
+	static std::list<VolatileTexture*>::iterator _currentTexture;
+	static int _currentTextureIndex;
 };
 
 #endif

@@ -570,7 +570,8 @@ std::string TextureCache::getCachedTextureInfo() const
 
 std::list<VolatileTexture*> VolatileTextureMgr::_textures;
 bool VolatileTextureMgr::_isReloading = false;
-std::list<VolatileTexture*>::iterator VolatileTextureMgr::_curentTexture;
+std::list<VolatileTexture*>::iterator VolatileTextureMgr::_currentTexture;
+int VolatileTextureMgr::_currentTextureIndex = 0;
 
 VolatileTexture::VolatileTexture(Texture2D *t)
 : _texture(t)
@@ -714,9 +715,9 @@ void VolatileTextureMgr::reloadAllTextures()
     }
 
     CCLOG("reload all texture");
-	_curentTexture = _textures.begin();
+	_currentTexture = _textures.begin();
 
-	while (_curentTexture != _textures.end())
+	while (_currentTexture != _textures.end())
     {
 		reloadNextTexture();
     }
@@ -724,7 +725,7 @@ void VolatileTextureMgr::reloadAllTextures()
     _isReloading = false;
 }
 
-void VolatileTextureMgr::prepapreReloading()
+void VolatileTextureMgr::prepareReloading()
 {
 	_isReloading = true;
 
@@ -733,13 +734,14 @@ void VolatileTextureMgr::prepapreReloading()
 	{
 		(*iter)->_texture->releaseGLTexture();
 	}
-	_curentTexture = _textures.begin();
+	_currentTexture = _textures.begin();
+	_currentTextureIndex = 0;
 }
 
 void VolatileTextureMgr::reloadNextTexture()
 {
-	VolatileTexture *vt = *_curentTexture++;
-
+	VolatileTexture *vt = *_currentTexture++;
+	++_currentTextureIndex;
 	CCLOG("Reloading texture %s", vt->_fileName.c_str());
 
 	switch (vt->_cashedImageType)
@@ -789,7 +791,7 @@ void VolatileTextureMgr::reloadNextTexture()
 	}
 	vt->_texture->setTexParameters(vt->_texParams); 
 
-	_isReloading = _curentTexture != _textures.end();
+	_isReloading = _currentTexture != _textures.end();
 }
 
 bool VolatileTextureMgr::isReloading()
