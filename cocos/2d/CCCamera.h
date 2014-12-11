@@ -68,6 +68,11 @@ public:
 	virtual bool init();
 
 	/**
+	* Enable camera input
+	*/
+	void setEnable(bool enable);
+
+	/**
 	* Set camera position, within the view.
 	*/
 	virtual void setPosition(const Vec2 &position) override;

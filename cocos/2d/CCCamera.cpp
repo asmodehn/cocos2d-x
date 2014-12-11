@@ -59,10 +59,23 @@ bool Camera::init()
 	_zoomListener->onTouchesEnded = CC_CALLBACK_2(Camera::onTouchesEnded, this);
 	_zoomListener->onTouchesCancelled = CC_CALLBACK_2(Camera::onTouchesCancelled, this);
 
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(_zoomListener, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
+	setEnable(true);
 
 	return true;
+}
+
+void Camera::setEnable(bool enable)
+{
+	if (enable)
+	{
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(_zoomListener, this);
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(_touchListener, this);
+	}
+	else
+	{
+		_eventDispatcher->removeEventListenersForTarget(this);
+		_eventDispatcher->removeEventListenersForTarget(this);
+	}
 }
 
 void Camera::setPosition(const Vec2 &position)
