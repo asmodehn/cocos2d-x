@@ -34,6 +34,11 @@ THE SOFTWARE.
 #include "2d/CCDrawingPrimitives.h"
 #include "CCGLViewImpl-android.h"
 #include "platform/android/jni/JniHelper.h"
+
+#ifdef CC_USE_GOOGLE_PLAY_GAME_SERVICES
+#include "gpg/gpg.h"
+#endif
+
 #include <android/log.h>
 #include <jni.h>
 
@@ -50,6 +55,12 @@ extern "C"
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
     JniHelper::setJavaVM(vm);
+
+//if we are using GPG
+#ifdef CC_USE_GOOGLE_PLAY_GAME_SERVICES
+    LOGD("Calling gpg::AndroidInitialization::JNI_OnLoad(vm)");
+    gpg::AndroidInitialization::JNI_OnLoad(vm);
+#endif
 
     return JNI_VERSION_1_4;
 }

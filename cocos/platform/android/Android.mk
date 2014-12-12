@@ -22,7 +22,7 @@ jni/Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp \
 jni/JniHelper.cpp \
 jni/TouchesJni.cpp
 
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH) \
                     $(LOCAL_PATH)/.. \
@@ -35,4 +35,9 @@ LOCAL_EXPORT_LDLIBS := -lGLESv1_CM \
                        -lz \
                        -landroid
 
+LOCAL_WHOLE_STATIC_LIBRARIES += libgpg-1
+
 include $(BUILD_STATIC_LIBRARY)
+
+$(call import-module,gpg-cpp-sdk/android)
+
