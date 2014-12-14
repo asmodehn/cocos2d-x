@@ -84,7 +84,6 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thi
         cocos2d::GL::invalidateStateCache();
         cocos2d::GLProgramCache::getInstance()->reloadDefaultGLPrograms();
         cocos2d::DrawPrimitives::init();
-        //cocos2d::VolatileTextureMgr::reloadAllTextures();
 
         cocos2d::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent);

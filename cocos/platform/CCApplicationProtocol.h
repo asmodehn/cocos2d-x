@@ -29,6 +29,7 @@ THE SOFTWARE.
 #include "base/CCPlatformMacros.h"
 #include "base/CCScriptSupport.h"
 #include "base/CCAutoreleasePool.h"
+#include "base/CCEventCustom.h"
 
 NS_CC_BEGIN
 
@@ -95,6 +96,12 @@ public:
     virtual void applicationWillEnterForeground() = 0;
 
     /**
+    @brief Called whenever the renderer needs to be recreated
+    *
+    */
+    virtual void applicationRendererRecreated(cocos2d::EventCustom*) = 0;
+
+    /**
     @brief    Callback by Director for limit FPS.
     @param interval The time, expressed in seconds, between current frame and next.
     * @js NA
@@ -118,7 +125,7 @@ public:
     * @lua NA
     */
     virtual LanguageType getCurrentLanguage() = 0;
-    
+
     /**
      @brief Get current language iso 639-1 code
      @return Current language iso 639-1 code
@@ -126,7 +133,7 @@ public:
      * @lua NA
      */
     virtual const char * getCurrentLanguageCode() = 0;
-    
+
     /**
      @brief Get target platform
      * @js NA

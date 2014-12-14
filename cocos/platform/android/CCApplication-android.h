@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include "platform/CCCommon.h"
 #include "platform/CCApplicationProtocol.h"
 
+#include "base/CCDirector.h"
+
 NS_CC_BEGIN
 
 class CC_DLL Application : public ApplicationProtocol
@@ -46,6 +48,12 @@ public:
      * @lua NA
      */
     virtual ~Application();
+
+    /**
+    @brief Called back whenever the renderer has been recreated (texture cache empty )
+    *
+    */
+    virtual void applicationRendererRecreated(cocos2d::EventCustom*);
 
     /**
     @brief    Callback by Director to limit FPS.
@@ -72,13 +80,13 @@ public:
     @return Current language config
     */
     virtual LanguageType getCurrentLanguage();
-    
+
     /**
     @brief Get current language iso 639-1 code
     @return Current language iso 639-1 code
     */
     virtual const char * getCurrentLanguageCode();
-    
+
     /**
      @brief Get target platform
      */
@@ -93,6 +101,10 @@ public:
 
 protected:
     static Application * sm_pSharedApplication;
+
+#if CC_ENABLE_CACHE_TEXTURE_DATA
+    cocos2d::EventListenerCustom* m_rendererRecreatedListener;
+#endif //CC_ENABLE_CACHE_TEXTURE_DATA
 };
 
 NS_CC_END

@@ -49,6 +49,12 @@ public:
      */
 	virtual ~Application();
 
+    /**
+    @brief Callback when renderer is recreated and cache needs to be repopulated
+    * noop on linux.
+    */
+    virtual void applicationRendererRecreated(cocos2d::EventCustom* evt) {}
+
 	/**
 	 @brief	Callback by Director for limit FPS.
 	 @param interval    The time, which expressed in second in second, between current frame and next.
@@ -68,7 +74,7 @@ public:
 
     /** @deprecated Use getInstance() instead */
     CC_DEPRECATED_ATTRIBUTE static Application* sharedApplication();
-    
+
 	/* override functions */
 	virtual LanguageType getCurrentLanguage();
 
@@ -84,13 +90,13 @@ public:
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
     CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
-    
-	/** 
+
+	/**
      *  Gets the Resource root path.
-     *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead. 
+     *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead.
      */
     CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath(void);
-    
+
     /**
      @brief Get target platform
      */
@@ -98,7 +104,7 @@ public:
 protected:
     long       _animationInterval;  //micro second
     std::string _resourceRootPath;
-    
+
 	static Application * sm_pSharedApplication;
 };
 

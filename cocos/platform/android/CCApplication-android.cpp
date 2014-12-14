@@ -30,6 +30,9 @@ THE SOFTWARE.
 #include "jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
 #include "CCApplication.h"
 #include "base/CCDirector.h"
+#include "base/CCEventType.h"
+#include "base/CCEventListenerCustom.h"
+#include "renderer/CCTextureCache.h"
 #include <android/log.h>
 #include <jni.h>
 #include <cstring>
@@ -43,6 +46,9 @@ NS_CC_BEGIN
 Application * Application::sm_pSharedApplication = 0;
 
 Application::Application()
+#if CC_ENABLE_CACHE_TEXTURE_DATA
+: m_rendererRecreatedListener(nullptr)
+#endif //CC_ENABLE_CACHE_TEXTURE_DATA
 {
     CCAssert(! sm_pSharedApplication, "");
     sm_pSharedApplication = this;
@@ -50,6 +56,16 @@ Application::Application()
 
 Application::~Application()
 {
+
+#if CC_ENABLE_CACHE_TEXTURE_DATA
+		if (m_rendererRecreatedListener)
+		{
+			auto eventDispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
+			eventDispatcher->removeEventListener(m_rendererRecreatedListener);
+			m_rendererRecreatedListener = nullptr;
+		}
+#endif //CC_ENABLE_CACHE_TEXTURE_DATA
+
     CCAssert(this == sm_pSharedApplication, "");
     sm_pSharedApplication = NULL;
 }
@@ -61,8 +77,22 @@ int Application::run()
     {
         return 0;
     }
-    
+
+	// call applicationRendererRecreated when needed
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
+            auto eventDispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
+            m_rendererRecreatedListener = cocos2d::EventListenerCustom::create(EVENT_RENDERER_RECREATED, CC_CALLBACK_1(Application::applicationRendererRecreated, this));
+            eventDispatcher->addEventListenerWithFixedPriority(m_rendererRecreatedListener, 1);
+    #endif //CC_ENABLE_CACHE_TEXTURE_DATA
+
     return -1;
+}
+
+void Application::applicationRendererRecreated(cocos2d::EventCustom* evt)
+{
+    //by default recreating all textures.
+    //can be overidden by application implementation
+    cocos2d::VolatileTextureMgr::reloadAllTextures();
 }
 
 void Application::setAnimationInterval(double interval)
