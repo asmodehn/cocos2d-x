@@ -50,6 +50,12 @@ public:
      */
     virtual ~Application();
 
+	/**
+	@brief Callback when renderer is recreated and cache needs to be repopulated
+	* noop on win32.
+	*/
+	virtual void applicationRendererRecreated(cocos2d::EventCustom* evt) {}
+
     /**
     @brief    Run the message loop.
     */
