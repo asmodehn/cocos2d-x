@@ -293,23 +293,26 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(const std::string& 
     }
 
     // parse spacing / padding
+	size_t curPos = 0;
     std::string line;
     std::string strLeft(contents);
-    while (strLeft.length() > 0)
+	while (curPos < strLeft.length())
     {
-        size_t pos = strLeft.find('\n');
+		size_t pos = strLeft.find('\n', curPos);
 
         if (pos != std::string::npos)
         {
             // the data is more than a line.get one line
-            line = strLeft.substr(0, pos);
-            strLeft = strLeft.substr(pos + 1);
+			line = strLeft.substr(curPos, pos);
+            //strLeft = strLeft.substr(pos + 1);
+			curPos = pos + 1;
         }
         else
         {
             // get the left data
-            line = strLeft;
-            strLeft.erase();
+			line = strLeft.substr(curPos);
+			//strLeft.erase();
+			curPos = pos + 1;
         }
 
         if(line.substr(0,strlen("info face")) == "info face") 

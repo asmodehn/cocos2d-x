@@ -49,10 +49,16 @@ public:
      It will purge the textures atlas and if multiple texture exist in one FontAtlas.
      */
     static void purgeCachedData();
+
+	static void addFontMap(const std::string& originalName, const std::string& mapPath);
+	static std::unordered_map<std::string, std::string>::const_iterator findInFontMap(const std::string& name);
+	static void purgeFontMap();
     
 private: 
     static std::string generateFontName(const std::string& fontFileName, int size, GlyphCollection theGlyphs, bool useDistanceField);
     static std::unordered_map<std::string, FontAtlas *> _atlasMap;
+
+	static std::unordered_map<std::string, std::string> _fontMapping;
 };
 
 NS_CC_END

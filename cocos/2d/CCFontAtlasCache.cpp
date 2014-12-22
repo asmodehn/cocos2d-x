@@ -34,7 +34,9 @@
 
 NS_CC_BEGIN
 
+
 std::unordered_map<std::string, FontAtlas *> FontAtlasCache::_atlasMap;
+std::unordered_map<std::string, std::string> FontAtlasCache::_fontMapping;
 
 void FontAtlasCache::purgeCachedData()
 {
@@ -68,8 +70,15 @@ FontAtlas * FontAtlasCache::getFontAtlasTTF(const TTFConfig & config)
     auto it = _atlasMap.find(atlasName);
 
     if ( it == _atlasMap.end() )
-    {
-        auto font = FontFreeType::create(config.fontFilePath, fontSize, config.glyphs, 
+	{
+		std::string fontMapName = config.fontFilePath;
+		auto it = findInFontMap(fontMapName);
+		if (it != _fontMapping.end())
+		{
+			fontMapName = it->second;
+		}
+
+		auto font = FontFreeType::create(fontMapName, fontSize, config.glyphs,
             config.customGlyphs, useDistanceField, config.outlineSize);
         if (font)
         {
@@ -96,9 +105,15 @@ FontAtlas * FontAtlasCache::getFontAtlasFNT(const std::string& fontFileName, con
     auto it = _atlasMap.find(atlasName);
 
     if ( it == _atlasMap.end() )
-    {
-        auto font = FontFNT::create(fontFileName,imageOffset);
+	{
+		std::string fontMapName = fontFileName;
+		auto it = findInFontMap(fontFileName);
+		if (it != _fontMapping.end())
+		{
+			fontMapName = it->second;
+		}
 
+		auto font = FontFNT::create(fontMapName, imageOffset);
         if(font)
         {
             auto tempAtlas = font->createFontAtlas();
@@ -261,6 +276,45 @@ bool FontAtlasCache::releaseFontAtlas(FontAtlas *atlas)
     }
     
     return false;
+}
+
+void FontAtlasCache::addFontMap(const std::string& originalName, const std::string& mapPath)
+{
+	// just keep the name with no path
+	//std::string::size_type anchor = originalName.find_last_of('/');
+	//if (anchor != std::string::npos)
+	//{
+	//	originalName.erase(0, anchor);
+	//}
+	//anchor = originalName.find_last_of('\\');
+	//if (anchor != std::string::npos)
+	//{
+	//	originalName.erase(0, anchor);
+	//}
+	//anchor = originalName.find_last_of('.');
+	//if (anchor != std::string::npos)
+	//{
+	//	originalName.erase(anchor);
+	//}
+
+	_fontMapping[originalName] = mapPath;
+}
+
+std::unordered_map<std::string, std::string>::const_iterator FontAtlasCache::findInFontMap(const std::string& name)
+{
+	for (auto curFont = _fontMapping.begin(); curFont != _fontMapping.end(); ++curFont)
+	{
+		if (name.find(curFont->first) != std::string::npos)
+		{
+			return curFont;
+		}
+	}
+	return _fontMapping.end();
+}
+
+void FontAtlasCache::purgeFontMap()
+{
+	_fontMapping.clear();
 }
 
 NS_CC_END
