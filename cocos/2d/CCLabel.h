@@ -253,7 +253,7 @@ public:
     int getStringNumLines() const { return _currNumLines;}
     int getStringLength() const;
 
-    FontAtlas* getFontAtlas() { return _fontAtlas; }
+    FontAtlasSwitch* getFontAtlas() { return _fontAtlas; }
     
     virtual void setBlendFunc(const BlendFunc &blendFunc) override;
 
@@ -316,7 +316,7 @@ protected:
     /**
     * @js NA
     */
-    Label(FontAtlas *atlas = nullptr, TextHAlignment hAlignment = TextHAlignment::LEFT, 
+    Label(FontAtlasSwitch *atlas = nullptr, TextHAlignment hAlignment = TextHAlignment::LEFT, 
         TextVAlignment vAlignment = TextVAlignment::TOP,bool useDistanceField = false,bool useA8Shader = false);
     /**
     * @js NA
@@ -324,7 +324,8 @@ protected:
     */
     virtual ~Label();
 
-    virtual void setFontAtlas(FontAtlas* atlas,bool distanceFieldEnabled = false, bool useA8Shader = false);
+	virtual void setFontAtlas(FontAtlasSwitch* atlas, bool distanceFieldEnabled = false, bool useA8Shader = false);
+	void fontAtlasChanged();
 
     bool recordLetterInfo(const cocos2d::Vec2& point,const FontLetterDefinition& letterDef, int spriteIndex);
     bool recordPlaceholderInfo(int spriteIndex);
@@ -363,7 +364,7 @@ protected:
     LabelType _currentLabelType;
 
     std::vector<SpriteBatchNode*> _batchNodes;
-    FontAtlas *                   _fontAtlas;
+    FontAtlasSwitch *             _fontAtlas;
     std::vector<LetterInfo>       _lettersInfo;
 
     TTFConfig _fontConfig;

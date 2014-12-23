@@ -34,6 +34,45 @@
 
 NS_CC_BEGIN
 
+const char* FontAtlasSwitch::EVENT_SWITCH_ATLAS = "__cc_FontAtlasSwitchAtlas";
+
+FontAtlasSwitch* FontAtlasSwitch::create()
+{
+	FontAtlasSwitch* fontSwitch = new FontAtlasSwitch();
+	if (fontSwitch)
+	{
+		//fontSwitch->autorelease();
+	}
+
+	return fontSwitch;
+}
+
+FontAtlasSwitch::FontAtlasSwitch()
+: _atlas(nullptr)
+{
+}
+
+FontAtlasSwitch::~FontAtlasSwitch()
+{
+	if (_atlas)
+	{
+		_atlas->release();
+	}
+}
+
+void FontAtlasSwitch::switchAtlas(FontAtlas* atlas)
+{
+	if (_atlas)
+	{
+		_atlas->release();
+	}
+	_atlas = atlas;
+	_atlas->retain();
+
+	auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+	eventDispatcher->dispatchCustomEvent(EVENT_SWITCH_ATLAS, this);
+}
+
 const int FontAtlas::CacheTextureWidth = 512;
 const int FontAtlas::CacheTextureHeight = 512;
 const char* FontAtlas::EVENT_PURGE_TEXTURES = "__cc_FontAtlasPurgeTextures";

@@ -128,6 +128,45 @@ private:
     bool _antialiasEnabled;
 };
 
+/**
+* Font atlas switch.
+* Instead of pointing directly to a font atlas, element point to a switch.
+* It makes switching language texture easy.
+* Only have to change the ptr in switch, it's transparent for other class.
+*/
+class CC_DLL FontAtlasSwitch : public Ref
+{
+public:
+	static const char* EVENT_SWITCH_ATLAS;
+
+	static FontAtlasSwitch* create();
+
+	/**
+	* Default constructor
+	*/
+	FontAtlasSwitch();
+
+	/**
+	* Destructor
+	*/
+	virtual ~FontAtlasSwitch();
+
+	/**
+	* Get font atlas used by switch
+	*/
+	inline FontAtlas* getAtlas() { return _atlas; }
+
+	/**
+	* Get font atlas used by switch
+	*/
+	void switchAtlas(FontAtlas* atlas);
+
+private:
+	/**
+	* Atlas map member
+	*/
+	FontAtlas * _atlas;
+};
 
 NS_CC_END
 

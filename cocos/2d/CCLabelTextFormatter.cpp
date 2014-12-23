@@ -327,7 +327,7 @@ bool LabelTextFormatter::createStringSprites(Label *theLabel)
     for (unsigned int i = 0; i < stringLen; i++)
     {
         char16_t c    = strWhole[i];
-        if (fontAtlas->getLetterDefinitionForChar(c, tempDefinition))
+        if (fontAtlas->getAtlas()->getLetterDefinitionForChar(c, tempDefinition))
         {
             charXOffset         = tempDefinition.offsetX;
             charYOffset         = tempDefinition.offsetY;

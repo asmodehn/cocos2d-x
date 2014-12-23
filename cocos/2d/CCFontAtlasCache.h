@@ -36,19 +36,20 @@ NS_CC_BEGIN
 class CC_DLL FontAtlasCache
 {  
 public:
-    static FontAtlas * getFontAtlasTTF(const TTFConfig & config);
-    static FontAtlas * getFontAtlasFNT(const std::string& fontFileName, const Vec2& imageOffset = Vec2::ZERO);
+	static FontAtlasSwitch * getFontAtlasTTF(const TTFConfig & config);
+	static FontAtlasSwitch * getFontAtlasFNT(const std::string& fontFileName, const Vec2& imageOffset = Vec2::ZERO);
 
-    static FontAtlas * getFontAtlasCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
-    static FontAtlas * getFontAtlasCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
-    static FontAtlas * getFontAtlasCharMap(const std::string& plistFile);
+	static FontAtlasSwitch * getFontAtlasCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
+	static FontAtlasSwitch * getFontAtlasCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
+	static FontAtlasSwitch * getFontAtlasCharMap(const std::string& plistFile);
     
-    static bool releaseFontAtlas(FontAtlas *atlas);
+	static bool releaseFontAtlas(FontAtlasSwitch *atlas);
 
     /** Removes cached data.
      It will purge the textures atlas and if multiple texture exist in one FontAtlas.
      */
-    static void purgeCachedData();
+	static void purgeCachedData();
+	static void reloadCachedData();
 
 	static void addFontMap(const std::string& originalName, const std::string& mapPath);
 	static std::unordered_map<std::string, std::string>::const_iterator findInFontMap(const std::string& name);
@@ -56,7 +57,7 @@ public:
     
 private: 
     static std::string generateFontName(const std::string& fontFileName, int size, GlyphCollection theGlyphs, bool useDistanceField);
-    static std::unordered_map<std::string, FontAtlas *> _atlasMap;
+	static std::unordered_map<std::string, FontAtlasSwitch *> _atlasMap;
 
 	static std::unordered_map<std::string, std::string> _fontMapping;
 };

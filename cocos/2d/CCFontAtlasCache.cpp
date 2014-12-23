@@ -34,19 +34,52 @@
 
 NS_CC_BEGIN
 
-
-std::unordered_map<std::string, FontAtlas *> FontAtlasCache::_atlasMap;
+std::unordered_map<std::string, FontAtlasSwitch *> FontAtlasCache::_atlasMap;
 std::unordered_map<std::string, std::string> FontAtlasCache::_fontMapping;
 
 void FontAtlasCache::purgeCachedData()
 {
     for (auto & atlas:_atlasMap)
     {
-        atlas.second->purgeTexturesAtlas();
+        atlas.second->getAtlas()->purgeTexturesAtlas();
     }
 }
 
-FontAtlas * FontAtlasCache::getFontAtlasTTF(const TTFConfig & config)
+void FontAtlasCache::reloadCachedData()
+{
+	for (auto & atlas : _atlasMap)
+	{
+		auto it = findInFontMap(atlas.first);
+		if (it != _fontMapping.end())
+		{
+			atlas.second->getAtlas()->purgeTexturesAtlas();
+			Font* font = nullptr;
+			if (const FontFNT* bmp = dynamic_cast<const FontFNT*>(atlas.second->getAtlas()->getFont()))
+			{
+				font = FontFNT::create(it->second, bmp->getOffset());
+			}
+			//else if (const FontFreeType* ttf = dynamic_cast<const FontFreeType*>(atlas.second->getAtlas()->getFont()))
+			//{
+			//	font = FontFreeType::create(fontMapName, fontSize, config.glyphs,
+			//		config.customGlyphs, useDistanceField, config.outlineSize);
+			//}
+
+			if (font)
+			{
+				auto tempAtlas = font->createFontAtlas();
+				if (tempAtlas)
+				{
+					_atlasMap[atlas.first]->switchAtlas(tempAtlas);
+					tempAtlas->release();
+				}
+			}
+		}
+
+	}
+
+}
+
+FontAtlasSwitch * FontAtlasCache::getFontAtlasTTF(const TTFConfig & config)
 {  
     bool useDistanceField = config.distanceFieldEnabled;
     if(config.outlineSize > 0)
@@ -82,10 +115,13 @@ FontAtlas * FontAtlasCache::getFontAtlasTTF(const TTFConfig & config)
             config.customGlyphs, useDistanceField, config.outlineSize);
         if (font)
         {
+			auto switchFnt = FontAtlasSwitch::create();
             auto tempAtlas = font->createFontAtlas();
             if (tempAtlas)
             {
-                _atlasMap[atlasName] = tempAtlas;
+				switchFnt->switchAtlas(tempAtlas);
+				tempAtlas->release();
+				_atlasMap[atlasName] = switchFnt;
                 return _atlasMap[atlasName];
             }
         }
@@ -99,7 +135,7 @@ FontAtlas * FontAtlasCache::getFontAtlasTTF(const TTFConfig & config)
     return nullptr;
 }
 
-FontAtlas * FontAtlasCache::getFontAtlasFNT(const std::string& fontFileName, const Vec2& imageOffset /* = Vec2::ZERO */)
+FontAtlasSwitch * FontAtlasCache::getFontAtlasFNT(const std::string& fontFileName, const Vec2& imageOffset /* = Vec2::ZERO */)
 {
     std::string atlasName = generateFontName(fontFileName, 0, GlyphCollection::CUSTOM,false);
     auto it = _atlasMap.find(atlasName);
@@ -115,11 +151,14 @@ FontAtlas * FontAtlasCache::getFontAtlasFNT(const std::string& fontFileName, con
 
 		auto font = FontFNT::create(fontMapName, imageOffset);
         if(font)
-        {
+		{
+			auto switchFnt = FontAtlasSwitch::create();
             auto tempAtlas = font->createFontAtlas();
             if (tempAtlas)
             {
-                _atlasMap[atlasName] = tempAtlas;
+				switchFnt->switchAtlas(tempAtlas);
+				tempAtlas->release();
+				_atlasMap[atlasName] = switchFnt;
                 return _atlasMap[atlasName];
             }
         }
@@ -133,7 +172,7 @@ FontAtlas * FontAtlasCache::getFontAtlasFNT(const std::string& fontFileName, con
     return nullptr;
 }
 
-FontAtlas * FontAtlasCache::getFontAtlasCharMap(const std::string& plistFile)
+FontAtlasSwitch * FontAtlasCache::getFontAtlasCharMap(const std::string& plistFile)
 {
     std::string atlasName = generateFontName(plistFile, 0, GlyphCollection::CUSTOM,false);
     auto it = _atlasMap.find(atlasName);
@@ -143,11 +182,14 @@ FontAtlas * FontAtlasCache::getFontAtlasCharMap(const std::string& plistFile)
         auto font = FontCharMap::create(plistFile);
 
         if(font)
-        {
+		{
+			auto switchFnt = FontAtlasSwitch::create();
             auto tempAtlas = font->createFontAtlas();
             if (tempAtlas)
-            {
-                _atlasMap[atlasName] = tempAtlas;
+			{
+				switchFnt->switchAtlas(tempAtlas);
+				tempAtlas->release();
+				_atlasMap[atlasName] = switchFnt;
                 return _atlasMap[atlasName];
             }
         }
@@ -161,7 +203,7 @@ FontAtlas * FontAtlasCache::getFontAtlasCharMap(const std::string& plistFile)
     return nullptr;
 }
 
-FontAtlas * FontAtlasCache::getFontAtlasCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
+FontAtlasSwitch * FontAtlasCache::getFontAtlasCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
 {
     char tmp[30];
     sprintf(tmp,"name:%u_%d_%d_%d",texture->getName(),itemWidth,itemHeight,startCharMap);
@@ -173,11 +215,14 @@ FontAtlas * FontAtlasCache::getFontAtlasCharMap(Texture2D* texture, int itemWidt
         auto font = FontCharMap::create(texture,itemWidth,itemHeight,startCharMap);
 
         if(font)
-        {
+		{
+			auto switchFnt = FontAtlasSwitch::create();
             auto tempAtlas = font->createFontAtlas();
             if (tempAtlas)
-            {
-                _atlasMap[atlasName] = tempAtlas;
+			{
+				switchFnt->switchAtlas(tempAtlas);
+				tempAtlas->release();
+				_atlasMap[atlasName] = switchFnt;
                 return _atlasMap[atlasName];
             }
         }
@@ -191,7 +236,7 @@ FontAtlas * FontAtlasCache::getFontAtlasCharMap(Texture2D* texture, int itemWidt
     return nullptr;
 }
 
-FontAtlas * FontAtlasCache::getFontAtlasCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
+FontAtlasSwitch * FontAtlasCache::getFontAtlasCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
     char tmp[255];
     snprintf(tmp,250,"name:%s_%d_%d_%d",charMapFile.c_str(),itemWidth,itemHeight,startCharMap);
@@ -204,11 +249,14 @@ FontAtlas * FontAtlasCache::getFontAtlasCharMap(const std::string& charMapFile, 
         auto font = FontCharMap::create(charMapFile,itemWidth,itemHeight,startCharMap);
 
         if(font)
-        {
+		{
+			auto switchFnt = FontAtlasSwitch::create();
             auto tempAtlas = font->createFontAtlas();
             if (tempAtlas)
-            {
-                _atlasMap[atlasName] = tempAtlas;
+			{
+				switchFnt->switchAtlas(tempAtlas);
+				tempAtlas->release();
+				_atlasMap[atlasName] = switchFnt;
                 return _atlasMap[atlasName];
             }
         }
@@ -255,7 +303,7 @@ std::string FontAtlasCache::generateFontName(const std::string& fontFileName, in
     return  tempName.append(ss.str());
 }
 
-bool FontAtlasCache::releaseFontAtlas(FontAtlas *atlas)
+bool FontAtlasCache::releaseFontAtlas(FontAtlasSwitch *atlas)
 {
     if (nullptr != atlas)
     {

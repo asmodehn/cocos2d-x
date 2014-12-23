@@ -44,6 +44,8 @@ public:
     static void purgeCachedData();
     virtual int* getHorizontalKerningForTextUTF16(const std::u16string& text, int &outNumLetters) const override;
     virtual FontAtlas *createFontAtlas() override;
+
+	inline const Vec2& getOffset() const { return _imageOffset; }
     
 protected:
     

@@ -236,7 +236,7 @@ bool Label::setCharMap(const std::string& charMapFile, int itemWidth, int itemHe
     return true;
 }
 
-Label::Label(FontAtlas *atlas /* = nullptr */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
+Label::Label(FontAtlasSwitch *atlas /* = nullptr */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */,
              TextVAlignment vAlignment /* = TextVAlignment::TOP */,bool useDistanceField /* = false */,bool useA8Shader /* = false */)
 : _reusedLetter(nullptr)
 , _commonLineHeight(0.0f)
@@ -267,7 +267,7 @@ Label::Label(FontAtlas *atlas /* = nullptr */, TextHAlignment hAlignment /* = Te
     reset();
 
     auto purgeTextureListener = EventListenerCustom::create(FontAtlas::EVENT_PURGE_TEXTURES, [this](EventCustom* event){
-        if (_fontAtlas && _currentLabelType == LabelType::TTF && event->getUserData() == _fontAtlas)
+        if (_fontAtlas && _currentLabelType == LabelType::TTF && event->getUserData() == _fontAtlas->getAtlas())
         {
             Node::removeAllChildrenWithCleanup(true);
             _batchNodes.clear();
@@ -275,8 +275,16 @@ Label::Label(FontAtlas *atlas /* = nullptr */, TextHAlignment hAlignment /* = Te
 
             alignText();
         }
-    });
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(purgeTextureListener, this);
+	});
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(purgeTextureListener, this);
+
+	auto resetTextureListener = EventListenerCustom::create(FontAtlasSwitch::EVENT_SWITCH_ATLAS, [this](EventCustom* event){
+		if (_fontAtlas && event->getUserData() == _fontAtlas)
+		{
+			fontAtlasChanged();
+		}
+	});
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(resetTextureListener, this);
 }
 
 Label::~Label()
@@ -365,7 +373,7 @@ void Label::updateShaderProgram()
     _uniformTextColor = glGetUniformLocation(getGLProgram()->getProgram(), "u_textColor");
 }
 
-void Label::setFontAtlas(FontAtlas* atlas,bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
+void Label::setFontAtlas(FontAtlasSwitch* atlas,bool distanceFieldEnabled /* = false */, bool useA8Shader /* = false */)
 {
     if (atlas == _fontAtlas)
     {
@@ -379,44 +387,50 @@ void Label::setFontAtlas(FontAtlas* atlas,bool distanceFieldEnabled /* = false *
         _fontAtlas = nullptr;
     }
 
-    _fontAtlas = atlas;
+	_fontAtlas = atlas;
 
-    if (_textureAtlas)
-    {
-        _textureAtlas->setTexture(_fontAtlas->getTexture(0));
-    }
-    else
-    {
-        SpriteBatchNode::initWithTexture(_fontAtlas->getTexture(0), 30);
-    }
+	fontAtlasChanged();
 
-    if (_reusedLetter == nullptr)
-    {
-        _reusedLetter = Sprite::create();
-        _reusedLetter->setOpacityModifyRGB(_isOpacityModifyRGB);
-        _reusedLetter->retain();
-        _reusedLetter->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-    }
-    _reusedLetter->setBatchNode(this);
+	_useDistanceField = distanceFieldEnabled;
+	_useA8Shader = useA8Shader;
+}
 
-    if (_fontAtlas)
-    {
-        _commonLineHeight = _fontAtlas->getCommonLineHeight();
-        _contentDirty = true;
-    }
-    _useDistanceField = distanceFieldEnabled;
-    _useA8Shader = useA8Shader;
+void Label::fontAtlasChanged()
+{
+	if (_textureAtlas)
+	{
+		_textureAtlas->setTexture(_fontAtlas->getAtlas()->getTexture(0));
+	}
+	else
+	{
+		SpriteBatchNode::initWithTexture(_fontAtlas->getAtlas()->getTexture(0), 30);
+	}
 
-    if (_currentLabelType != LabelType::TTF)
-    {
-        _currLabelEffect = LabelEffect::NORMAL;
-        updateShaderProgram();
-    }
+	if (_reusedLetter == nullptr)
+	{
+		_reusedLetter = Sprite::create();
+		_reusedLetter->setOpacityModifyRGB(_isOpacityModifyRGB);
+		_reusedLetter->retain();
+		_reusedLetter->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+	}
+	_reusedLetter->setBatchNode(this);
+
+	if (_fontAtlas)
+	{
+		_commonLineHeight = _fontAtlas->getAtlas()->getCommonLineHeight();
+		_contentDirty = true;
+	}
+
+	if (_currentLabelType != LabelType::TTF)
+	{
+		_currLabelEffect = LabelEffect::NORMAL;
+		updateShaderProgram();
+	}
 }
 
 bool Label::setTTFConfig(const TTFConfig& ttfConfig)
 {
-    FontAtlas *newAtlas = FontAtlasCache::getFontAtlasTTF(ttfConfig);
+    FontAtlasSwitch *newAtlas = FontAtlasCache::getFontAtlasTTF(ttfConfig);
 
     if (!newAtlas)
     {
@@ -452,7 +466,7 @@ bool Label::setTTFConfig(const TTFConfig& ttfConfig)
 
 bool Label::setBMFontFilePath(const std::string& bmfontFilePath, const Vec2& imageOffset /* = Vec2::ZERO */)
 {
-    FontAtlas *newAtlas = FontAtlasCache::getFontAtlasFNT(bmfontFilePath,imageOffset);
+    FontAtlasSwitch *newAtlas = FontAtlasCache::getFontAtlasFNT(bmfontFilePath,imageOffset);
 
     if (!newAtlas)
     {
@@ -588,8 +602,8 @@ void Label::alignText()
     {
         batchNode->getTextureAtlas()->removeAllQuads();
     }
-    _fontAtlas->prepareLetterDefinitions(_currentUTF16String);
-    auto textures = _fontAtlas->getTextures();
+	_fontAtlas->getAtlas()->prepareLetterDefinitions(_currentUTF16String);
+	auto textures = _fontAtlas->getAtlas()->getTextures();
     if (textures.size() > _batchNodes.size())
     {
         for (auto index = _batchNodes.size(); index < textures.size(); ++index)
@@ -647,7 +661,7 @@ bool Label::computeHorizontalKernings(const std::u16string& stringToRender)
     }
 
     int letterCount = 0;
-    _horizontalKernings = _fontAtlas->getFont()->getHorizontalKerningForTextUTF16(stringToRender, letterCount);
+	_horizontalKernings = _fontAtlas->getAtlas()->getFont()->getHorizontalKerningForTextUTF16(stringToRender, letterCount);
 
     if(!_horizontalKernings)
         return false;
@@ -1166,7 +1180,7 @@ Sprite * Label::getLetter(int letterIndex)
             uvRect.origin.x    = letter.def.U;
             uvRect.origin.y    = letter.def.V;
 
-            sp = Sprite::createWithTexture(_fontAtlas->getTexture(letter.def.textureID),uvRect);
+			sp = Sprite::createWithTexture(_fontAtlas->getAtlas()->getTexture(letter.def.textureID), uvRect);
             sp->setBatchNode(_batchNodes[letter.def.textureID]);
             sp->setPosition(Vec2(letter.position.x + uvRect.size.width / 2,
                 letter.position.y - uvRect.size.height / 2));
