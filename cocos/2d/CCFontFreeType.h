@@ -69,6 +69,8 @@ public:
     virtual int           getFontMaxHeight() const override;  
     virtual int           getFontAscender() const;
 
+	inline int			  getFontSize() const { return _fontSize; }
+
 protected:
     
     FontFreeType(bool distanceFieldEnabled = false,int outline = 0);
@@ -90,6 +92,7 @@ private:
     std::string       _fontName;
     bool              _distanceFieldEnabled;
     float             _outlineSize;
+	int				  _fontSize;
 };
 
 NS_CC_END

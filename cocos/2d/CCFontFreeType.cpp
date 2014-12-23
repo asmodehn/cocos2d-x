@@ -99,6 +99,7 @@ FontFreeType::FontFreeType(bool distanceFieldEnabled /* = false */,int outline /
 ,_distanceFieldEnabled(distanceFieldEnabled)
 ,_outlineSize(outline)
 ,_stroker(nullptr)
+, _fontSize(0)
 {
     if (_outlineSize > 0)
     {
@@ -142,6 +143,7 @@ bool FontFreeType::createFontObject(const std::string &fontName, int fontSize)
         return false;
 
     // set the requested font size
+	_fontSize = fontSize;
     int dpi = 72;
     int fontSizePoints = (int)(64.f * fontSize * CC_CONTENT_SCALE_FACTOR());
     if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))

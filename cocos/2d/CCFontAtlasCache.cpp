@@ -58,11 +58,12 @@ void FontAtlasCache::reloadCachedData()
 			{
 				font = FontFNT::create(it->second, bmp->getOffset());
 			}
-			//else if (const FontFreeType* ttf = dynamic_cast<const FontFreeType*>(atlas.second->getAtlas()->getFont()))
-			//{
-			//	font = FontFreeType::create(fontMapName, fontSize, config.glyphs,
-			//		config.customGlyphs, useDistanceField, config.outlineSize);
-			//}
+			else if (const FontFreeType* ttf = dynamic_cast<const FontFreeType*>(atlas.second->getAtlas()->getFont()))
+			{
+				ttf->getFontSize();
+				font = FontFreeType::create(it->second, ttf->getFontSize(), ttf->getGlyphType(),
+					ttf->getGlyphCustom(), ttf->isDistanceFieldEnabled(), ttf->getOutlineSize());
+			}
 
 			if (font)
 			{

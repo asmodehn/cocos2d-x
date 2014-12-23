@@ -46,6 +46,9 @@ public:
     
     
     virtual int getFontMaxHeight() const { return 0; }
+
+	inline GlyphCollection getGlyphType() const { return _usedGlyphs; }
+	inline char* getGlyphCustom() const { return _customGlyphs; }
     
 protected:
     
