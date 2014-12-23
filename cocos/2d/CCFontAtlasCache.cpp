@@ -36,6 +36,8 @@ NS_CC_BEGIN
 
 std::unordered_map<std::string, FontAtlasSwitch *> FontAtlasCache::_atlasMap;
 std::unordered_map<std::string, std::string> FontAtlasCache::_fontMapping;
+std::unordered_map<std::string, FontAtlasSwitch *>::iterator FontAtlasCache::_currentReloadFont = _atlasMap.end();
+int FontAtlasCache::_currentReloadStep = 0;
 
 void FontAtlasCache::purgeCachedData()
 {
@@ -47,37 +49,63 @@ void FontAtlasCache::purgeCachedData()
 
 void FontAtlasCache::reloadCachedData()
 {
-	for (auto & atlas : _atlasMap)
+	for (auto atlas = _atlasMap.begin(); atlas != _atlasMap.end(); ++atlas)
 	{
-		auto it = findInFontMap(atlas.first);
-		if (it != _fontMapping.end())
-		{
-			atlas.second->getAtlas()->purgeTexturesAtlas();
-			Font* font = nullptr;
-			if (const FontFNT* bmp = dynamic_cast<const FontFNT*>(atlas.second->getAtlas()->getFont()))
-			{
-				font = FontFNT::create(it->second, bmp->getOffset());
-			}
-			else if (const FontFreeType* ttf = dynamic_cast<const FontFreeType*>(atlas.second->getAtlas()->getFont()))
-			{
-				ttf->getFontSize();
-				font = FontFreeType::create(it->second, ttf->getFontSize(), ttf->getGlyphType(),
-					ttf->getGlyphCustom(), ttf->isDistanceFieldEnabled(), ttf->getOutlineSize());
-			}
+		reloadCachedData(atlas);
+	}
+}
 
-			if (font)
-			{
-				auto tempAtlas = font->createFontAtlas();
-				if (tempAtlas)
-				{
-					_atlasMap[atlas.first]->switchAtlas(tempAtlas);
-					tempAtlas->release();
-				}
-			}
+void FontAtlasCache::incrementalReloadCachedData()
+{
+	reloadCachedData(_currentReloadFont);
+	++_currentReloadFont;
+	++_currentReloadStep;
+}
+
+void FontAtlasCache::incrementalReloadStart()
+{
+	_currentReloadFont = _atlasMap.begin();
+	_currentReloadStep = 0;
+}
+
+bool FontAtlasCache::incrementalReloadDone()
+{
+	return _currentReloadFont == _atlasMap.end();
+}
+
+float FontAtlasCache::incrementalReloadCompletion()
+{
+	return static_cast<float>(_currentReloadStep )/ _atlasMap.size();
+}
+
+void FontAtlasCache::reloadCachedData(std::unordered_map<std::string, FontAtlasSwitch *>::iterator reloadData)
+{
+	auto it = findInFontMap(reloadData->first);
+	if (it != _fontMapping.end())
+	{
+		reloadData->second->getAtlas()->purgeTexturesAtlas();
+		Font* font = nullptr;
+		if (const FontFNT* bmp = dynamic_cast<const FontFNT*>(reloadData->second->getAtlas()->getFont()))
+		{
+			font = FontFNT::create(it->second, bmp->getOffset());
+		}
+		else if (const FontFreeType* ttf = dynamic_cast<const FontFreeType*>(reloadData->second->getAtlas()->getFont()))
+		{
+			ttf->getFontSize();
+			font = FontFreeType::create(it->second, ttf->getFontSize(), ttf->getGlyphType(),
+				ttf->getGlyphCustom(), ttf->isDistanceFieldEnabled(), ttf->getOutlineSize());
 		}
 
+		if (font)
+		{
+			auto tempAtlas = font->createFontAtlas();
+			if (tempAtlas)
+			{
+				_atlasMap[reloadData->first]->switchAtlas(tempAtlas);
+				tempAtlas->release();
+			}
+		}
 	}
-
 }
 
 FontAtlasSwitch * FontAtlasCache::getFontAtlasTTF(const TTFConfig & config)

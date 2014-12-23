@@ -49,17 +49,31 @@ public:
      It will purge the textures atlas and if multiple texture exist in one FontAtlas.
      */
 	static void purgeCachedData();
+
+	/**
+	*
+	*/
 	static void reloadCachedData();
+	static void incrementalReloadCachedData();
+	static void incrementalReloadStart();
+	static bool incrementalReloadDone();
+	static float incrementalReloadCompletion();
 
 	static void addFontMap(const std::string& originalName, const std::string& mapPath);
 	static std::unordered_map<std::string, std::string>::const_iterator findInFontMap(const std::string& name);
 	static void purgeFontMap();
+
     
 private: 
-    static std::string generateFontName(const std::string& fontFileName, int size, GlyphCollection theGlyphs, bool useDistanceField);
+	static std::string generateFontName(const std::string& fontFileName, int size, GlyphCollection theGlyphs, bool useDistanceField);
+	static void reloadCachedData(std::unordered_map<std::string, FontAtlasSwitch *>::iterator reloadData);
+
 	static std::unordered_map<std::string, FontAtlasSwitch *> _atlasMap;
 
 	static std::unordered_map<std::string, std::string> _fontMapping;
+
+	static std::unordered_map<std::string, FontAtlasSwitch *>::iterator _currentReloadFont;
+	static int _currentReloadStep;
 };
 
 NS_CC_END
