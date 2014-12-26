@@ -58,6 +58,7 @@ public:
 	static void incrementalReloadStart();
 	static bool incrementalReloadDone();
 	static float incrementalReloadCompletion();
+	static void forceEvent();
 
 	static void addFontMap(const std::string& originalName, const std::string& mapPath);
 	static std::unordered_map<std::string, std::string>::const_iterator findInFontMap(const std::string& name);

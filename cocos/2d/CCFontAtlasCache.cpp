@@ -55,6 +55,15 @@ void FontAtlasCache::reloadCachedData()
 	}
 }
 
+void FontAtlasCache::forceEvent()
+{
+	for (auto atlas = _atlasMap.begin(); atlas != _atlasMap.end(); ++atlas)
+	{
+		auto eventDispatcher = cocos2d::Director::getInstance()->getEventDispatcher();
+		eventDispatcher->dispatchCustomEvent(cocos2d::FontAtlasSwitch::EVENT_SWITCH_ATLAS, atlas->second);
+	}
+}
+
 void FontAtlasCache::incrementalReloadCachedData()
 {
 	reloadCachedData(_currentReloadFont);
