@@ -342,6 +342,7 @@ bool LabelTextFormatter::createStringSprites(Label *theLabel)
 
         if (c == '\n')
         {
+			theLabel->offsetEvent(i);
             lineIndex++;
             nextFontPositionX  = 0;
             nextFontPositionY -= theLabel->_commonLineHeight;

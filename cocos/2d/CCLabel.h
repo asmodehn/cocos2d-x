@@ -289,6 +289,11 @@ public:
 
     CC_DEPRECATED_ATTRIBUTE int getCommonLineHeight() const { return static_cast<int>(getLineHeight());}
 
+	/**
+	* Offset all events after position from one character, mostly because of line jump.
+	*/
+	void offsetEvent(int charPos);
+
 protected:
     void onDraw(const Mat4& transform, bool transformUpdated);
 

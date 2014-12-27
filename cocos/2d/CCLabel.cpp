@@ -1543,4 +1543,20 @@ void Label::checkColorEvent(std::vector<Color4B>& colorStack, int index)
 	}
 }
 
+void Label::offsetEvent(int charPos)
+{
+	for (auto curEvent = _events.begin(); curEvent != _events.end(); ++curEvent)
+	{
+		if ((*curEvent)->_start > charPos)
+		{
+			--(*curEvent)->_start;
+		}
+		if ((*curEvent)->_end > charPos)
+		{
+			--(*curEvent)->_end;
+		}
+	}
+}
+
+
 NS_CC_END
