@@ -296,6 +296,12 @@ private:
 	* Panning mode
 	*/
 	CameraPanMode					_panMode;
+
+	/**
+	* True if camera is currently zooming.
+	* If touches > 1
+	*/
+	int								_touchCount;
 };
 
 NS_CC_END

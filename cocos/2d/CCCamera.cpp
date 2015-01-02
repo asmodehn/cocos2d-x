@@ -17,6 +17,7 @@ Camera::Camera() :
 	,_zoomVelocity(0.0000008f)
 #endif //_WINDOWS
 	, _panMode(PAN_CENTER)
+	, _touchCount(0)
 {
 	// Arbitrary value from Director::setProjection
 	_range.set(-1024, 1024);
@@ -75,6 +76,8 @@ void Camera::setEnable(bool enable)
 	{
 		_eventDispatcher->removeEventListenersForTarget(this);
 		_eventDispatcher->removeEventListenersForTarget(this);
+		// reset in case it was zooming
+		_touchCount = 0;
 	}
 }
 
@@ -97,8 +100,8 @@ void Camera::getProjectionMatrix(cocos2d::Mat4& projMatrix)
 	case cocos2d::Director::Projection::_2D:
 		//we center the camera on its position
 		//-> the center of the view will be the position of the camera
-		int left = _position.x - (_fov.x * _scaleX)/2 ;
-		int right = _position.x + (_fov.x * _scaleX)/2 ;
+		int left = _position.x - (_fov.x * _scaleX)/2;
+		int right = _position.x + (_fov.x * _scaleX)/2;
 
 		int bottom = _position.y - (_fov.y * _scaleX)/2;
 		int top = _position.y + (_fov.y * _scaleX)/2;
@@ -134,19 +137,21 @@ Vec2 Camera::convertWorldSpaceToCenter(const Vec2& worldPoint) const
 
 bool Camera::onTouchBegan(Touch *touch, Event *unused_event)
 {
-	
-	return true;
+	return _touchCount <= 1;
 }
 
 void Camera::onTouchMoved(Touch *touch, Event *unused_event)
 {
-	if (touch->getPreviousLocation().distanceSquared(touch->getLocation()) > 20.f)
+	if (_touchCount <= 1)
 	{
-		_eventDispatcher->cancelEvent(_touchListener, touch);
+		if (touch->getPreviousLocation().distanceSquared(touch->getLocation()) > 20.f)
+		{
+			_eventDispatcher->cancelEvent(_touchListener, touch);
+		}
+		Vec2 newPos = getPosition() - touch->getDelta() * getZoom();
+
+		setPosition(newPos);
 	}
-	Vec2 newPos = getPosition() - touch->getDelta() * getZoom();
-	
-	setPosition(newPos);
 }
 
 void Camera::onTouchEnded(Touch *touch, Event *unused_event)
@@ -159,7 +164,8 @@ void Camera::onTouchCancelled(Touch *touch, Event *unused_event)
 
 void Camera::onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event)
 {
-
+	_touchCount += touches.size();
+	CCLOG("onTouchesBegan touches.size() %i", _touchCount);
 }
 
 void Camera::onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_event)
@@ -178,10 +184,15 @@ void Camera::onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_ev
 }
 
 void Camera::onTouchesEnded(const std::vector<Touch*>& touches, Event *unused_event)
-{}
+{
+	_touchCount -= touches.size();
+	CCLOG("onTouchesEnded touches.size() %i", _touchCount);
+}
 
 void Camera::onTouchesCancelled(const std::vector<Touch*>& touches, Event *unused_event)
-{}
+{
+	_touchCount -= touches.size();
+}
 
 #ifdef _WINDOWS
 void Camera::onMouseScroll(Event* evt)
