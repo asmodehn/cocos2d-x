@@ -1540,11 +1540,29 @@ void Node::resume()
     _eventDispatcher->resumeEventListenersForTarget(this);
 }
 
+void Node::resumeHierarchy(void)
+{
+	resume();
+	for (auto &child : _children)
+	{
+		child->resumeHierarchy();
+	}
+}	
+
 void Node::pause()
 {
     _scheduler->pauseTarget(this);
     _actionManager->pauseTarget(this);
     _eventDispatcher->pauseEventListenersForTarget(this);
+}
+
+void Node::pauseHierarchy(void)
+{
+	pause();
+	for (auto &child : _children)
+	{
+		child->pauseHierarchy();
+	}
 }
 
 void Node::resumeSchedulerAndActions()

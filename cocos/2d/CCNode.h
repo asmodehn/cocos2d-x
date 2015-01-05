@@ -1285,12 +1285,14 @@ public:
      * Resumes all scheduled selectors, actions and event listeners.
      * This method is called internally by onEnter
      */
-    void resume(void);
+	void resume(void);
+	void resumeHierarchy(void);
     /**
      * Pauses all scheduled selectors, actions and event listeners..
      * This method is called internally by onExit
      */
-    void pause(void);
+	void pause(void);
+	void pauseHierarchy(void);
 
     /**
      * Resumes all scheduled selectors, actions and event listeners.
