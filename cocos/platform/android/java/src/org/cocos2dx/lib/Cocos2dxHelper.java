@@ -129,6 +129,10 @@ public class Cocos2dxHelper {
 
 	private static native void nativeSetApkPath(final String pApkPath);
 
+    public static native void nativeSetMainXApkPath(final String pMainXApkPath);
+
+    public static native void nativeSetPatchXApkPath(final String pPatchXApkPath);
+
 	private static native void nativeSetEditTextDialogResult(final byte[] pBytes);
 
 	private static native void nativeSetContext(final Context pContext, final AssetManager pAssetManager);

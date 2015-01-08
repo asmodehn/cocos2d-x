@@ -30,6 +30,8 @@ THE SOFTWARE.
 typedef void (*EditTextCallback)(const char* text, void* ctx);
 
 extern const char * getApkPath();
+extern const char * getMainXApkPath();
+extern const char * getPatchXApkPath();
 extern void showDialogJNI(const char * message, const char * title);
 extern void showEditTextDialogJNI(const char* title, const char* content, int inputMode, int inputFlag, int returnType, int maxLength, EditTextCallback callback, void* ctx);
 extern void terminateProcessJNI();
