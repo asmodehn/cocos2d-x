@@ -142,10 +142,10 @@ bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
         const char* s = strFilePath.c_str();
 
         std::string strPath = strFilePath;
-        //if (strPath.find(_defaultResRootPath) != 0)
-        //{// Didn't find "assets/" at the beginning of the path, adding it.
-        //    strPath.insert(0, _defaultResRootPath);
-        //}
+        if (strPath.find(_defaultResRootPath) != 0)
+        {// Didn't find "assets/" at the beginning of the path, adding it.
+            strPath.insert(0, _defaultResRootPath);
+        }
 
         if ( s_pPatchObbFile && s_pPatchObbFile->fileExists(strPath))
         {
@@ -167,8 +167,8 @@ bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
             {
                 bFound = true;
                 AAsset_close(aa);
-            } else {
-                CCLOG("[AssetManager] ... in APK %s, found = false!", strPath.c_str());
+            //} else {
+            //    CCLOG("[AssetManager] ... in APK %s, found = false!", strPath.c_str());
             }
         }
     }
@@ -212,28 +212,40 @@ Data FileUtilsAndroid::getData(const std::string& filename, bool forString)
     if (fullPath[0] != '/')
     {
         std::string strPath = fullPath;
-        //if (strPath.find(_defaultResRootPath) != 0)
-        //{// Didn't find "assets/" at the beginning of the path, adding it.
-        //    strPath.insert(0, _defaultResRootPath);
-        //}
+        if (strPath.find(_defaultResRootPath) != 0)
+        {// Didn't find "assets/" at the beginning of the path, adding it.
+            strPath.insert(0, _defaultResRootPath);
+        }
 
         if ( s_pPatchObbFile && nullptr != (data = s_pPatchObbFile->getFileData(strPath,&size) ) )
         {
+            if (forString)
+            {
+                //adding the null ending character
+                data = (unsigned char*) realloc(data,++size);
+                data[size-1] = '\0';
+            }
             CCLOG("[s_pPatchObbFile] ... in OBB %s, getData = Success!", strPath.c_str());
         }
         else if ( s_pMainObbFile && nullptr != (data = s_pMainObbFile->getFileData(strPath,&size) ) )
         {
+            if (forString)
+            {
+                //adding the null ending character
+                data = (unsigned char*) realloc(data,++size);
+                data[size-1] = '\0';
+            }
             CCLOG("[s_pMainObbFile] ... in OBB %s, getData = Success!", strPath.c_str());
         }
         else if (FileUtilsAndroid::assetmanager)
         {
-            string relativePath = string();
-            size_t position = strPath.find("assets/");
+            string relativePath;
+            size_t position = fullPath.find("assets/");
             if (0 == position) {
                 // "assets/" is at the beginning of the path and we don't want it
-                relativePath += strPath.substr(strlen("assets/"));
+                relativePath += fullPath.substr(strlen("assets/"));
             } else {
-                relativePath += strPath;
+                relativePath += fullPath;
             }
             LOGD("relative path = %s", relativePath.c_str());
 
@@ -323,9 +335,14 @@ std::string FileUtilsAndroid::getStringFromFile(const std::string& filename)
 {
     Data data = getData(filename, true);
     if (data.isNull())
+    {
+        CCLOG("getStringFromFile : %s data is NULL", filename.c_str());
         return "";
+    }
 
     std::string ret((const char*)data.getBytes());
+    CCLOG("getStringFromFile : %s data is : %s", filename.c_str(), ret.c_str());
+
     return ret;
 }
 
@@ -348,10 +365,10 @@ unsigned char* FileUtilsAndroid::getFileData(const std::string& filename, const 
     if (fullPath[0] != '/')
     {
         std::string strPath = fullPath;
-        //if (strPath.find(_defaultResRootPath) != 0)
-        //{// Didn't find "assets/" at the beginning of the path, adding it.
-        //    strPath.insert(0, _defaultResRootPath);
-        //}
+        if (strPath.find(_defaultResRootPath) != 0)
+        {// Didn't find "assets/" at the beginning of the path, adding it.
+            strPath.insert(0, _defaultResRootPath);
+        }
 
         if ( s_pPatchObbFile && nullptr != (data = s_pPatchObbFile->getFileData(strPath,size) ) )
         {
@@ -364,7 +381,7 @@ unsigned char* FileUtilsAndroid::getFileData(const std::string& filename, const 
         else if (FileUtilsAndroid::assetmanager)
         {
 
-            string relativePath = string();
+            string relativePath;
 
             size_t position = fullPath.find("assets/");
             if (0 == position) {
