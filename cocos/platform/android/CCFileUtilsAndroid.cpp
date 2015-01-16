@@ -80,10 +80,7 @@ FileUtils* FileUtils::getInstance()
             mainObbPath = getMainXApkPath();
 
             //TMP for debug
-            //char buf[MAX_LOG_LENGTH] = {0};
-            //snprintf(buf, MAX_LOG_LENGTH-3, "MainXApkPath = %s", mainObbPath.c_str());
-            //strcat(buf, "\n");
-            //__android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info",  "%s", buf);
+            //LOGD("MainXApkPath = %s", mainObbPath.c_str());
         }
         if ( !mainObbPath.empty() )
         {
@@ -98,10 +95,7 @@ FileUtils* FileUtils::getInstance()
             patchObbPath = getPatchXApkPath();
 
             //TMP for debug
-            //char buf[MAX_LOG_LENGTH] = {0};
-            //snprintf(buf, MAX_LOG_LENGTH-3, "PatchXApkPath = %s", patchObbPath.c_str());
-            //strcat(buf, "\n");
-            //__android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info",  "%s", buf);
+            //LOGD("PatchXApkPath = %s", patchObbPath.c_str());
         }
         if ( !patchObbPath.empty() )
         {
