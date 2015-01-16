@@ -1,19 +1,19 @@
 /****************************************************************************
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2014 Chukong Technologies
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -82,7 +82,7 @@ to be different from other platforms unless there's a good reason.
 
 It's new in cocos2d-x since v0.99.5
 */
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
     #define CC_ENABLE_CACHE_TEXTURE_DATA       1
 #else
     #define CC_ENABLE_CACHE_TEXTURE_DATA       0
@@ -105,10 +105,10 @@ It's new in cocos2d-x since v0.99.5
     #define NS_CC_END                       }
     #define USING_NS_CC                     using namespace cocos2d
 #else
-    #define NS_CC_BEGIN 
-    #define NS_CC_END 
-    #define USING_NS_CC 
-#endif 
+    #define NS_CC_BEGIN
+    #define NS_CC_END
+    #define USING_NS_CC
+#endif
 
 /** CC_PROPERTY_READONLY is used to declare a protected variable.
  We can use getter to read the variable.
@@ -195,7 +195,7 @@ public: virtual void set##funName(varType var)   \
         CC_SAFE_RELEASE(varName); \
         varName = var; \
     } \
-} 
+}
 
 #define CC_SAFE_DELETE(p)           do { delete (p); (p) = nullptr; } while(0)
 #define CC_SAFE_DELETE_ARRAY(p)     do { if(p) { delete[] (p); (p) = nullptr; } } while(0)
@@ -212,7 +212,7 @@ public: virtual void set##funName(varType var)   \
 #if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
 #define CCLOG(...)       do {} while (0)
 #define CCLOGINFO(...)   do {} while (0)
-#define CCLOGERROR(...)  do {} while (0)
+#define CCLOGERROR(format,...)  cocos2d::log(format, ##__VA_ARGS__)
 #define CCLOGWARN(...)   do {} while (0)
 
 #elif COCOS2D_DEBUG == 1
@@ -264,10 +264,10 @@ public: virtual void set##funName(varType var)   \
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
     #define CC_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
 #elif _MSC_VER >= 1400 //vs 2005 or higher
-    #define CC_DEPRECATED_ATTRIBUTE __declspec(deprecated) 
+    #define CC_DEPRECATED_ATTRIBUTE __declspec(deprecated)
 #else
     #define CC_DEPRECATED_ATTRIBUTE
-#endif 
+#endif
 
 /*
  * only certain compiler support __attribute__((format))
