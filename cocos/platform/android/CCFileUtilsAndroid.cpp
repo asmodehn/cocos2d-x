@@ -69,38 +69,38 @@ FileUtils* FileUtils::getInstance()
         {
           delete s_sharedFileUtils;
           s_sharedFileUtils = nullptr;
-          CCLOG("ERROR: Could not init CCFileUtilsAndroid");
+          LOGD("ERROR: Could not init CCFileUtilsAndroid");
         }
     }
-    //in case we set obb path later than we call FileUtils::getInstance()
+    //we set obb path later than we call FileUtils::getInstance()
     if ( !s_pMainObbFile )
     {
-        if ( mainObbPath.empty() )
+        if ( mainObbPath.empty() && strlen(getMainXApkPath())!=0 )
         { //we can set the path only once
-            mainObbPath = getMainXApkPath();
+            mainObbPath.assign(getMainXApkPath());
 
             //TMP for debug
-            //LOGD("MainXApkPath = %s", mainObbPath.c_str());
+            LOGD("MainXApkPath = %s", mainObbPath.c_str());
         }
         if ( !mainObbPath.empty() )
         {
             s_pMainObbFile = new ZipFile(mainObbPath, "assets/");
-            CCLOG("Main OBB File set to %s in CCFileUtilsAndroid", mainObbPath.c_str());
+            LOGD("Main OBB File set to %s in CCFileUtilsAndroid", mainObbPath.c_str());
         }
     }
     if ( !s_pPatchObbFile)
     {
-        if ( patchObbPath.empty() )
+        if ( patchObbPath.empty() && strlen(getPatchXApkPath())!=0 )
         { //we can set the path only once
-            patchObbPath = getPatchXApkPath();
+            patchObbPath.assign(getPatchXApkPath());
 
             //TMP for debug
-            //LOGD("PatchXApkPath = %s", patchObbPath.c_str());
+            LOGD("PatchXApkPath = %s", patchObbPath.c_str());
         }
         if ( !patchObbPath.empty() )
         {
             s_pPatchObbFile = new ZipFile(patchObbPath, "assets/");
-            CCLOG("Patch OBB File set to %s in CCFileUtilsAndroid", patchObbPath.c_str());
+            LOGD("Patch OBB File set to %s in CCFileUtilsAndroid", patchObbPath.c_str());
         }
     }
 
@@ -143,12 +143,12 @@ bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
 
         if ( s_pPatchObbFile && s_pPatchObbFile->fileExists(strPath))
         {
-            CCLOG("[s_pPatchObbFile] ... in OBB %s, found = true!", strPath.c_str());
+            LOGD("[s_pPatchObbFile] ... in OBB %s, found = true!", strPath.c_str());
             bFound = true;
         }
         else if ( s_pMainObbFile && s_pMainObbFile->fileExists(strPath) )
         {
-            CCLOG("[s_pMainObbFile] ... in OBB %s, found = true!", strPath.c_str());
+            LOGD("[s_pMainObbFile] ... in OBB %s, found = true!", strPath.c_str());
             bFound = true;
         }
         else if (FileUtilsAndroid::assetmanager) {
@@ -162,13 +162,13 @@ bool FileUtilsAndroid::isFileExistInternal(const std::string& strFilePath) const
                 bFound = true;
                 AAsset_close(aa);
             //} else {
-            //    CCLOG("[AssetManager] ... in APK %s, found = false!", strPath.c_str());
+            //    LOGD("[AssetManager] ... in APK %s, found = false!", strPath.c_str());
             }
         }
     }
     else
     {
-        //CCLOG("isFileExistInternal - path does starts with / so should be in file system");
+        //LOGD("isFileExistInternal - path does starts with / so should be in file system");
         FILE *fp = fopen(strFilePath.c_str(), "r");
         if(fp)
         {
@@ -219,7 +219,7 @@ Data FileUtilsAndroid::getData(const std::string& filename, bool forString)
                 data = (unsigned char*) realloc(data,++size);
                 data[size-1] = '\0';
             }
-            CCLOG("[s_pPatchObbFile] ... in OBB %s, getData = Success!", strPath.c_str());
+            LOGD("[s_pPatchObbFile] ... in OBB %s, getData = Success!", strPath.c_str());
         }
         else if ( s_pMainObbFile && nullptr != (data = s_pMainObbFile->getFileData(strPath,&size) ) )
         {
@@ -229,7 +229,7 @@ Data FileUtilsAndroid::getData(const std::string& filename, bool forString)
                 data = (unsigned char*) realloc(data,++size);
                 data[size-1] = '\0';
             }
-            CCLOG("[s_pMainObbFile] ... in OBB %s, getData = Success!", strPath.c_str());
+            LOGD("[s_pMainObbFile] ... in OBB %s, getData = Success!", strPath.c_str());
         }
         else if (FileUtilsAndroid::assetmanager)
         {
@@ -280,7 +280,7 @@ Data FileUtilsAndroid::getData(const std::string& filename, bool forString)
         do
         {
             // read from other path than user set it
-            //CCLOG("GETTING FILE ABSOLUTE DATA: %s", filename);
+            //LOGD("GETTING FILE ABSOLUTE DATA: %s", filename);
             const char* mode = nullptr;
             if (forString)
                 mode = "rt";
@@ -315,7 +315,7 @@ Data FileUtilsAndroid::getData(const std::string& filename, bool forString)
     {
         std::string msg = "Get data from file(";
         msg.append(filename).append(") failed!");
-        CCLOG("%s", msg.c_str());
+        LOGD("%s", msg.c_str());
     }
     else
     {
@@ -330,12 +330,12 @@ std::string FileUtilsAndroid::getStringFromFile(const std::string& filename)
     Data data = getData(filename, true);
     if (data.isNull())
     {
-        CCLOG("getStringFromFile : %s data is NULL", filename.c_str());
+        LOGD("getStringFromFile : %s data is NULL", filename.c_str());
         return "";
     }
 
     std::string ret((const char*)data.getBytes());
-    CCLOG("getStringFromFile : %s data is : %s", filename.c_str(), ret.c_str());
+    LOGD("getStringFromFile : %s data is : %s", filename.c_str(), ret.c_str());
 
     return ret;
 }
@@ -366,11 +366,11 @@ unsigned char* FileUtilsAndroid::getFileData(const std::string& filename, const 
 
         if ( s_pPatchObbFile && nullptr != (data = s_pPatchObbFile->getFileData(strPath,size) ) )
         {
-            CCLOG("[s_pPatchObbFile] ... in OBB %s, getFileData = Success!", strPath.c_str());
+            LOGD("[s_pPatchObbFile] ... in OBB %s, getFileData = Success!", strPath.c_str());
         }
         else if ( s_pMainObbFile && nullptr != (data = s_pMainObbFile->getFileData(strPath,size) ) )
         {
-            CCLOG("[s_pMainObbFile] ... in OBB %s, getFileData = Success!", strPath.c_str());
+            LOGD("[s_pMainObbFile] ... in OBB %s, getFileData = Success!", strPath.c_str());
         }
         else if (FileUtilsAndroid::assetmanager)
         {
@@ -419,7 +419,7 @@ unsigned char* FileUtilsAndroid::getFileData(const std::string& filename, const 
         do
         {
             // read rrom other path than user set it
-            //CCLOG("GETTING FILE ABSOLUTE DATA: %s", filename);
+            //LOGD("GETTING FILE ABSOLUTE DATA: %s", filename);
             FILE *fp = fopen(fullPath.c_str(), mode);
             CC_BREAK_IF(!fp);
 
@@ -442,7 +442,7 @@ unsigned char* FileUtilsAndroid::getFileData(const std::string& filename, const 
     {
         std::string msg = "Get data from file(";
         msg.append(filename).append(") failed!");
-        CCLOG("%s", msg.c_str());
+        LOGD("%s", msg.c_str());
     }
 
     return data;

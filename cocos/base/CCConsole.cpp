@@ -233,7 +233,16 @@ static void _log(const char *format, va_list args)
 #endif
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
-    Director::getInstance()->getConsole()->log(buf);
+
+    Director* d = Director::getInstance();
+    if (d)
+    {
+        Console* c = d->getConsole();
+        if (c)
+        {
+           c->log(buf);
+        }
+    }
 #endif
 
 }

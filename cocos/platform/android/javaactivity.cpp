@@ -71,16 +71,19 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thi
     auto glview = director->getOpenGLView();
     if (!glview)
     {
+	    LOGD("Calling glview = cocos2d::GLViewImpl::create('Android app');");
         glview = cocos2d::GLViewImpl::create("Android app");
         glview->setFrameSize(w, h);
         director->setOpenGLView(glview);
 
+		LOGD("Calling cocos_android_app_init(env, thiz);");
         cocos_android_app_init(env, thiz);
 
         cocos2d::Application::getInstance()->run();
     }
     else
     {
+		LOGD("Calling cocos2d::GL::invalidateStateCache();");
         cocos2d::GL::invalidateStateCache();
         cocos2d::GLProgramCache::getInstance()->reloadDefaultGLPrograms();
         cocos2d::DrawPrimitives::init();
@@ -94,13 +97,16 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thi
 
 jintArray Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNIEnv* env, jobject thiz)
 {
+    LOGD("Calling cocos_android_app_init(env, thiz);");
     cocos_android_app_init(env, thiz);
+	LOGD("Calling cocos2d::Application::getInstance()->initGLContextAttrs();");
     cocos2d::Application::getInstance()->initGLContextAttrs();
     GLContextAttrs _glContextAttrs = GLView::getGLContextAttrs();
 
     int tmp[6] = {_glContextAttrs.redBits, _glContextAttrs.greenBits, _glContextAttrs.blueBits,
         _glContextAttrs.alphaBits, _glContextAttrs.depthBits, _glContextAttrs.stencilBits};
 
+	LOGD("Calling env->SetIntArrayRegion(glContextAttrsJava, 0, 6, tmp);");
     jintArray glContextAttrsJava = env->NewIntArray(6);
     env->SetIntArrayRegion(glContextAttrsJava, 0, 6, tmp);
 

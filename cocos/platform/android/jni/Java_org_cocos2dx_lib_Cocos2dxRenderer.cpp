@@ -6,6 +6,10 @@
 #include "platform/CCFileUtils.h"
 #include "JniHelper.h"
 #include <jni.h>
+#include <android/log.h>
+
+#define  LOG_TAG    "Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp"
+#define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
 
 using namespace cocos2d;
 
@@ -16,17 +20,25 @@ extern "C" {
     }
 
     JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnPause() {
+		LOGD("Calling Application::getInstance()->applicationDidEnterBackground();");
         Application::getInstance()->applicationDidEnterBackground();
+		LOGD("Calling cocos2d::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);");
         cocos2d::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
+		LOGD("Calling cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent);");
         cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent);
     }
 
     JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnResume() {
+		LOGD("Calling Director::getInstance()->getOpenGLView()");
         if (Director::getInstance()->getOpenGLView()) {
+		    LOGD("Calling Application::getInstance()->applicationWillEnterForeground();");
             Application::getInstance()->applicationWillEnterForeground();
+			LOGD("Calling cocos2d::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);");
             cocos2d::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
-            cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
+			LOGD("Calling cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);");
+			cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
         }
+		LOGD("Director::getInstance()->getOpenGLView() returns %p", Director::getInstance()->getOpenGLView() );
     }
 
     JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInsertText(JNIEnv* env, jobject thiz, jstring text) {
