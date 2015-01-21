@@ -1547,11 +1547,11 @@ void Label::offsetEvent(int charPos)
 {
 	for (auto curEvent = _events.begin(); curEvent != _events.end(); ++curEvent)
 	{
-		if ((*curEvent)->_start > charPos)
+		if ((*curEvent)->_start >= charPos)
 		{
 			--(*curEvent)->_start;
 		}
-		if ((*curEvent)->_end > charPos)
+		if ((*curEvent)->_end >= charPos)
 		{
 			--(*curEvent)->_end;
 		}
