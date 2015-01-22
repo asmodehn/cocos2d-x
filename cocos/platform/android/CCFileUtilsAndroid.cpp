@@ -34,8 +34,12 @@ THE SOFTWARE.
 
 #include <stdlib.h>
 
+#ifdef _DEBUG
 #define  LOG_TAG    "CCFileUtilsAndroid.cpp"
 #define  LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG,LOG_TAG,__VA_ARGS__)
+#else // _DEBUG
+#define  LOGD(...) do{}while(false)
+#endif // _DEBUG
 
 #include "base/ZipUtils.h"
 
