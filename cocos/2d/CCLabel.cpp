@@ -1551,7 +1551,7 @@ void Label::offsetEvent(int charPos)
 		{
 			--(*curEvent)->_start;
 		}
-		if ((*curEvent)->_end >= charPos)
+		if ((*curEvent)->_end > charPos)
 		{
 			--(*curEvent)->_end;
 		}
