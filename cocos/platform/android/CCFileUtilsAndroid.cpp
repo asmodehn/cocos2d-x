@@ -339,7 +339,7 @@ std::string FileUtilsAndroid::getStringFromFile(const std::string& filename)
     }
 
     std::string ret((const char*)data.getBytes());
-    LOGD("getStringFromFile : %s data is : %s", filename.c_str(), ret.c_str());
+    //LOGD("getStringFromFile : %s data is : %s", filename.c_str(), ret.c_str());
 
     return ret;
 }
