@@ -74,6 +74,8 @@ public class Cocos2dxMusic {
 	// ===========================================================
 
 	public void preloadBackgroundMusic(final String pPath) {
+
+        Log.d(Cocos2dxMusic.TAG, "preloadBackgroundMusic");
 		if ((this.mCurrentPath == null) || (!this.mCurrentPath.equals(pPath))) {
 			// preload new background music
 
@@ -90,6 +92,8 @@ public class Cocos2dxMusic {
 	}
 
 	public void playBackgroundMusic(final String pPath, final boolean isLoop) {
+
+        Log.d(Cocos2dxMusic.TAG, "playBackgroundMusic");
 		if (this.mCurrentPath == null) {
 			// it is the first time to play background music or end() was called
 			this.mBackgroundMediaPlayer = this.createMediaplayer(pPath);
@@ -130,6 +134,7 @@ public class Cocos2dxMusic {
 	}
 
 	public void stopBackgroundMusic() {
+        Log.d(Cocos2dxMusic.TAG, "stopBackgroundMusic");
 		if (this.mBackgroundMediaPlayer != null) {
 			this.mBackgroundMediaPlayer.stop();
 
@@ -140,6 +145,7 @@ public class Cocos2dxMusic {
 	}
 
 	public void pauseBackgroundMusic() {
+        Log.d(Cocos2dxMusic.TAG, "pauseBackgroundMusic");
 		if (this.mBackgroundMediaPlayer != null && this.mBackgroundMediaPlayer.isPlaying()) {
 			this.mBackgroundMediaPlayer.pause();
 			this.mPaused = true;
@@ -148,6 +154,7 @@ public class Cocos2dxMusic {
 	}
 
 	public void resumeBackgroundMusic() {
+        Log.d(Cocos2dxMusic.TAG, "resumeBackgroundMusic");
 		if (this.mBackgroundMediaPlayer != null && this.mPaused) {
 			this.mBackgroundMediaPlayer.start();
 			this.mPaused = false;
@@ -215,6 +222,8 @@ public class Cocos2dxMusic {
 	}
 
 	public void onEnterBackground(){
+
+        Log.d(Cocos2dxMusic.TAG, "onEnterBackground");
 		if (this.mBackgroundMediaPlayer != null && this.mBackgroundMediaPlayer.isPlaying()) {
 			this.mBackgroundMediaPlayer.pause();
 			this.mPaused = true;
@@ -222,6 +231,7 @@ public class Cocos2dxMusic {
 	}
 	
 	public void onEnterForeground(){
+        Log.d(Cocos2dxMusic.TAG, "onEnterForeground");
 		if(!this.mManualPaused){
 			if (this.mBackgroundMediaPlayer != null && this.mPaused) {
 				this.mBackgroundMediaPlayer.start();

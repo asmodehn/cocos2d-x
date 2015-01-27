@@ -26,13 +26,24 @@ package org.cocos2dx.lib;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.os.PowerManager;
+import android.util.Log;
 
 import org.cocos2dx.lib.Cocos2dxHelper;
 public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
+
+    // =====
+    // Access to power manager to determine device screen status
+    // ====
+    private PowerManager pm = null;
+
 	// ===========================================================
 	// Constants
 	// ===========================================================
+
+    private final static String TAG = Cocos2dxActivity.class.getSimpleName();
 
 	private final static long NANOSECONDSPERSECOND = 1000000000L;
 	private final static long NANOSECONDSPERMICROSECOND = 1000000;
@@ -55,6 +66,11 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+
+    public void setPowerManager(PowerManager a_pm)
+    {
+        pm = a_pm;
+    }
 
 	public static void setAnimationInterval(final double pAnimationInterval) {
 		Cocos2dxRenderer.sAnimationInterval = (long) (pAnimationInterval * Cocos2dxRenderer.NANOSECONDSPERSECOND);
@@ -152,14 +168,23 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
         // native methed before onSurfaceCreated is invoked
         if (! mNativeInitCompleted)
             return;
-        
-		Cocos2dxHelper.onEnterBackground();
-		Cocos2dxRenderer.nativeOnPause();
+
+        Log.d(TAG,"application did enter Background !" );
+
+        Cocos2dxHelper.onEnterBackground();
+        Cocos2dxRenderer.nativeOnPause();
 	}
 
 	public void handleOnResume() {
-		Cocos2dxHelper.onEnterForeground();
-		Cocos2dxRenderer.nativeOnResume();
+        //we should call this only if screen is on
+        if ( pm.isScreenOn()) {
+            Log.d(TAG,"application will enter Foreground !" );
+            Cocos2dxHelper.onEnterForeground();
+            Cocos2dxRenderer.nativeOnResume();
+        }else {
+            Log.d(TAG,"application will skip enter Foreground !");
+        }
+
 	}
 
 	private static native void nativeInsertText(final String pText);

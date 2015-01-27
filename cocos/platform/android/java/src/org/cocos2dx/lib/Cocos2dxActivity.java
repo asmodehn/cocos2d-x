@@ -33,6 +33,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.PowerManager;
 import android.view.ViewGroup;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -42,7 +43,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	// ===========================================================
 	// Constants
 	// ===========================================================
-
+    protected PowerManager pm;
 	private final static String TAG = Cocos2dxActivity.class.getSimpleName();
 
 	// ===========================================================
@@ -54,7 +55,9 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	private Cocos2dxHandler mHandler;	
 	private static Cocos2dxActivity sContext = null;
 	private Cocos2dxVideoHelper mVideoHelper = null;
-	
+
+	protected boolean mHiddenCycle = false;
+
 	public static Context getContext() {
 		return sContext;
 	}
@@ -78,18 +81,29 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		onLoadNativeLibraries();
+        //we want to initialize cocos only if screen is On
+        pm = (PowerManager)getSystemService(POWER_SERVICE);
 
-		sContext = this;
-    	this.mHandler = new Cocos2dxHandler(this);
-    	
-    	Cocos2dxHelper.init(this);
+            onLoadNativeLibraries();
 
-        this.glContextAttrs = getGLContextAttrs();
-    	this.init();
-    	if (mVideoHelper == null) {
-    		mVideoHelper = new Cocos2dxVideoHelper(this, mFrameLayout);
-		}
+            sContext = this;
+            this.mHandler = new Cocos2dxHandler(this);
+
+            Cocos2dxHelper.init(this);
+
+        if(pm.isScreenOn()) {
+            this.glContextAttrs = getGLContextAttrs();
+            this.init();
+            if (mVideoHelper == null) {
+                mVideoHelper = new Cocos2dxVideoHelper(this, mFrameLayout);
+            }
+
+            mHiddenCycle = false;
+        }
+        else
+        {
+            mHiddenCycle = true;
+        }
 	}
 
     //native method,call GLViewImpl::getGLContextAttrs() to get the OpenGL ES context attributions
@@ -107,17 +121,30 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	protected void onResume() {
 		super.onResume();
 
-		Cocos2dxHelper.onResume();
-		this.mGLSurfaceView.onResume();
+        if (! mHiddenCycle) {
+            Cocos2dxHelper.onResume();
+        }
 	}
 
 	@Override
 	protected void onPause() {
-		super.onPause();
-		
-		Cocos2dxHelper.onPause();
-		this.mGLSurfaceView.onPause();
+        if ( !mHiddenCycle) {
+            Cocos2dxHelper.onPause();
+        }
+        super.onPause();
 	}
+
+    @Override
+    public void onWindowFocusChanged(boolean focus){
+        Log.d(TAG,"onWindowFocusChanged");
+        if ( ! mHiddenCycle) {
+            if (focus) {
+                this.mGLSurfaceView.onResume();
+            } else {
+                this.mGLSurfaceView.onPause();
+            }
+        }
+    }
 	
 	@Override
 	protected void onDestroy() {
@@ -189,8 +216,12 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         if (isAndroidEmulator())
            this.mGLSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
-        this.mGLSurfaceView.setCocos2dxRenderer(new Cocos2dxRenderer());
+        Cocos2dxRenderer renderer = new Cocos2dxRenderer();
+        renderer.setPowerManager((PowerManager)getSystemService(POWER_SERVICE));
+        this.mGLSurfaceView.setCocos2dxRenderer(renderer);
         this.mGLSurfaceView.setCocos2dxEditText(edittext);
+
+
 
         // Set framelayout as the content view
 		setContentView(mFrameLayout);
