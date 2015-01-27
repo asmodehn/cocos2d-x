@@ -38,6 +38,7 @@ THE SOFTWARE.
 #include "base/CCScheduler.h"
 #include "platform/CCFileUtils.h"
 #include "base/ccUtils.h"
+#include "2d/CCFontAtlasCache.h"
 
 #include "deprecated/CCString.h"
 
@@ -792,6 +793,10 @@ void VolatileTextureMgr::reloadNextTexture()
 	vt->_texture->setTexParameters(vt->_texParams); 
 
 	_isReloading = _currentTexture != _textures.end();
+
+	auto eventDispatcher = Director::getInstance()->getEventDispatcher();
+	eventDispatcher->dispatchCustomEvent(FontAtlas::EVENT_TEXTURES_RECREATED, vt->_texture);
+	
 }
 
 bool VolatileTextureMgr::isReloading()

@@ -59,8 +59,9 @@ class CC_DLL FontAtlas : public Ref
 {
 public:
     static const int CacheTextureWidth;
-    static const int CacheTextureHeight;
-    static const char* EVENT_PURGE_TEXTURES;
+	static const int CacheTextureHeight;
+	static const char* EVENT_PURGE_TEXTURES; 
+	static const char*  EVENT_TEXTURES_RECREATED;
     /**
      * @js ctor
      */

@@ -32,6 +32,10 @@
 #include "base/CCEventType.h"
 
 
+#if CC_ENABLE_CACHE_TEXTURE_DATA
+#include "renderer/CCTextureCache.h"
+#endif
+
 NS_CC_BEGIN
 
 const char* FontAtlasSwitch::EVENT_SWITCH_ATLAS = "__cc_FontAtlasSwitchAtlas";
@@ -76,6 +80,7 @@ void FontAtlasSwitch::switchAtlas(FontAtlas* atlas)
 const int FontAtlas::CacheTextureWidth = 512;
 const int FontAtlas::CacheTextureHeight = 512;
 const char* FontAtlas::EVENT_PURGE_TEXTURES = "__cc_FontAtlasPurgeTextures";
+const char* FontAtlas::EVENT_TEXTURES_RECREATED = "__cc_FontAtlasTexturesRecreated";
 
 FontAtlas::FontAtlas(Font &theFont) 
 : _font(&theFont)
@@ -122,6 +127,9 @@ FontAtlas::FontAtlas(Font &theFont)
 
         _rendererRecreatedListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, CC_CALLBACK_1(FontAtlas::listenRendererRecreated, this));
         eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, 1);
+
+		//cache texture
+		VolatileTextureMgr::addDataTexture(texture, _currentPageData, _currentPageDataSize, pixelFormat, Size(CacheTextureWidth, CacheTextureHeight));
 #endif
     }
 }
