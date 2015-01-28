@@ -26,8 +26,10 @@ package org.cocos2dx.lib;
 import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -57,6 +59,8 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	private Cocos2dxVideoHelper mVideoHelper = null;
 
 	protected boolean mHiddenCycle = false;
+    protected BroadcastReceiver mScreenReceiver = null;
+    protected boolean mScreenWasOn = false;
 
 	public static Context getContext() {
 		return sContext;
@@ -81,15 +85,39 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+        // initialize receiver
+        final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        mScreenReceiver = new BroadcastReceiver() {
+            @Override
+            //similar behavior as onWindowFocusChanged
+            public void onReceive(final Context context, final Intent intent) {
+                if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                    Log.d(TAG,"onScreenActionReceived OFF");
+                    // do whatever you need to do here
+                    mScreenWasOn = false;
+                    mGLSurfaceView.onPause();
+                } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                    Log.d(TAG,"onScreenActionReceived ON");
+                    // and do whatever you need to do here
+                    mScreenWasOn = true;
+                    //wait for onWindowFocusChanged
+                    //mGLSurfaceView.onResume();
+                }
+            }
+        };
+
+        registerReceiver(mScreenReceiver, filter);
+
         //we want to initialize cocos only if screen is On
         pm = (PowerManager)getSystemService(POWER_SERVICE);
 
-            onLoadNativeLibraries();
+        onLoadNativeLibraries();
 
-            sContext = this;
-            this.mHandler = new Cocos2dxHandler(this);
+        sContext = this;
+        this.mHandler = new Cocos2dxHandler(this);
 
-            Cocos2dxHelper.init(this);
+        Cocos2dxHelper.init(this);
 
         if(pm.isScreenOn()) {
             this.glContextAttrs = getGLContextAttrs();
