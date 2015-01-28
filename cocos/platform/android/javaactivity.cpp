@@ -76,9 +76,11 @@ void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thi
         glview->setFrameSize(w, h);
         director->setOpenGLView(glview);
 
-		LOGD("nativeInit Calling cocos_android_app_init(env, thiz);");
-        cocos_android_app_init(env, thiz);
-
+        if(! cocos2d::Application::getInstance())
+        {
+            LOGD("nativeInit Calling cocos_android_app_init(env, thiz);");
+            cocos_android_app_init(env, thiz);
+        }
         cocos2d::Application::getInstance()->run();
     }
     else
@@ -101,9 +103,11 @@ jintArray Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNIEnv* env, 
     auto glview = director->getOpenGLView();
     if (!glview)
     {
-        LOGD("getGLContextAttrs Calling cocos_android_app_init(env, thiz);");
-        cocos_android_app_init(env, thiz);
-
+        if(! cocos2d::Application::getInstance())
+        {
+            LOGD("getGLContextAttrs Calling cocos_android_app_init(env, thiz);");
+            cocos_android_app_init(env, thiz);
+        }
         LOGD("getGLContextAttrs Calling cocos2d::Application::getInstance()->initGLContextAttrs();");
         cocos2d::Application::getInstance()->initGLContextAttrs();
     }

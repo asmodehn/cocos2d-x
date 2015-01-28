@@ -90,19 +90,18 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         mScreenReceiver = new BroadcastReceiver() {
             @Override
-            //similar behavior as onWindowFocusChanged
             public void onReceive(final Context context, final Intent intent) {
                 if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                    Log.d(TAG,"onScreenActionReceived OFF");
+                    Log.e(TAG,"onScreenActionReceived OFF");
                     // do whatever you need to do here
                     mScreenWasOn = false;
-                    mGLSurfaceView.onPause();
+                    Cocos2dxHelper.onEnterBackground();
                 } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                    Log.d(TAG,"onScreenActionReceived ON");
+                    Log.e(TAG,"onScreenActionReceived ON");
                     // and do whatever you need to do here
                     mScreenWasOn = true;
-                    //wait for onWindowFocusChanged
-                    //mGLSurfaceView.onResume();
+                    //we should do it on resume to make sure the activity is visible ( not behind a lock screen )
+                    //Cocos2dxHelper.onEnterForeground();
                 }
             }
         };
@@ -126,7 +125,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
                 mVideoHelper = new Cocos2dxVideoHelper(this, mFrameLayout);
             }
 
-            mHiddenCycle = false;
+            mHiddenCycle = false; // we assume the app cannot start when the screen is off.
         }
         else
         {
@@ -151,6 +150,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
 
         if (! mHiddenCycle) {
             Cocos2dxHelper.onResume();
+            Cocos2dxHelper.onEnterForeground();
         }
 	}
 
