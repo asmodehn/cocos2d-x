@@ -33,6 +33,7 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
+#import <Foundation/Foundation.h>
 
 #define XML_FILE_NAME "UserDefault.xml"
 
@@ -79,7 +80,7 @@ static tinyxml2::XMLElement* getXMLNodeForKey(const char* pKey, tinyxml2::XMLDoc
 
 		if (xmlBuffer.empty())
 		{
-            NSLog(@"can not read xml file");
+            CCLOG("can not read xml file");
 			break;
 		}
 		xmlDoc->Parse(xmlBuffer.c_str(), xmlBuffer.size());
@@ -88,7 +89,7 @@ static tinyxml2::XMLElement* getXMLNodeForKey(const char* pKey, tinyxml2::XMLDoc
 		rootNode = xmlDoc->RootElement();
 		if (nullptr == rootNode)
 		{
-            NSLog(@"read root node error");
+            CCLOG("read root node error");
 			break;
 		}
 		// find the node

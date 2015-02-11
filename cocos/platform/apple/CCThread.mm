@@ -23,7 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 //#import <UIKit/UIKit.h>
-#include "CCThread.h"
+#include "platform/CCThread.h"
+
+#import <Foundation/Foundation.h>
 
 NS_CC_BEGIN
 

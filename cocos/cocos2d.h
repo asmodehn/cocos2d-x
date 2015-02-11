@@ -202,7 +202,7 @@ THE SOFTWARE.
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-    #include "platform/mac/CCApplication.h"
+    #include "platform/mac/CCApplication-mac.h"
     #include "platform/desktop/CCGLViewImpl-desktop.h"
     #include "platform/mac/CCGL.h"
     #include "platform/mac/CCStdC.h"
