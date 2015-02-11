@@ -12,6 +12,15 @@ set(COCOS_PLATFORM_SPECIFIC_SRC
 
 elseif(APPLE)
 
+set(COCOS_PLATFORM_SPECIFIC_SRC
+  platform/mac/CCApplication-mac.mm
+  platform/mac/CCCommon.mm
+  platform/mac/CCDevice.mm  
+  platform/apple/CCLock.cpp
+  platform/apple/CCFileUtilsApple.mm
+  platform/apple/CCThread.mm
+)
+
 else()
 
 set(COCOS_PLATFORM_SPECIFIC_SRC

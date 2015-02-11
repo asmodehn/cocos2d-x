@@ -27,8 +27,6 @@ set(COCOS_BASE_SRC
   base/CCScheduler.cpp
   base/CCScriptSupport.cpp
   base/CCTouch.cpp
-  base/CCUserDefault.cpp
-  base/CCUserDefaultAndroid.cpp
   base/CCValue.cpp
   base/TGAlib.cpp
   base/ZipUtils.cpp
@@ -44,3 +42,20 @@ set(COCOS_BASE_SRC
   base/s3tc.cpp
   base/ObjectFactory.cpp
 )
+
+if(WIN32)
+set(COCOS_BASE_SRC
+  ${COCOS_BASE_SRC}
+  base/CCUserDefault.cpp
+)
+elseif(APPLE)
+set(COCOS_BASE_SRC
+  ${COCOS_BASE_SRC}
+  base/CCUserDefault.mm
+)
+else()
+set(COCOS_BASE_SRC
+  ${COCOS_BASE_SRC}
+  base/CCUserDefaultAndroid.cpp
+)
+endif()

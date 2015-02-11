@@ -21,7 +21,7 @@ elseif(APPLE)
     )
   else()
     set(PLATFORM_SRC
-      proj.mac/main.m
+      proj.mac/main.cpp
     )
   endif()
 else()

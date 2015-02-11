@@ -69,19 +69,20 @@ if(WIN32)
   else(MSVC)#MINGW
   
   endif(MSVC)
+
 elseif(APPLE)
-
-
+  ADD_DEFINITIONS(-DCC_TARGET_OS_MAC)
+  ADD_DEFINITIONS (-DUSE_FILE32API)
 else()#Linux
-ADD_DEFINITIONS(-DLINUX)
+  ADD_DEFINITIONS(-DLINUX)
 endif()
 
 
 if(NOT MSVC)# all gcc
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -Wall -DCOCOS2D_DEBUG=1")
-set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
-set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-std=c99")
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
+  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -Wall -DCOCOS2D_DEBUG=1")
+  set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+  set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-std=c99")
+  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++11")
 endif()
 
 if(MINGW)
@@ -186,6 +187,16 @@ if(WIN32)
   endif()
 
 elseif(APPLE)
+  link_directories(
+    /usr/local/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/jpeg/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/tiff/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/webp/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/png/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/freetype2/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/glfw3/prebuilt/${PLATFORM_FOLDER}
+    ${CMAKE_CURRENT_SOURCE_DIR}/external-bin/websockets/prebuilt/${PLATFORM_FOLDER}
+  )
 
 else()
 
@@ -268,11 +279,11 @@ endif(BUILD_LIBS_LUA)
 
 # build tests 
 if(BUILD_CppTests)
-add_subdirectory(tests/cpp-empty-test)
-add_subdirectory(tests/cpp-tests)
+  add_subdirectory(tests/cpp-empty-test)
+  add_subdirectory(tests/cpp-tests)
 endif(BUILD_CppTests)
 
 if(BUILD_LuaTests)
-add_subdirectory(tests/lua-tests/project)
-add_subdirectory(tests/lua-empty-test/project)
+  add_subdirectory(tests/lua-tests/project)
+  add_subdirectory(tests/lua-empty-test/project)
 endif(BUILD_LuaTests)

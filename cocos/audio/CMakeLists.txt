@@ -12,7 +12,24 @@ if(WIN32)
 	win32/MciPlayer.h
   )
 elseif(APPLE)
-
+  if(IOS)
+    set(AUDIO_SRC
+      ios/CDAudioManager.m
+      ios/CDOpenALSupport.m
+      ios/CocosDenshion.m
+      ios/SimpleAudioEngine_objc.m
+      ios/SimpleAudioEngine.mm
+    )
+  else()
+    set(AUDIO_SRC
+      mac/CDAudioManager.m
+      mac/CDOpenALSupport.m
+      mac/CDXMacOSXSupport.mm
+      mac/CocosDenshion.m
+      mac/SimpleAudioEngine_objc.m
+      mac/SimpleAudioEngine.mm
+    )
+  endif()
 else()
   set(AUDIO_SRC
     linux/SimpleAudioEngineFMOD.cpp
@@ -22,7 +39,7 @@ else()
   )
 
   include_directories(
-    ../../external/linux-specific/fmod/include/${ARCH_DIR}
+    ../../external-bin/linux-specific/fmod/include/${ARCH_DIR}
   )
 
 endif()

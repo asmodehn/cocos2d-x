@@ -1,17 +1,22 @@
-if(WIN32)
-  set(PLATFORM_SRC
-    network/WebSocket.cpp
-  )
 
+set(PLATFORM_SRC
+  network/WebSocket.cpp
+)
+
+if(WIN32)
   set(PLATFORM_LINK
     websockets
     Ws2_32
   )
   
-elseif(NOT APPLE)
-  set(PLATFORM_SRC
-    network/WebSocket.cpp
+elseif(APPLE)
+
+  set(PLATFORM_LINK
+    websockets
+    ssl
+    crypto
   )
+else()
 
   set(PLATFORM_LINK
     websockets
