@@ -7,6 +7,10 @@ if(WIN32)
     Classes/ExtensionsTest/NetworkTest/SocketIOTest.cpp
     proj.win32/main.cpp
   )
+elseif(APPLE)
+  set(PLATFORM_SRC
+    proj.mac/main.cpp
+  )
 else()
   set(PLATFORM_SRC
     proj.linux/main.cpp

@@ -87,4 +87,7 @@ else()
     )
 endif()
 
+include_directories(
+ “../Classes”
+)
 target_link_libraries(${APP_NAME} audio cocos2d)

@@ -57,7 +57,7 @@ public:
     @param  the pointer of the application
     */
     virtual void applicationWillEnterForeground();
-
+    virtual void applicationRendererRecreated(cocos2d::EventCustom*){};
     BaseTest* getCurrentTest();
     void setCurrentTest(BaseTest* curTest);
 private:

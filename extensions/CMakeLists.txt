@@ -15,9 +15,6 @@ set(EXTENSIONS_SRC
   GUI/CCControlExtension/CCInvocation.cpp
   GUI/CCControlExtension/CCScale9Sprite.cpp
   GUI/CCEditBox/CCEditBox.cpp
-  GUI/CCEditBox/CCEditBoxImplAndroid.cpp
-  GUI/CCEditBox/CCEditBoxImplNone.cpp
-  GUI/CCEditBox/CCEditBoxImplWin.cpp
   GUI/CCScrollView/CCScrollView.cpp
   GUI/CCScrollView/CCTableView.cpp
   GUI/CCScrollView/CCTableViewCell.cpp
@@ -30,11 +27,18 @@ if(WIN32)
 
   set(PLATFORM_EXTENSIONS_SRC
     proj.win32/Win32InputBox.cpp
+    GUI/CCEditBox/CCEditBoxImplWin.cpp
   )
 elseif(APPLE)
 
+  set(PLATFORM_EXTENSIONS_SRC
+    GUI/CCEditBox/CCEditBoxImplMac.mm
+  )
 else()
 
+  set(PLATFORM_EXTENSIONS_SRC
+    GUI/CCEditBox/CCEditBoxImplAndroid.cpp
+  )
 endif()
 
 include_directories(
