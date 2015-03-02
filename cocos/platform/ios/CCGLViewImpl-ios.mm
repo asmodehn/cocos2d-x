@@ -28,8 +28,8 @@
 
 #import <UIKit/UIKit.h>
 
-#include "CCEAGLView-ios.h"
-#include "CCDirectorCaller-ios.h"
+#include "CCEAGLView.h"
+#include "CCDirectorCaller.h"
 #include "CCGLViewImpl-ios.h"
 #include "CCSet.h"
 #include "base/CCTouch.h"
