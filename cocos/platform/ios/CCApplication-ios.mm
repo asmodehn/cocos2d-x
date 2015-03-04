@@ -30,7 +30,7 @@
 #import <UIKit/UIKit.h>
 
 #import "math/CCGeometry.h"
-#import "CCDirectorCaller-ios.h"
+#import "CCDirectorCaller.h"
 
 NS_CC_BEGIN
 
