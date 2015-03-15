@@ -61,6 +61,10 @@ private:
     std::vector<Touch*> _touches;
 
     friend class GLView;
+    
+#if  (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    friend class GLViewProtocol;
+#endif
 };
 
 

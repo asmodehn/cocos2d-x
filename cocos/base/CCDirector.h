@@ -524,6 +524,9 @@ protected:
 
     // GLViewProtocol will recreate stats labels to fit visible rect
     friend class GLView;
+#if  (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    friend class GLViewProtocol;
+#endif
 };
 
 /** 
