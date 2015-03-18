@@ -33,6 +33,16 @@
 #include "platform/CCCommon.h"
 #include "platform/CCGLViewProtocol.h"
 
+struct GLContextAttrs
+{
+    int redBits;
+    int greenBits;
+    int blueBits;
+    int alphaBits;
+    int depthBits;
+    int stencilBits;
+};
+
 NS_CC_BEGIN
 
 
